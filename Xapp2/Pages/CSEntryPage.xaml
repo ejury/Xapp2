@@ -1,0 +1,227 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:d="http://xamarin.com/schemas/2014/forms/design"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:gradient="clr-namespace:Syncfusion.XForms.Graphics;assembly=Syncfusion.Core.XForms"
+             mc:Ignorable="d"
+             x:Class="Xapp2.Pages.CSEntryPage">
+    <ContentPage.Content>
+        <StackLayout
+            Style="{StaticResource pageStyle}">
+
+            <!-- Top Header Details -->
+            <Grid
+                BackgroundColor="#2783d6" >
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="40" />
+
+                </Grid.RowDefinitions>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="40"/>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="40"/>
+                </Grid.ColumnDefinitions>
+                <Image Grid.Column="0"   Source="SEWhite.jpg"   HorizontalOptions="Center"   VerticalOptions="Center"  Margin="3" />
+                <Label Grid.Column="1"   Style="{StaticResource labletitlestyle}"  Text="CSE Manager"    />
+                <ImageButton Grid.Column="2" Source="HomeButton.png" Margin="5"  BackgroundColor="Transparent"  Clicked = "OnMainNavClicked" />
+            </Grid>
+            <!-- Top Header Ends -->
+
+            <Grid
+                HorizontalOptions="CenterAndExpand"
+                VerticalOptions="Center">
+                
+                
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto" />
+                </Grid.RowDefinitions>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition Width="*" />
+                </Grid.ColumnDefinitions>
+
+                <Label Grid.Column="0"  Text="Unit:"   VerticalOptions="Center"   Style="{StaticResource lablebodystyle}"/>
+
+                <Picker Grid.Column="1"
+                    x:Name="unitpicker" 
+                    Title="Select Unit"  
+                    ItemsSource="{Binding unitlist}" 
+                    SelectedItem="{Binding SelectedUnit}"
+                    SelectedIndexChanged="OnUnitPickerChanged"/>
+
+                <Label Grid.Column="2"  Text="Vessel:"  VerticalOptions="Center"  Style="{StaticResource lablebodystyle}"/>
+
+                <Picker Grid.Column="3"
+                    x:Name="vesselpicker" 
+                    Title="Select Vessel"  
+                    ItemsSource="{Binding vessellist}" 
+                    SelectedItem="{Binding SelectedVessel}"
+                    SelectedIndexChanged="OnVesselPickerChanged"/>
+
+            </Grid>
+
+            <Grid
+                HorizontalOptions="CenterAndExpand">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto" />
+                </Grid.RowDefinitions>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition Width="*" />
+                </Grid.ColumnDefinitions>
+
+                <Label Grid.Column="0"   Text="Entry Mode"  HorizontalOptions="End"  VerticalOptions="Center"  Style="{StaticResource lablebodystyle}"/>
+                
+                <Switch Grid.Column ="1" 
+                        x:Name="InOutButton"
+                        IsToggled="True"
+                        Toggled="InOutToggle" RotationY="180"
+                        HorizontalOptions="Center"
+                        VerticalOptions="Center"/>
+
+                <Label Grid.Column="2"  Text="Exit Mode"  HorizontalOptions="Start"  VerticalOptions="Center"  Style="{StaticResource lablebodystyle}"/>
+            </Grid>
+
+            <Grid
+                HorizontalOptions="CenterAndExpand">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto" />
+                </Grid.RowDefinitions>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition Width="*" />
+                </Grid.ColumnDefinitions>
+                <Label Grid.Column="0"  Text="Worker"   VerticalOptions="Center"  Style="{StaticResource lablebodystyle}"/>
+
+                <Picker x:Name="workerpicker"
+                        Grid.Column="1"
+                    Title="Select Worker"
+                    ItemsSource="{Binding workerlist}"
+                    SelectedItem="{Binding SelectedWorker}"
+                    SelectedIndexChanged="OnWorkerPickerChanged"/>
+            </Grid>
+
+            <!-- Main worker list display section-->
+            <StackLayout BackgroundColor="#3992e3">
+                <Label Text="CSE Company Summary" TextColor="Black"  Style="{StaticResource labletitlestyle}" FontSize="Medium" HeightRequest="25" Padding="0,2,0,0"  VerticalTextAlignment="Center"/>
+                <ListView x:Name="CompanyList"   Style="{StaticResource listviewstyle}" VerticalOptions="Center" RowHeight="25" HeightRequest="200">
+
+                    <ListView.ItemTemplate>
+                        <DataTemplate>
+                            <ViewCell>
+                                <Grid >
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition  Height="20" />
+                                    </Grid.RowDefinitions>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="25*" />
+                                        <ColumnDefinition Width="25*" />
+                                    </Grid.ColumnDefinitions>
+
+                                    <!-- List of workers per company  -->
+                                    <Label Grid.Column="0" Text="{Binding CompanyListName}"   Style="{StaticResource lablebodystyle}" TextColor="Black"/>
+                                    <Label Grid.Column="1" Text="{Binding CompanyListNum}"    Style="{StaticResource lablebodystyle}" TextColor="Black"/>
+                                </Grid>
+                            </ViewCell>
+
+                        </DataTemplate>
+                    </ListView.ItemTemplate>
+                </ListView>
+
+                <Label Text="CSE Worker Summary"  HorizontalOptions="Center" Style="{StaticResource labletitlestyle}" FontSize="Medium" TextColor="Black" HeightRequest="20" Padding="0,-2,0,-1" VerticalTextAlignment="Center"/>
+                <ListView x:Name="workersview"  Style="{StaticResource listviewstyle}"  ItemSelected="WorkerExitSelected" HeightRequest="300">
+                    <ListView.ItemTemplate>
+                        <DataTemplate>
+                            <ViewCell>
+                                <Grid>
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition Height="Auto" />
+                                    </Grid.RowDefinitions>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="25*" />
+                                        <ColumnDefinition Width="25*" />
+                                        <ColumnDefinition Width="25*" />
+                                        <ColumnDefinition Width="25*" />
+                                    </Grid.ColumnDefinitions>
+
+                                    <!-- List of workers  -->
+                                    <Label Grid.Column="0"  Text="{Binding FirstName}" Style="{StaticResource lablebodystyle}" TextColor="Black"/>
+                                    <Label Grid.Column="1"  Text="{Binding LastName}" Style="{StaticResource lablebodystyle}" TextColor="Black"/>
+                                    <Label Grid.Column="2"  Text="{Binding Company}" Style="{StaticResource lablebodystyle}" TextColor="Black"/>
+                                    <Label Grid.Column="3"  Text="{Binding TimeLog}" Style="{StaticResource lablebodystyle}" TextColor="Black"/>
+                                </Grid>
+                            </ViewCell>
+
+                        </DataTemplate>
+
+                    </ListView.ItemTemplate>
+                </ListView>
+
+                <!-- Navigation Bar -->
+                <Grid Margin="0,-6,0,0" Padding="0,0,0,0" ColumnSpacing="-5" MinimumHeightRequest="75">
+                    <!-- Nav Bar Background Gradient-->
+                    <gradient:SfGradientView>
+                        <gradient:SfGradientView.BackgroundBrush>
+                            <gradient:SfLinearGradientBrush>
+                                <gradient:SfLinearGradientBrush.GradientStops>
+                                    <gradient:SfGradientStop Color="#2783d6" Offset="0.0" />
+                                    <gradient:SfGradientStop Color="#020a45" Offset="0.7" />
+                                </gradient:SfLinearGradientBrush.GradientStops>
+                            </gradient:SfLinearGradientBrush>
+                        </gradient:SfGradientView.BackgroundBrush>
+                    </gradient:SfGradientView>
+
+                    <!-- Nav Bar Display-->
+                    <StackLayout>
+                        <Grid x:Name="NavBarGrid" >
+                            <Grid.GestureRecognizers>
+                                <SwipeGestureRecognizer Direction="Up" Swiped="NavSwipedUp"/>
+                                <SwipeGestureRecognizer Direction="Down" Swiped="NavSwipedDown"/>
+                            </Grid.GestureRecognizers>
+
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="15"/>
+                                <RowDefinition Height="60"/>
+                            </Grid.RowDefinitions>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="*"/>
+                            </Grid.ColumnDefinitions>
+
+                            <!-- Nav Bar Selections-->
+                            <Label Grid.Row="0"  Grid.Column="0"  Style="{StaticResource NavLabel}" Text="Portal"/>
+                            <Label Grid.Row="0"  Grid.Column="1"  Style="{StaticResource NavLabel}" Text="Status"/>
+                            <Label Grid.Row="0"  Grid.Column="2"  Style="{StaticResource NavLabel}" Text="Heirarchy"/>
+                            <Label Grid.Row="0"  Grid.Column="3"  Style="{StaticResource NavLabel}" Text="Workers"/>
+                            <Label Grid.Row="0"  Grid.Column="4"  Style="{StaticResource NavLabel}" Text="Analytics"/>
+
+                            <Button Grid.Row="0" Grid.Column ="0" Grid.ColumnSpan="5" BackgroundColor="Transparent" Clicked = "ShowNavClicked"/>
+
+                            <ImageButton Grid.Row="1"  Grid.Column="0"   Style="{StaticResource NavImageCSE}"
+                    Clicked = "OnCSEManagerClicked" />
+                            <ImageButton Grid.Row="1"  Grid.Column="1"   Style="{StaticResource NavImageStatus}"
+                    Clicked = "OnSiteStatusButtonClicked" />
+                            <ImageButton Grid.Row="1"  Grid.Column="2"   Style="{StaticResource NavImageHeirarchy}"
+                    Clicked = "OnVesselButtonClicked" />
+                            <ImageButton Grid.Row="1"  Grid.Column="3"   Style="{StaticResource NavImageWorker}"
+                    Clicked = "OnWorkerButtonClicked" />
+                            <ImageButton Grid.Row="1"  Grid.Column="4"   Style="{StaticResource NavImageAnalytics}"
+                    Clicked = "OnAnalyticsButtonClicked" />
+                        </Grid>
+
+                    </StackLayout>
+                </Grid>
+
+            </StackLayout>
+        </StackLayout>
+
+        
+    </ContentPage.Content>
+</ContentPage>

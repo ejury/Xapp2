@@ -1,0 +1,123 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:d="http://xamarin.com/schemas/2014/forms/design"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:gradient="clr-namespace:Syncfusion.XForms.Graphics;assembly=Syncfusion.Core.XForms"
+             xmlns:buttons="clr-namespace:Syncfusion.XForms.Buttons;assembly=Syncfusion.Buttons.XForms"
+             mc:Ignorable="d"
+             Title="Welcome to X"
+             x:Class="Xapp2.MainPage"
+             BackgroundImageSource="LoginBackground.png">
+
+    <Grid>
+        <gradient:SfGradientView Style="{StaticResource SfGradientViewStyle}" />
+
+
+        <StackLayout 
+        
+            Style="{StaticResource pageStyle}">
+            <!-- Place new controls here -->
+
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="30" />
+                    <RowDefinition Height="30" />
+                </Grid.RowDefinitions>
+
+                <!--Label Grid.Row="0" Grid.RowSpan="2" BackgroundColor="#187edb" Opacity=".8" HorizontalOptions="Fill" /-->
+                <Label Grid.Row="0" TextColor="White" FontAttributes="Bold" Text="Welcome to SafeEntry" Style="{StaticResource labletitlestyle}" HorizontalOptions="CenterAndExpand" />
+                <Label Grid.Row="1" TextColor="White" FontAttributes="Bold" Text="Confined Space Entry Electronic Managment"  Style="{StaticResource lablebodystyle}" HorizontalOptions="CenterAndExpand" />
+            </Grid>
+            
+            <Image Source="SafeEntryBlue.png" HorizontalOptions="Center"  IsOpaque="False" HeightRequest="300" Opacity=".4" VerticalOptions="FillAndExpand" />
+
+            <Grid Margin="30,0">
+   
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+                <buttons:SfButton
+                            Grid.Column="0"
+                            Style="{StaticResource HomePageButtons}"
+                            Text="Randomize Data" 
+                            Clicked="OnDatabaseRefresh"/>
+                
+                <buttons:SfButton
+                            Grid.Column="1"
+                            Style="{StaticResource HomePageButtons}"
+                            Text="Clear Data" 
+                            Clicked="OnDatabaseClear"/>
+
+            </Grid>
+            <buttons:SfButton
+                            Style="{StaticResource SfButtonStyle}"
+                                            Margin="30,16"
+                            Text="Logout" 
+                            Clicked="OnLogout"/>
+
+            <!--Button Text="Full Database Refresh"   Style="{StaticResource buttonStyle}"  TextColor="Red" Clicked = "OnDatabaseRefresh" />
+            <Button Text="Logout"   Style="{StaticResource buttonStyle}"  TextColor="Red" Clicked = "OnLogout" /-->
+
+            <!-- Navigation Bar -->
+            <Grid Padding="0,0,0,0" ColumnSpacing="-5" MinimumHeightRequest="75" >
+                <!-- Nav Bar Background Gradient-->
+                <gradient:SfGradientView>
+                    <gradient:SfGradientView.BackgroundBrush>
+                        <gradient:SfLinearGradientBrush>
+                            <gradient:SfLinearGradientBrush.GradientStops>
+                                <gradient:SfGradientStop Color="#2783d6" Offset="0.0" />
+                                <gradient:SfGradientStop Color="#020a45" Offset="0.7" />
+                            </gradient:SfLinearGradientBrush.GradientStops>
+                        </gradient:SfLinearGradientBrush>
+                    </gradient:SfGradientView.BackgroundBrush>
+                </gradient:SfGradientView>
+
+                <!-- Nav Bar Display-->
+                <StackLayout >
+                    <Grid x:Name="NavBarGrid">
+                        <Grid.GestureRecognizers>
+                            <SwipeGestureRecognizer Direction="Up" Swiped="NavSwipedUp"/>
+                            <SwipeGestureRecognizer Direction="Down" Swiped="NavSwipedDown"/>
+                        </Grid.GestureRecognizers>
+
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="15"/>
+                            <RowDefinition Height="60"/>
+                        </Grid.RowDefinitions>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
+
+                        <!-- Nav Bar Selections-->
+                        <Label Grid.Row="0"  Grid.Column="0"  Style="{StaticResource NavLabel}" Text="Portal"/>
+                        <Label Grid.Row="0"  Grid.Column="1"  Style="{StaticResource NavLabel}" Text="Status"/>
+                        <Label Grid.Row="0"  Grid.Column="2"  Style="{StaticResource NavLabel}" Text="Heirarchy"/>
+                        <Label Grid.Row="0"  Grid.Column="3"  Style="{StaticResource NavLabel}" Text="Workers"/>
+                        <Label Grid.Row="0"  Grid.Column="4"  Style="{StaticResource NavLabel}" Text="Analytics"/>
+
+                        <Button Grid.Row="0" Grid.Column ="0" Grid.ColumnSpan="5" BackgroundColor="Transparent" Clicked = "ShowNavClicked"/>
+
+                        <ImageButton x:Name="CSEButton" Grid.Row="1"  Grid.Column="0"   Style="{StaticResource NavImageCSE}"
+                        Clicked = "OnCSEManagerClicked"/>
+                        <ImageButton x:Name="StatusButton" Grid.Row="1"  Grid.Column="1"   Style="{StaticResource NavImageStatus}"
+                        Clicked = "OnSiteStatusButtonClicked" />
+                        <ImageButton x:Name="HeirarchyButton" Grid.Row="1"  Grid.Column="2"   Style="{StaticResource NavImageHeirarchy}"
+                        Clicked = "OnVesselButtonClicked" />
+                        <ImageButton x:Name="WorkerButton" Grid.Row="1"  Grid.Column="3"   Style="{StaticResource NavImageWorker}"
+                        Clicked = "OnWorkerButtonClicked" />
+                        <ImageButton x:Name="AnalyticsButton" Grid.Row="1"  Grid.Column="4"   Style="{StaticResource NavImageAnalytics}"
+                        Clicked = "OnAnalyticsButtonClicked" />
+                    </Grid>
+
+                </StackLayout>
+            </Grid>
+
+        </StackLayout>
+    </Grid>
+</ContentPage>
