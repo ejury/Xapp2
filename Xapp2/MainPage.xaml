@@ -13,7 +13,7 @@
     <Grid>
         <gradient:SfGradientView Style="{StaticResource SfGradientViewStyle}" />
 
-
+        
         <StackLayout 
         
             Style="{StaticResource pageStyle}">
