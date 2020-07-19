@@ -162,6 +162,9 @@
     <PackageReference Include="Syncfusion.Xamarin.SfTreeView">
       <Version>17.4.0.44</Version>
     </PackageReference>
+    <PackageReference Include="System.Data.SqlClient">
+      <Version>4.8.1</Version>
+    </PackageReference>
     <PackageReference Include="Xamarin.Forms" Version="4.4.0.991477" />
     <PackageReference Include="Xamarin.Essentials" Version="1.3.1" />
   </ItemGroup>

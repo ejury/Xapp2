@@ -5,6 +5,8 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using System.Linq;
 using Xapp2.Models;
+using System.Data.SqlClient;
+using System.Data;
 
 namespace Xapp2.Data
 {
@@ -50,42 +52,70 @@ namespace Xapp2.Data
         }
 
         //Pull individual IDs from database list
-        public Task<Vessel> GetVessel(int id)
+        public Task<Vessel> GetVessel(int ident)
         {
-            return _connection.Table<Vessel>().FirstOrDefaultAsync(t => t.VesselID == id);
+            return _connection.Table<Vessel>().FirstOrDefaultAsync(t => t.VesselID == ident);
         }
-        public Task<Worker> GetWorker(int id)
+        public Task<Worker> GetWorker(int ident)
         {
-            return _connection.Table<Worker>().FirstOrDefaultAsync(t => t.WorkerID == id);
+            return _connection.Table<Worker>().FirstOrDefaultAsync(t => t.WorkerID == ident);
         }
 
         //Delete individual IDs from database list
-        public Task<int> DeleteUnit(int id)
+        public Task<int> DeleteUnit(Unit unit)
         {
-            return _connection.DeleteAsync<Unit>(id);
+            APIServer.Delete("U" + unit.UnitID);
+            return _connection.DeleteAsync<Unit>(unit.UnitID);
         }
-        public Task<int> DeleteVessel(int id)
+        public Task<int> DeleteVessel(int ident)
         {
-            return _connection.DeleteAsync<Vessel>(id);
+            APIServer.Delete("V" + ident);
+            return _connection.DeleteAsync<Vessel>(ident);
         }
-        public Task<int> DeleteLog(int id)
+        public Task<int> DeleteLog(int ident)
         {
-            return _connection.DeleteAsync<EntryLog>(id);
+            return _connection.DeleteAsync<EntryLog>(ident);
         }
 
         //Add Individual Entries to database list
-        public Task<int> AddWorker(Worker worker)
+        async public Task<int> AddWorker(Worker worker)
         {
-            return _connection.InsertAsync(worker);
-        }
-        public Task<int> AddVessel(Vessel vessel)
-        {
-            return _connection.InsertAsync(vessel);
-        }
-        public Task<int> AddUnit(Unit unit)
-        {
-            return _connection.InsertAsync(unit);
+            await APIServer.Add(new Tuple<Unit, Vessel, Worker>(null, null, worker), "W");
+            IEnumerable<Worker> tempW = await APIServer.GetAllWorkers();
 
+            _connection.DropTableAsync<Worker>().Wait();
+            _connection.CreateTableAsync<Worker>().Wait();
+
+
+            await  _connection.InsertAllAsync(tempW);
+            int t = 1;
+            return t;
+        }
+        async public Task<int> AddVessel(Vessel vessel)
+        {
+
+            await APIServer.Add(new Tuple<Unit, Vessel, Worker>(null, vessel, null), "V");
+            IEnumerable<Vessel> tempV = await APIServer.GetAllVessels();
+
+            _connection.DropTableAsync<Vessel>().Wait();
+            _connection.CreateTableAsync<Vessel>().Wait();
+            
+            await    _connection.InsertAllAsync(tempV);
+            int t = 1;
+            return t;
+        }
+        async public Task<int> AddUnit(Unit unit)
+        {
+
+            await APIServer.Add(new Tuple <Unit, Vessel, Worker> (unit,null,null), "U");
+            IEnumerable<Unit> tempU = await APIServer.GetAllUnits();
+
+            _connection.DropTableAsync<Unit>().Wait();
+            _connection.CreateTableAsync<Unit>().Wait();
+
+            await _connection.InsertAllAsync(tempU);
+            int t = 1;
+            return t;
         }
         public Task<int> AddLog(EntryLog entrylog)
         {
@@ -101,20 +131,26 @@ namespace Xapp2.Data
         //Remove entire database tables
         public Task ClearUnit()
         {
+            APIServer.Delete("UxClearx");
+           
+
             _connection.DropTableAsync<Unit>().Wait();
             _connection.CreateTableAsync<Unit>().Wait();
             return Task.CompletedTask;
         }
         public Task ClearVessel()
         {
+            APIServer.Delete("VxClearx");
             _connection.DropTableAsync<Vessel>().Wait();
             _connection.CreateTableAsync<Vessel>().Wait();
             return Task.CompletedTask;
         }
         public Task ClearWorker()
         {
+            APIServer.Delete("WxClearx");
             _connection.DropTableAsync<Worker>().Wait();
             _connection.CreateTableAsync<Worker>().Wait();
+            Globals.NFCtempcount = 100;
             return Task.CompletedTask;
         }
         public Task ClearLogs()
@@ -150,6 +186,8 @@ namespace Xapp2.Data
                 worker.FirstName = workerfirst[i];
                 worker.LastName = workerlast[i];
                 worker.Company = companyname[i];
+                Globals.NFCtempcount++;
+                worker.ReferenceNFC = Globals.NFCtempcount.ToString();
                 await AddWorker(worker);
 
             }

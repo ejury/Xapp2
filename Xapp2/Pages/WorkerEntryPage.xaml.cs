@@ -93,7 +93,8 @@ namespace Xapp2.Pages
                     //string newworker = ((Entry)sender).Text;
                     workers.FirstName = FirstEntry;
                     workers.LastName = LastEntry;
-                    workers.ReferenceNFC = 777;
+                    Globals.NFCtempcount++;
+                    workers.ReferenceNFC = Globals.NFCtempcount.ToString();
                     workers.Company = currentcompany;
 
                     await App.Database.AddWorker(workers);

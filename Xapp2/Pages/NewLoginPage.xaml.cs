@@ -6,6 +6,8 @@ using System.Threading.Tasks;
 
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
+using Xapp2.Data;
+using Xapp2.Models;
 
 namespace Xapp2.Pages
 {
@@ -17,8 +19,14 @@ namespace Xapp2.Pages
             InitializeComponent();
         }
 
-        private async void LoginClicked(object sender, EventArgs e)
+        private async void LoginClicked(object sender, EventArgs e) 
         {
+            Credentials tempCred = new Credentials();
+            tempCred.Email = UserEntry.Text;
+            tempCred.Password = PasswordEntry.Text;
+
+            await APIServer.RegClient(tempCred);
+
             await Navigation.PushModalAsync(new MainPage(), false).ConfigureAwait(false);
         }
     }

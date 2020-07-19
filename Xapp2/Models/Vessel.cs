@@ -8,7 +8,8 @@ namespace Xapp2.Models
 {
     public class Vessel
     {
-        [PrimaryKey, AutoIncrement]
+        //[PrimaryKey, AutoIncrement]
+        [PrimaryKey]
         public int VesselID { get; set; }
        // public int UnitID { get; set; }
         public string Name { get; set; }

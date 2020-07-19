@@ -19,6 +19,7 @@ namespace Xapp2
                 {
                     database = new XDatabase(Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "XApp2.db3"));
                 }
+
                 return database;
             }
         }

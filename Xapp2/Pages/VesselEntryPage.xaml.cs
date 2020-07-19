@@ -258,7 +258,7 @@ namespace Xapp2.Pages
                 var deleteunit = picker.SelectedItem;
                 Unit deleteunit2 = new Unit();
                 deleteunit2 = (Unit)deleteunit;
-                await App.Database.DeleteUnit(deleteunit2.UnitID);
+                await App.Database.DeleteUnit(deleteunit2);
                 currentunit = "";
                 SetUnitList();
             }

@@ -18,8 +18,8 @@
             </ResourceDictionary.MergedDictionaries >
 
             <Style x:Key="pageStyle" TargetType="StackLayout">
-              
-                <!--Setter Property="BackgroundColor" Value="#1c254d" /-->
+
+                <Setter Property="BackgroundColor" Value="#ffffff" />
             </Style>
             
             
@@ -60,30 +60,35 @@
                 <Setter Property="VerticalOptions" Value="CenterAndExpand" />
                 <Setter Property="Source" Value="NavBarCSE.png" />
                 <Setter Property="BackgroundColor" Value="Transparent" />
+                <Setter Property="Padding" Value="7" />
             </Style>
             <Style x:Key="NavImageStatus" TargetType="ImageButton">
                 <Setter Property="HorizontalOptions" Value="CenterAndExpand" />
                 <Setter Property="VerticalOptions" Value="CenterAndExpand" />
                 <Setter Property="Source" Value="NavBarStatus.png" />
                 <Setter Property="BackgroundColor" Value="Transparent" />
+                <Setter Property="Padding" Value="7" />
             </Style>
             <Style x:Key="NavImageHeirarchy" TargetType="ImageButton">
                 <Setter Property="HorizontalOptions" Value="CenterAndExpand" />
                 <Setter Property="VerticalOptions" Value="CenterAndExpand" />
                 <Setter Property="Source" Value="NavBarHeirarchy.png" />
                 <Setter Property="BackgroundColor" Value="Transparent" />
+                <Setter Property="Padding" Value="7" />
             </Style>
             <Style x:Key="NavImageWorker" TargetType="ImageButton">
                 <Setter Property="HorizontalOptions" Value="CenterAndExpand" />
                 <Setter Property="VerticalOptions" Value="CenterAndExpand" />
                 <Setter Property="Source" Value="NavBarWorker.png" />
                 <Setter Property="BackgroundColor" Value="Transparent" />
+                <Setter Property="Padding" Value="7" />
             </Style>
             <Style x:Key="NavImageAnalytics" TargetType="ImageButton">
                 <Setter Property="HorizontalOptions" Value="CenterAndExpand" />
                 <Setter Property="VerticalOptions" Value="CenterAndExpand" />
                 <Setter Property="Source" Value="NavBarAnalytics.png" />
                 <Setter Property="BackgroundColor" Value="Transparent" />
+                <Setter Property="Padding" Value="7" />
             </Style>
 
             <Style x:Key="LabelNavBar" TargetType="Label">
