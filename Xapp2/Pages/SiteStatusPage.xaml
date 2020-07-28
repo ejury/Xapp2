@@ -106,47 +106,30 @@
                 </gradient:SfGradientView>
 
                 <!-- Nav Bar Display-->
-                <StackLayout Padding="0" Margin="0">
-                    <Grid x:Name="NavBarGrid" >
-                        <Grid.GestureRecognizers>
-                            <SwipeGestureRecognizer Direction="Up" Swiped="NavSwipedUp"/>
-                            <SwipeGestureRecognizer Direction="Down" Swiped="NavSwipedDown"/>
-                        </Grid.GestureRecognizers>
+                <Grid x:Name="NavBarGrid"  BackgroundColor="#ffffff">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="50"/>
+                    </Grid.RowDefinitions>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
 
-                        <Grid.RowDefinitions>
-                            <RowDefinition Height="15"/>
-                            <RowDefinition Height="60"/>
-                        </Grid.RowDefinitions>
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="*"/>
-                            <ColumnDefinition Width="*"/>
-                            <ColumnDefinition Width="*"/>
-                            <ColumnDefinition Width="*"/>
-                            <ColumnDefinition Width="*"/>
-                        </Grid.ColumnDefinitions>
-
-                        <!-- Nav Bar Selections-->
-                        <Label Grid.Row="0"  Grid.Column="0"  Style="{StaticResource NavLabel}" Text="Portal"/>
-                        <Label Grid.Row="0"  Grid.Column="1"  Style="{StaticResource NavLabel}" Text="Status"/>
-                        <Label Grid.Row="0"  Grid.Column="2"  Style="{StaticResource NavLabel}" Text="Heirarchy"/>
-                        <Label Grid.Row="0"  Grid.Column="3"  Style="{StaticResource NavLabel}" Text="Workers"/>
-                        <Label Grid.Row="0"  Grid.Column="4"  Style="{StaticResource NavLabel}" Text="Analytics"/>
-
-                        <Button Grid.Row="0" Grid.Column ="0" Grid.ColumnSpan="5" BackgroundColor="Transparent" Clicked = "ShowNavClicked"/>
-
-                        <ImageButton Grid.Row="1"  Grid.Column="0"   Style="{StaticResource NavImageCSE}"
-                    Clicked = "OnCSEManagerClicked" />
-                        <ImageButton Grid.Row="1"  Grid.Column="1"   Style="{StaticResource NavImageStatus}"
-                    Clicked = "OnSiteStatusButtonClicked" />
-                        <ImageButton Grid.Row="1"  Grid.Column="2"   Style="{StaticResource NavImageHeirarchy}"
-                    Clicked = "OnVesselButtonClicked" />
-                        <ImageButton Grid.Row="1"  Grid.Column="3"   Style="{StaticResource NavImageWorker}"
-                    Clicked = "OnWorkerButtonClicked" />
-                        <ImageButton Grid.Row="1"  Grid.Column="4"   Style="{StaticResource NavImageAnalytics}"
-                    Clicked = "OnAnalyticsButtonClicked" />
-                    </Grid>
-
-                </StackLayout>
+                    <!-- Nav Bar Selections-->
+                    <ImageButton x:Name="CSEButton" Grid.Row="0"  Grid.Column="0"   Style="{StaticResource NavImageCSE}"
+                        Clicked = "OnCSEManagerClicked"/>
+                    <ImageButton x:Name="StatusButton" Grid.Row="0"  Grid.Column="1"   Style="{StaticResource NavImageStatus}"
+                        Clicked = "OnSiteStatusButtonClicked" />
+                    <ImageButton x:Name="HeirarchyButton" Grid.Row="0"  Grid.Column="2"   Style="{StaticResource NavImageHeirarchy}"
+                        Clicked = "OnVesselButtonClicked" />
+                    <ImageButton x:Name="WorkerButton" Grid.Row="0"  Grid.Column="3"   Style="{StaticResource NavImageWorker}"
+                        Clicked = "OnWorkerButtonClicked" />
+                    <ImageButton x:Name="AnalyticsButton" Grid.Row="0"  Grid.Column="4"   Style="{StaticResource NavImageAnalytics}"
+                        Clicked = "OnAnalyticsButtonClicked" />
+                </Grid>
             </Grid>
 
 

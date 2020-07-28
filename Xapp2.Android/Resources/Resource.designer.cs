@@ -8999,13 +8999,13 @@ namespace Xapp2.Droid
 			public const int LogoMakr_SafeEntry = 2131165336;
 			
 			// aapt resource value: 0x7F070099
-			public const int MainPageLeftFrac = 2131165337;
+			public const int MainPageLeftStatus = 2131165337;
 			
 			// aapt resource value: 0x7F07009A
-			public const int MainPageMidFrac = 2131165338;
+			public const int MainPageMidStatus = 2131165338;
 			
 			// aapt resource value: 0x7F07009B
-			public const int MainPageRightFrac = 2131165339;
+			public const int MainPageRightStatus = 2131165339;
 			
 			// aapt resource value: 0x7F07009C
 			public const int mtrl_snackbar_background = 2131165340;

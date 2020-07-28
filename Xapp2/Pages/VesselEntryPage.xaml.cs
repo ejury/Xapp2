@@ -23,9 +23,16 @@ namespace Xapp2.Pages
         int currentselect;
         bool Nav;
 
+        async Task Screenset()
+        {
+            ListFrame.HeightRequest = 0;
+            ForceLayout();
+        }
         protected override async void OnAppearing()
         {
             base.OnAppearing();
+
+            //await Screenset(); //Ensure listview does not overexpand
 
             //Create Initial Unit List Selection
             var unitslist = await App.Database.GetUnits();
@@ -40,8 +47,17 @@ namespace Xapp2.Pages
                 pieview.pieselect = currentselect;
                 picker.SelectedIndex = currentselect;
                 currentunit = unitslist[currentselect].Name;
-                //SetVesselList();
+
+                // Populating display if data is present
+                if (vessellist.Count() > 0)
+                {
+                    await SetVesselList();
+                    //ListFrame.HeightRequest = PieFrame.Height; //set listview size
+                }
+                
             }
+            
+            
         }
         private async void SetUnitList()
         {
@@ -49,7 +65,7 @@ namespace Xapp2.Pages
             picker.ItemsSource = unitslist;
             picker.SelectedIndex = pieview.pielabels.Count - 1;
         }
-            private async void SetVesselList()
+            private async Task SetVesselList()
         {
             //Pulling current Database Heirarchy
             var vessellist = await App.Database.GetVessels();
@@ -59,7 +75,7 @@ namespace Xapp2.Pages
             var vessellistFilter = vessellist.Where(w => w.Unitname == currentunit); //Filter for vessels in selected unit
             List<Vessel> v22 = (List < Vessel>)vessellistFilter.ToList();
             
-            //Split list of vessels into two columns
+/*            //Split list of vessels into two columns
             int NumOfVes = vessellistFilter.Count();
             IEnumerable<Vessel> v1; IEnumerable<Vessel> v2;
             List<string> u1 = new List<string>();
@@ -72,9 +88,10 @@ namespace Xapp2.Pages
             {
                 v1 = v22.Take((NumOfVes+1) / 2);
                 v2 = (v22.Skip((NumOfVes +1)/2).Take(NumOfVes-1 / 2));
-            }
-            vesselview1.ItemsSource = v1;
-            vesselview2.ItemsSource = v2;
+            }*/
+            vesselview1.ItemsSource = v22;
+            //vesselview1.ItemsSource = v1;
+            //vesselview2.ItemsSource = v2;
 
             var temp = currentunit;
             unitlabelname.Text = currentunit;
@@ -101,55 +118,61 @@ namespace Xapp2.Pages
             pie.ExplodeIndex = pieview.pieselect;
     }
 
-        public VesselEntryPage()
+         public VesselEntryPage()
         {
+
             Nav = true;
-            InitializeComponent();   
+            InitializeComponent();
+            //Screenset(); //ensure listview does not overexpand
             BindingContext = pieview;   //Pie Chart Context
+
         }
         async void OnPickerSelectedIndexChanged(object sender, EventArgs e)
         {
-            if (pieview.pieselect != currentselect)
+            //Error handler due to events during page changes. Verifies both pickers can be accessed and skips updates if models not loaded
+            int selectedIndex = -1;
+            try
             {
-                currentselect = pieview.pieselect;
-                picker.SelectedIndex = pieview.pieselect;
+                if (picker.SelectedIndex != -1) 
+                    { selectedIndex = picker.SelectedIndex; }
+                if (pieview.pieselect != -1)
+                    { selectedIndex = pieview.pieselect; }
             }
-            if (picker.SelectedIndex != currentselect)
+            catch (Exception e1)
             {
-                currentselect = picker.SelectedIndex;
-                pieview.pieselect = picker.SelectedIndex;
+                selectedIndex = -1;
             }
+
+            int changed = 0; //test if company selection state has changed to avoid circular loop
 
             //Updating vessel list display
-            if (pieview.pieselect != -1) //Ensure a value has been selected
+            if (selectedIndex != -1) //Ensure a value has been selected
             {
-                var test = (Unit)picker.ItemsSource[pieview.pieselect];
-                currentunit = test.Name;
-            }
-            SetVesselList();
-        }
+                //Updating company selection state variables
+                if (pieview.pieselect != currentselect & pieview.pieselect != -1)
+                {
+                    currentselect = pieview.pieselect;
+                    picker.SelectedIndex = pieview.pieselect;
+                    changed = 1;
+                }
+                if (picker.SelectedIndex != currentselect & picker.SelectedIndex != -1)
+                {
+                    currentselect = picker.SelectedIndex;
+                    pieview.pieselect = picker.SelectedIndex;
+                    changed = 1;
+                }
 
-        //async void PieSelectChange(object sender, EventArgs e)
-        //{
-        //    //var picker = sender;
-        //    var unitslist = await App.Database.GetUnits();
-        //    if (pieview.pieselect < unitslist.Count & pieview.pieselect > -1)
-        //    {
-        //        //Updating vessel list display
-                
-        //        currentunit = unitslist[pieview.pieselect].Name;
-        //        picker.SelectedIndex = pieview.pieselect;
-        //    }
-        //    else
-        //    {
-        //        int t = 1;
-        //    }
-        //}
+                if (changed ==1 ) //Update list if a state change has occurred
+                {
+                    currentunit = pieview.pielabels[currentselect];
+                    SetVesselList();
+                }
+            }
+        }
 
         async void OnUnitEntryCompleted(object sender, EventArgs e)
         {
-            string newunit = ((Entry)sender).Text;
-            units.Name = newunit;
+            units.Name = UnitEntryText.Text;
 
             await App.Database.AddUnit(units);
             currentunit = units.Name;
@@ -167,14 +190,12 @@ namespace Xapp2.Pages
                 int properunit2 = properunit.Count();
                 if (properunit2 > 0)
                 {
-                    string newvessel = ((Entry)sender).Text;
-                    vessels.Name = newvessel;
+                    vessels.Name = VesselEntryText.Text;
                     vessels.Unitname = currentunit;
 
                     await App.Database.AddVessel(vessels);
 
                     SetVesselList();
-                    //_fetchingUnits = App.Database.GetVessels();
                     VesselEntryText.Text = string.Empty;
                 }
                 else
@@ -200,17 +221,6 @@ namespace Xapp2.Pages
                 VesselSelectOptions(1, LineSelected);
             }
         }
-        async void VesselSelected2(object sender, EventArgs e)
-        {
-            //Grabbing selected Vessel Object
-            Vessel LineSelected = (Vessel)vesselview2.SelectedItem;
-
-            if (LineSelected != null) //Don't display options if deselecting was trigger
-            {
-                VesselSelectOptions(2, LineSelected);
-            }
-        }
-
         async void VesselSelectOptions(int column, Vessel LineSelected)
         {
             string answer = await DisplayActionSheet("Vessel Selection Options", "Cancel", null, "Open CSE Manager", "Open Analytics", "Delete Vessel");
@@ -247,7 +257,6 @@ namespace Xapp2.Pages
             }
             //Clear selected items
             vesselview1.SelectedItem = null;
-            vesselview2.SelectedItem = null;
         }
 
         async void DeleteUnitSelected(object sender, EventArgs e) //////////
@@ -261,6 +270,34 @@ namespace Xapp2.Pages
                 await App.Database.DeleteUnit(deleteunit2);
                 currentunit = "";
                 SetUnitList();
+            }
+        }
+
+        private async void OnDatabaseRefresh(object sender, EventArgs e)
+        {
+
+            bool answer = await DisplayAlert("Reset Full Database?", "Confirmation", "Yes", "No");
+            if (answer)
+            {
+                await App.Database.ClearVessel();
+                await App.Database.ClearUnit();
+                await App.Database.ClearWorker();
+                await App.Database.ClearLogs();
+                await App.Database.ClearAnalytics();
+                await App.Database.RefreshDatabase();
+            }
+        }
+        private async void OnDatabaseClear(object sender, EventArgs e)
+        {
+
+            bool answer = await DisplayAlert("Reset Full Database?", "Confirmation", "Yes", "No");
+            if (answer)
+            {
+                await App.Database.ClearVessel();
+                await App.Database.ClearUnit();
+                await App.Database.ClearWorker();
+                await App.Database.ClearLogs();
+                await App.Database.ClearAnalytics();
             }
         }
         private async void OnMainNavClicked(object sender, EventArgs e)

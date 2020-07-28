@@ -27,7 +27,27 @@ namespace Xapp2.Pages
 
             await APIServer.RegClient(tempCred);
 
+    
             await Navigation.PushModalAsync(new MainPage(), false).ConfigureAwait(false);
+        }
+
+        private async void SEClicked(object sender, EventArgs e)
+        {
+            Worker tempWorker = new Worker();
+            tempWorker.ReferenceNFC = UserEntry.Text;
+            
+            string IsValid = await APIServer.SEClient(tempWorker);
+
+            if (IsValid == "Card Not Active")
+            {
+                DisplayAlert("Card Error", "The scanned card is not valid or has not been activited, please contact your administrator", "Return to login screen");
+            }
+            else
+            {
+                await Navigation.PushModalAsync(new MainPage(), false).ConfigureAwait(false);
+            }
+
+
         }
     }
 }

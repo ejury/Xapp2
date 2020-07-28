@@ -15,5 +15,9 @@ namespace Xapp2.Models
 
         public string Company { get; set; }
 
+        public int SELevel { get; set; }
+
+        public int Activated { get; set; }
+
     }
 }

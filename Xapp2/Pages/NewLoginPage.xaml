@@ -128,12 +128,15 @@
                             Margin="0,16,0,16"
                             BackgroundColor="{DynamicResource FacebookBlue}"
                             CornerRadius="20"
-                            HeightRequest="40">
+                            HeightRequest="40"
+                            Clicked="SEClicked">
+                            
                             <buttons:SfButton.Content>
                                 <StackLayout
                                     HorizontalOptions="CenterAndExpand"
                                     Orientation="Horizontal"
                                     VerticalOptions="Center">
+                                    
                                     <Label
                                         FontFamily="{StaticResource FontIcons}"
                                         FontSize="18"

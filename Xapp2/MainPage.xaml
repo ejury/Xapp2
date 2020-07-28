@@ -4,7 +4,7 @@
              xmlns:d="http://xamarin.com/schemas/2014/forms/design"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:gradient="clr-namespace:Syncfusion.XForms.Graphics;assembly=Syncfusion.Core.XForms"
-             xmlns:buttons="clr-namespace:Syncfusion.XForms.Buttons;assembly=Syncfusion.Buttons.XForms"
+             xmlns:buttons="clr-namespace:Syncfusion.XForms.Buttons;assembly=Syncfusion.Buttons.XForms" xmlns:chart="clr-namespace:Syncfusion.SfChart.XForms;assembly=Syncfusion.SfChart.XForms"
              mc:Ignorable="d"
              Title="Welcome to X"
              x:Class="Xapp2.MainPage"
@@ -15,20 +15,19 @@
 
         
         <StackLayout>
-            <!-- Place new controls here -->
+            <Grid BackgroundColor="Black">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
 
-            <Grid>
-                <!--gradient:SfGradientView>
-                    <gradient:SfGradientView.BackgroundBrush>
-                        <gradient:SfRadialGradientBrush>
-                            <gradient:SfRadialGradientBrush.GradientStops>
-                                <gradient:SfGradientStop Color="#2783d6" Offset="0.0" />
-                                <gradient:SfGradientStop Color="#020a45" Offset="1.0" />
-                            </gradient:SfRadialGradientBrush.GradientStops>
-                        </gradient:SfRadialGradientBrush>
-                    </gradient:SfGradientView.BackgroundBrush>
-                </-->
-
+                <Label  Grid.Row="0" Grid.Column="0" Text="(Server) LocalDB"  Style="{StaticResource lablebodystyle}" VerticalOptions="Center" HorizontalOptions="Start" TextColor="white" />
+                <Button  Grid.Row="0" Grid.Column="1" Text="&#xe723; TempUser" FontFamily="{StaticResource FontIcons}" BackgroundColor="Transparent" FontAttributes="Bold" TextColor="White" VerticalOptions="Center" HorizontalOptions="End" 
+                             Clicked="OnLogout"/>
+            </Grid>
+            
+            <Grid Margin="0,-6,0,0">  <!-- Top MainPage Header -->
+                <!-- Top Header Gradient -->
                 <gradient:SfGradientView>
                     <gradient:SfGradientView.BackgroundBrush>
                         <gradient:SfLinearGradientBrush>
@@ -41,19 +40,24 @@
                     </gradient:SfGradientView.BackgroundBrush>
                 </gradient:SfGradientView>
 
-
-                <Grid>
+                <!-- Top Header Content -->
+                <Grid RowSpacing="0">
                     <Grid.RowDefinitions>
-                        <RowDefinition Height="*" />
+                        <RowDefinition Height="20" />
+                        <RowDefinition Height="150" />
                     </Grid.RowDefinitions>
-                    <Image Grid.Row="0" Grid.Column="0" Source="SEHomePage.png" HorizontalOptions="Center"  IsOpaque="False"  VerticalOptions="FillAndExpand" />
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+
+
+                    <Image Grid.Row="0" Grid.Column="0" Grid.RowSpan="2" Source="SEHomePage.png" HorizontalOptions="Center"  IsOpaque="False"  VerticalOptions="FillAndExpand" />
                 </Grid>
             </Grid>
             
             <!-- Add current Data Overview (Users, #Active, Areas, #Active, Locations, #Active)   -->
-            <Grid Margin="10" >
+            <Grid Margin="16,16,10,0" >
                 <Grid.RowDefinitions>
-                    <RowDefinition Height="30" />
                     <RowDefinition Height="120" />
                 </Grid.RowDefinitions>
                 <Grid.ColumnDefinitions>
@@ -64,90 +68,105 @@
                     <ColumnDefinition Width="120"/>
                 </Grid.ColumnDefinitions>
 
-                <Label  Grid.Row="0" Grid.Column="0" Text="Users"  Style="{StaticResource labletitlestyle}" FontAttributes="Bold"/>
-                
-                <Grid Grid.Row="1" Grid.Column="0" BackgroundColor="#ffffff">
-
+                 <!-- Active Users -->
+                <Grid Grid.Row="0" Grid.Column="0" >
                     <Grid.RowDefinitions>
-                            <RowDefinition Height="*" />
-                            <RowDefinition Height="*"/>
+                        <RowDefinition Height=".4*" />
+                        <RowDefinition Height=".3*"/>
+                        <RowDefinition Height=".3*"/>
                     </Grid.RowDefinitions>
                     <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="2*"/>
                         <ColumnDefinition Width="*"/>
                     </Grid.ColumnDefinitions>
 
-                    <Image Grid.Row="0" Grid.Column="0" Grid.RowSpan="2" Grid.ColumnSpan="2" Source="MainPageLeftFrac.png" VerticalOptions="CenterAndExpand" HorizontalOptions="FillAndExpand" Margin="5"/>
-                    <Label Grid.Row="0" Grid.Column="0" Style="{StaticResource labletitlestyle}" FontAttributes="Bold" Text="2" Margin="12,0,0,0"/>
-                    <Label Grid.Row="1" Grid.Column="1" Style="{StaticResource labletitlestyle}" FontAttributes="Bold" Text="12" Margin="0,0,12,0"/>
+                    <Image Grid.Row="0" Grid.Column="0" Grid.RowSpan="3" Grid.ColumnSpan="2" Source="MainPageLeftStatus.png" VerticalOptions="CenterAndExpand" HorizontalOptions="FillAndExpand" />
+                    <Label Grid.Row="1" Grid.Column="0" FontSize="Body" TextColor="Black" HorizontalOptions="Start" VerticalOptions="Center" FontAttributes="None" Text="Active:" Margin="12,0,0,0"/>
+                    <Label Grid.Row="2" Grid.Column="0" FontSize="Body" TextColor="Black" HorizontalOptions="Start" VerticalOptions="Center" FontAttributes="None" Text="Total:" Margin="12,-5,0,12"/>
+                    <Label Grid.Row="1" Grid.Column="1" FontSize="Body" TextColor="Black" HorizontalOptions="Center" VerticalOptions="Center" FontAttributes="Bold" Text="2" Margin="0,0,12,0"/>
+                    <Label Grid.Row="2" Grid.Column="1" FontSize="Body" TextColor="Black" HorizontalOptions="Center" VerticalOptions="Center" FontAttributes="Bold" Text="12" Margin="0,-5,12,12"/>
                 </Grid>
                 
                 <!-- Active Areas -->
-                <Label  Grid.Row="0" Grid.Column="2" Text=" Areas" Style="{StaticResource labletitlestyle}" FontAttributes="Bold"/>
-                <Grid Grid.Row="1" Grid.Column="2" BackgroundColor="#ffffff">
+                <Grid Grid.Row="0" Grid.Column="2" >
                     <Grid.RowDefinitions>
-                        <RowDefinition Height="*" />
-                        <RowDefinition Height="*"/>
+                        <RowDefinition Height=".4*" />
+                        <RowDefinition Height=".3*"/>
+                        <RowDefinition Height=".3*"/>
                     </Grid.RowDefinitions>
                     <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="2*"/>
                         <ColumnDefinition Width="*"/>
                     </Grid.ColumnDefinitions>
 
-                    <Image Grid.Row="0" Grid.Column="0" Grid.RowSpan="2" Grid.ColumnSpan="2" Source="MainPageMidFrac.png" VerticalOptions="CenterAndExpand" HorizontalOptions="FillAndExpand" Margin="5"/>
-                    <Label Grid.Row="0" Grid.Column="0" Style="{StaticResource labletitlestyle}" FontAttributes="Bold" Text="2" Margin="12,12,0,0"/>
-                    <Label Grid.Row="1" Grid.Column="1" Style="{StaticResource labletitlestyle}" FontAttributes="Bold" Text="12" Margin="0,0,12,12"/>
+                    <Image Grid.Row="0" Grid.Column="0" Grid.RowSpan="3" Grid.ColumnSpan="2" Source="MainPageMidStatus.png" VerticalOptions="CenterAndExpand" HorizontalOptions="FillAndExpand" />
+                    <Label Grid.Row="1" Grid.Column="0" FontSize="Body" TextColor="Black" HorizontalOptions="Start" VerticalOptions="Center" FontAttributes="None" Text="Active:" Margin="12,0,0,0"/>
+                    <Label Grid.Row="2" Grid.Column="0" FontSize="Body" TextColor="Black" HorizontalOptions="Start" VerticalOptions="Center" FontAttributes="None" Text="Total:" Margin="12,-5,0,12"/>
+                    <Label Grid.Row="1" Grid.Column="1" FontSize="Body" TextColor="Black" HorizontalOptions="Center" VerticalOptions="Center" FontAttributes="Bold" Text="2" Margin="0,0,12,0"/>
+                    <Label Grid.Row="2" Grid.Column="1" FontSize="Body" TextColor="Black" HorizontalOptions="Center" VerticalOptions="Center" FontAttributes="Bold" Text="12" Margin="0,-5,12,12"/>
                 </Grid>
 
                 <!-- Active Locations -->
-                <Label  Grid.Row="0" Grid.Column="4" Text="Entries" Style="{StaticResource labletitlestyle}" FontAttributes="Bold"/>
-                <Grid Grid.Row="1" Grid.Column="4" BackgroundColor="#ffffff">
+                <Grid Grid.Row="0" Grid.Column="4" >
                     <Grid.RowDefinitions>
-                        <RowDefinition Height="*" />
-                        <RowDefinition Height="*"/>
+                        <RowDefinition Height=".4*" />
+                        <RowDefinition Height=".3*"/>
+                        <RowDefinition Height=".3*"/>
                     </Grid.RowDefinitions>
                     <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="2*"/>
                         <ColumnDefinition Width="*"/>
                     </Grid.ColumnDefinitions>
 
-                    <Image Grid.Row="0" Grid.Column="0" Grid.RowSpan="2" Grid.ColumnSpan="2" Source="MainPageRightFrac.png" VerticalOptions="CenterAndExpand" HorizontalOptions="FillAndExpand" Margin="5"/>
-                    <Label Grid.Row="0" Grid.Column="0" Style="{StaticResource labletitlestyle}" FontAttributes="Bold" Text="2" Margin="12,12,0,0"/>
-                    <Label Grid.Row="1" Grid.Column="1" Style="{StaticResource labletitlestyle}" FontAttributes="Bold" Text="12" Margin="0,0,12,12"/>
+                    <Image Grid.Row="0" Grid.Column="0" Grid.RowSpan="3" Grid.ColumnSpan="2" Source="MainPageRightStatus.png" VerticalOptions="CenterAndExpand" HorizontalOptions="CenterAndExpand"/>
+                    <Label Grid.Row="1" Grid.Column="0" FontSize="Body" TextColor="Black" HorizontalOptions="Start" VerticalOptions="Center" FontAttributes="None" Text="Active:" Margin="12,0,0,0"/>
+                    <Label Grid.Row="2" Grid.Column="0" FontSize="Body" TextColor="Black" HorizontalOptions="Start" VerticalOptions="Center" FontAttributes="None" Text="Total:" Margin="12,-5,0,12"/>
+                    <Label Grid.Row="1" Grid.Column="1" FontSize="Body" TextColor="Black" HorizontalOptions="Center" VerticalOptions="Center" FontAttributes="Bold" Text="2" Margin="0,0,12,0"/>
+                    <Label Grid.Row="2" Grid.Column="1" FontSize="Body" TextColor="Black" HorizontalOptions="Center" VerticalOptions="Center" FontAttributes="Bold" Text="12" Margin="0,-5,12,12"/>
                 </Grid>
             </Grid>
-            
-            <Image Source="SafeEntryBlue.png" HorizontalOptions="Center"  IsOpaque="False" HeightRequest="100" Opacity=".4" VerticalOptions="FillAndExpand" />
 
-            <Grid Margin="30,0">
-   
+            <!-- Database 24hr plot   -->
+            <Grid VerticalOptions="FillAndExpand" BackgroundColor="#ffffff" Margin="16">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="5"/>
+                    <RowDefinition Height="Auto"/>
+                </Grid.RowDefinitions>
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="*"/>
                     <ColumnDefinition Width="*"/>
                 </Grid.ColumnDefinitions>
-                <buttons:SfButton
-                            Grid.Column="0"
-                            Style="{StaticResource HomePageButtons}"
-                            Text="Randomize Data" 
-                            Clicked="OnDatabaseRefresh"/>
-                
-                <buttons:SfButton
-                            Grid.Column="1"
-                            Style="{StaticResource HomePageButtons}"
-                            Text="Clear Data" 
-                            Clicked="OnDatabaseClear"/>
 
+                <chart:SfChart  Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2" VerticalOptions="FillAndExpand" Margin="0,0,10,0">
+
+                    <chart:SfChart.PrimaryAxis>
+                        <chart:DateTimeAxis x:Name="xaxis" IntervalType="Days"  LabelsIntersectAction="MultipleRows">
+                            <chart:DateTimeAxis.Title>
+                                <chart:ChartAxisTitle Text="Time" FontSize="14" TextColor="Black"></chart:ChartAxisTitle>
+                            </chart:DateTimeAxis.Title>
+                        </chart:DateTimeAxis>
+                    </chart:SfChart.PrimaryAxis>
+
+                    <chart:SfChart.SecondaryAxis>
+                        <chart:NumericalAxis>
+                            <chart:NumericalAxis.Title>
+                                <chart:ChartAxisTitle Text="Count #" FontSize="14" TextColor="Black"></chart:ChartAxisTitle>
+                            </chart:NumericalAxis.Title>
+                        </chart:NumericalAxis>
+                    </chart:SfChart.SecondaryAxis>
+
+                    <chart:SfChart.Series>
+                        <chart:StepAreaSeries x:Name = "sfchart" ItemsSource ="{Binding DatetimeData}"  XBindingPath="Date"
+                            YBindingPath="Value" Color="#2783d6" >
+                        </chart:StepAreaSeries>
+                    </chart:SfChart.Series>
+
+                </chart:SfChart>
             </Grid>
-            <buttons:SfButton
-                            Style="{StaticResource SfButtonStyle}"
-                                            Margin="30,16"
-                            Text="Logout" 
-                            Clicked="OnLogout"/>
 
-            <!--Button Text="Full Database Refresh"   Style="{StaticResource buttonStyle}"  TextColor="Red" Clicked = "OnDatabaseRefresh" />
-            <Button Text="Logout"   Style="{StaticResource buttonStyle}"  TextColor="Red" Clicked = "OnLogout" /-->
 
-                <!-- Nav Bar Display-->
+
+            <!-- Nav Bar Display-->
             <Grid x:Name="NavBarGrid"  BackgroundColor="#ffffff">
                 <Grid.RowDefinitions>
                     <RowDefinition Height="50"/>

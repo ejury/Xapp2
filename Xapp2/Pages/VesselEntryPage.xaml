@@ -5,172 +5,282 @@ xmlns:chart="clr-namespace:Syncfusion.SfChart.XForms;assembly=Syncfusion.SfChart
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:d="http://xamarin.com/schemas/2014/forms/design"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-             xmlns:gradient="clr-namespace:Syncfusion.XForms.Graphics;assembly=Syncfusion.Core.XForms"
+             xmlns:gradient="clr-namespace:Syncfusion.XForms.Graphics;assembly=Syncfusion.Core.XForms" xmlns:buttons="clr-namespace:Syncfusion.XForms.Buttons;assembly=Syncfusion.Buttons.XForms"
              mc:Ignorable="d"
              x:Class="Xapp2.Pages.VesselEntryPage"
              >
 
+    <ContentPage.Resources>
+        <ResourceDictionary>
+            <chart:ChartColorCollection x:Key="Colors">
+                <Color>#2c0051</Color>
+                <Color>#6e28b8</Color>
+                <Color>#282bb8</Color>
+                <Color>#1c8af0</Color>
+                <Color>#1cbcdf</Color>
+                <Color>#1cdfc6</Color>
+                <Color>#adf0a3</Color>
+                <Color>#e8e5fd</Color>
 
-        
-  
+            </chart:ChartColorCollection>
+        </ResourceDictionary>
+    </ContentPage.Resources>
+
+
     <ContentPage.Content>
 
-        <Grid>
-            <gradient:SfGradientView>
-                <gradient:SfGradientView.BackgroundBrush>
-                    <gradient:SfLinearGradientBrush>
-                        <gradient:SfLinearGradientBrush.GradientStops>
-                            <gradient:SfGradientStop Color="#eaebf4" Offset="0.0" />
-                            <gradient:SfGradientStop Color="#d5d6dd" Offset="1.0" />
-                        </gradient:SfLinearGradientBrush.GradientStops>
-                    </gradient:SfLinearGradientBrush>
-                </gradient:SfGradientView.BackgroundBrush>
-            </gradient:SfGradientView>
 
-
-            <StackLayout
+        <StackLayout VerticalOptions="Start"
             Style="{StaticResource pageStyle}">
 
-                <!-- Top Header Details -->
-                <Grid
-                BackgroundColor="#2783d6" >
-                    <Grid.RowDefinitions>
-                        <RowDefinition Height="40" />
+            <!-- Top Header Details -->
+            <Grid
+                BackgroundColor="#000000" >
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="40" />
 
-                    </Grid.RowDefinitions>
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="40"/>
-                        <ColumnDefinition Width="*"/>
-                        <ColumnDefinition Width="40"/>
-                    </Grid.ColumnDefinitions>
-                    <Image Grid.Column="0"   Source="SEWhite.jpg"   HorizontalOptions="Center"   VerticalOptions="Center"  Margin="3" />
-                    <Label Grid.Column="1"   Style="{StaticResource labletitlestyle}"  Text="Heirarchy Dev"    />
-                    <ImageButton Grid.Column="2" Source="HomeButton.png" Margin="5"  BackgroundColor="Transparent"  Clicked = "OnMainNavClicked" />
-                </Grid>
-                <!-- Top Header Ends -->
+                </Grid.RowDefinitions>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="40"/>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="40"/>
+                </Grid.ColumnDefinitions>
+                <Image Grid.Column="0"   Source="SEWhite.jpg"   HorizontalOptions="Center"   VerticalOptions="Center"  Margin="3" />
+                <Label Grid.Column="1"   Style="{StaticResource labletitlestyle}"  Text="Heirarchy Dev"  TextColor="White"  />
+                <ImageButton Grid.Column="2" Source="HomeButton.png" Margin="5"  BackgroundColor="Transparent"  Clicked = "OnMainNavClicked" />
+            </Grid>
+            <!-- Top Header Ends -->
 
-                <!--Data Entry Section   -->
-                <Grid RowSpacing="0">
-                    <Grid.RowDefinitions>
-                        <RowDefinition Height="20" />
-                        <RowDefinition Height="40" />
-                        <RowDefinition Height="40" />
+            <!--Data Entry Section   -->
+            <Grid VerticalOptions="StartAndExpand" MinimumHeightRequest="197">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+
+                <!-- Vessel Entry Section -->
+                <Frame Grid.Column="0" CornerRadius="10" HorizontalOptions="StartAndExpand"  VerticalOptions="Start" Margin="16,16,8,16" BackgroundColor="#ffffff"
+           HasShadow="True"   IsClippedToBounds="True"  Padding="0">
+
+                    <Grid RowSpacing="0">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="30"/>
+                            <RowDefinition Height="5"/>
+                            <RowDefinition Height="40" />
+                            <RowDefinition Height="40" />
+                            <RowDefinition Height="50"/>
+                        </Grid.RowDefinitions>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
+
+                        <Label Text=" &#xe729;"  Margin="3,0,0,0" Grid.Row="0" Grid.Column="0"  HorizontalOptions="Start"
+                       Style="{StaticResource lablebodystyle}" FontAttributes="bold" FontFamily="{StaticResource FontIcons}" TextColor="#3cc6ee"/>
+                        <Label Text=" +Location"  Margin="25,0,0,0" Grid.Row="0" Grid.Column="0"  HorizontalOptions="Start"
+                       Style="{StaticResource lablebodystyle}" FontAttributes="bold" FontFamily="{StaticResource FontIcons}" TextColor="#000000"/>
+
+                        <BoxView Grid.Row="1" HorizontalOptions="FillAndExpand" HeightRequest="1" Color="#67ceec" Margin="10,0,10,0"/>
+
+                        <!--Label Grid.Row="2" Grid.Column="0" Text="New Vessel:" VerticalOptions="Center" HorizontalOptions="Start" Style="{StaticResource lablebodystyle}"/-->
+
+                        <Label Grid.Row="2" Text="  &#xe730;"  Margin="0,0,0,0"  HorizontalOptions="Start"
+                       Style="{StaticResource lablebodystyle}" FontAttributes="bold" FontFamily="{StaticResource FontIcons}" TextColor="#000000"/>
                         
-                    </Grid.RowDefinitions>
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="100"/>
-                        <ColumnDefinition Width="*"/>
-                        <ColumnDefinition Width="*"/>
-                    </Grid.ColumnDefinitions>
+                        <Entry Grid.Row="2"   x:Name ="VesselEntryText" Margin="40,0,10,0" HorizontalOptions="FillAndExpand"
+                       Style="{StaticResource entrystyle}"  VerticalOptions="Center"   Placeholder="Location Name"/>
 
-                    <Label Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="3" Text="Data Entry" HorizontalOptions="Center" Style="{StaticResource lablebodystyle}"/>
-                    <Label Grid.Row="1" Grid.Column="0" Text="New Vessel:" VerticalOptions="Center" HorizontalOptions="Start" Style="{StaticResource lablebodystyle}"/>
-                    <Label Grid.Row="2" Grid.Column="0" Text="New Unit:" VerticalOptions="Center" HorizontalOptions="Start" Style="{StaticResource lablebodystyle}"/>
+                        <Label Grid.Row="3" Text="  &#xe733;"  Margin="0,0,0,0"  HorizontalOptions="Start"
+                       Style="{StaticResource lablebodystyle}" FontAttributes="bold" FontFamily="{StaticResource FontIcons}" TextColor="#000000"/>
+                        
+                        <Picker Grid.Row="3"   x:Name="picker" Margin="40,0,10,0"
+                        Style="{StaticResource pickerstyle}"  Title="Select Area"    ItemsSource="{Binding unitspicker}"  HorizontalOptions="FillAndExpand"
+                        ItemDisplayBinding="{Binding Name}"     SelectedItem="{Binding SelectedUnit}"   SelectedIndexChanged="OnPickerSelectedIndexChanged"/>
+                   
+                        <buttons:SfButton
+                            Grid.Row="4"  Margin="20,10,20,10"  BackgroundColor="{DynamicResource FacebookBlue}"
+                            CornerRadius="20" HeightRequest="40"  Clicked = "OnVesselEntryCompleted">
+                            <buttons:SfButton.Content>
+                                <StackLayout
+                                    HorizontalOptions="CenterAndExpand"  Orientation="Horizontal"     VerticalOptions="Center">
+                                    <Label
+                                        FontFamily="{StaticResource FontIcons}" FontSize="18" 
+                                        Text="&#xe729;"
+                                        TextColor="{DynamicResource Gray-White}"
+                                        VerticalTextAlignment="Center" />
+                                    <Label
+                                        FontFamily="{StaticResource Montserrat-Medium}"  FontSize="16"
+                                        Text=" Add"
+                                        TextColor="{DynamicResource Gray-White}" />
+                                </StackLayout>
+                            </buttons:SfButton.Content>
+                        </buttons:SfButton>
+                    </Grid>
+                </Frame>
 
-                    <Entry Grid.Row="1" Grid.Column="1"
-                       x:Name ="VesselEntryText"
-                       Style="{StaticResource entrystyle}"
-                       VerticalOptions="Center"
-                       Placeholder="Enter Text"
-                       Completed="OnVesselEntryCompleted"/>
+                <!-- Unit Entry Section -->
+                <Frame Grid.Column="1" CornerRadius="10" HorizontalOptions="Center"   Margin="8,16,16,16" BackgroundColor="#ffffff"
+           HasShadow="True"   IsClippedToBounds="True"  Padding="0" VerticalOptions="Fill">
 
-                    <Entry Grid.Row="2" Grid.Column="1"
-                       x:Name ="UnitEntryText"
-                       Style="{StaticResource entrystyle}"
-                       VerticalOptions="End"
-                       Placeholder="Enter Text"
-                       Completed="OnUnitEntryCompleted"/>
+                    <Grid RowSpacing="0">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="30"/>
+                            <RowDefinition Height="5"/>
+                            <RowDefinition Height="40" />
+                            <RowDefinition Height="40" />
+                            <RowDefinition Height="50"/>
+                        </Grid.RowDefinitions>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
 
-                    <Picker Grid.Row="1" Grid.Column="2"
-                        x:Name="picker" 
-                        Style="{StaticResource pickerstyle}"
-                        Title="Select Unit"  
-                        ItemsSource="{Binding unitspicker}" 
-                        HorizontalOptions="CenterAndExpand"
-                        ItemDisplayBinding="{Binding Name}"
-                        SelectedItem="{Binding SelectedUnit}"
-                        SelectedIndexChanged="OnPickerSelectedIndexChanged"/>
-                </Grid>
+                        <Label Text="  &#xe733;"  Margin="0,0,0,0" Grid.Row="0" HorizontalOptions="Start"
+                       Style="{StaticResource lablebodystyle}" FontAttributes="bold" FontFamily="{StaticResource FontIcons}" TextColor="#23dfb4"/>
+
+                        <Label Text=" +Area"  Margin="25,0,0,0" Grid.Row="0"  HorizontalOptions="Start"
+                       Style="{StaticResource lablebodystyle}" FontAttributes="bold" FontFamily="{StaticResource FontIcons}" TextColor="#000000"/>
+
+                        <BoxView Grid.Row="1"  HorizontalOptions="FillAndExpand" HeightRequest="1" Color="#69ecce" Margin="10,0,10,0"/>
+
+                        <Label Grid.Row="2" Text="  &#xe730;"  Margin="0,0,0,0"  HorizontalOptions="Start"
+                       Style="{StaticResource lablebodystyle}" FontAttributes="bold" FontFamily="{StaticResource FontIcons}" TextColor="#000000"/>
+
+                        <Entry Grid.Row="2"  x:Name ="UnitEntryText" Margin="40,0,10,0" HorizontalOptions="FillAndExpand"
+                       Style="{StaticResource entrystyle}"   VerticalOptions="End"  Placeholder="Area Name" />
+                     
+                        <!--Label Text=" &#xe733;&#xe703;&#xe704; &#xe729; &#xe730; &#xe715;&#xe716;&#xe717;&#xe719;"  Margin="0,0,0,-5" Grid.Row="3"  HorizontalOptions="Start"
+                       Style="{StaticResource lablebodystyle}" FontAttributes="bold" FontFamily="{StaticResource FontIcons}" TextColor="#0f2696"/-->
+
+                        <buttons:SfButton
+                            Grid.Row="4" Margin="20,10,20,10"  BackgroundColor="{DynamicResource FacebookBlue}"
+                            CornerRadius="20" HeightRequest="40"  Clicked = "OnUnitEntryCompleted">
+                            <buttons:SfButton.Content>
+                                <StackLayout
+                                    HorizontalOptions="CenterAndExpand"  Orientation="Horizontal"     VerticalOptions="Center">
+                                    <Label
+                                        FontFamily="{StaticResource FontIcons}" FontSize="18"
+                                        Text="&#xe733;"
+                                        TextColor="{DynamicResource Gray-White}"
+                                        VerticalTextAlignment="Center" />
+                                    <Label
+                                        FontFamily="{StaticResource Montserrat-Medium}"  FontSize="16"
+                                        Text=" Add"
+                                        TextColor="{DynamicResource Gray-White}" />
+                                </StackLayout>
+                            </buttons:SfButton.Content>
+                        </buttons:SfButton>
+                    </Grid>
+
+                </Frame>
+            </Grid>
+
+            <!--Data Display Section   -->
+            <!--Data Display Section   -->
+            <StackLayout BackgroundColor="Black">
+                <Label Text="Location Summary" TextColor="White"  Style="{StaticResource labletitlestyle}" FontSize="Medium" HeightRequest="40" Padding="0,2,0,0"  VerticalTextAlignment="Center"/>
+            </StackLayout>
+            
+            <Grid Margin="0" Padding="0" RowSpacing="0" VerticalOptions="FillAndExpand">
+
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="1.5*" />
+                    <ColumnDefinition Width="*" />
+                </Grid.ColumnDefinitions>
+
+                <!-- Adding Vessel List Display-->
+                <Frame x:Name="ListFrame" Grid.Column="1" CornerRadius="10" HorizontalOptions="Center"  VerticalOptions="FillAndExpand" Margin="8,16,16,16" BackgroundColor="#ffffff"
+                   HasShadow="True" IsClippedToBounds="True" Padding="0">
+
+                    <Grid RowSpacing="5" >
+                        
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="30" />
+                            <RowDefinition Height="5" />
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="30" />
+                            <RowDefinition Height="30" />
+                        </Grid.RowDefinitions>
+
+                        <!--Adding Vessel List Display   -->
+                        <Button x:Name="unitlabelname" Grid.Row="0" Text="temp" HorizontalOptions="Fill"   FontAttributes="Bold"
+                                BorderWidth="0" Padding="0" FontSize="20" TextColor="Black" BackgroundColor="#FFFFFF" Margin="0,0,0,0">
+                        </Button>
+
+                        <BoxView Grid.Row="1" HorizontalOptions="FillAndExpand" HeightRequest="1" Color="#69ecce" Margin="10,0,10,0"/>
+
+                        <StackLayout Grid.Row="2" VerticalOptions="Fill" Spacing="0">
+                        <ListView x:Name="vesselview1" SeparatorVisibility="Default" RowHeight="25"
+                      Style="{StaticResource listviewstyle}" BackgroundColor="Transparent" VerticalOptions="Start"  HasUnevenRows="True"
+                      ItemSelected="VesselSelected1" >
+                            <ListView.ItemTemplate>
+                                <DataTemplate>
+                                    <ViewCell>
+                                       
+                                            <Grid Margin="10,0,10,0" RowSpacing="-5">
+                                                <Grid.ColumnDefinitions>
+                                                    <ColumnDefinition Width="*" />
+                                                </Grid.ColumnDefinitions>
+
+                                                <!-- Left column - First Name of Vessel  -->
+                                                <Label Grid.Column="0"
+                                               TextColor="Black"  FontSize="Body"
+                                                   HorizontalTextAlignment="start"
+                                                      Text="{Binding Name}"/>
+
+                                            </Grid>
+                                        </ViewCell>
+                                </DataTemplate>
+
+                            </ListView.ItemTemplate>
+                        </ListView>
+                        </StackLayout>
+
+                        <!-- Database clear options -->
+                        <buttons:SfButton Grid.Row="3" Style="{StaticResource HomePageButtons}" Margin="0,-2"  Text="Randomize Data"  Clicked="OnDatabaseRefresh"/>
+                        <buttons:SfButton Grid.Row="4"  Style="{StaticResource HomePageButtons}" Margin="0,-2" Text="Clear Data" Clicked="OnDatabaseClear"/>
+                    </Grid>
+                </Frame>
 
 
-                <!--Data Display Section   -->
-                <Grid BackgroundColor="#85baea" Margin="0" Padding="0" RowSpacing="0" VerticalOptions="FillAndExpand">
-                    <!-- Data Background Gradient>
-                    <gradient:SfGradientView>
-                        <gradient:SfGradientView.BackgroundBrush>
-                            <gradient:SfLinearGradientBrush>
-                                <gradient:SfLinearGradientBrush.GradientStops>
-                                    <gradient:SfGradientStop Color="#2783d6" Offset="0.0" />
-                                    <gradient:SfGradientStop Color="#020a45" Offset="0.7" />
-                                </gradient:SfLinearGradientBrush.GradientStops>
-                            </gradient:SfLinearGradientBrush>
-                        </gradient:SfGradientView.BackgroundBrush>
-                    </gradient:SfGradientView-->
-                    
-                    <Grid.RowDefinitions>
-                        <RowDefinition Height="47" />
-                        <RowDefinition Height="300" />
-                    </Grid.RowDefinitions>
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="*" />
-                        <ColumnDefinition Width="60" />
-                        <ColumnDefinition Width="60" />
-                    </Grid.ColumnDefinitions>
+                <!-- Adding Pie Chart Display-->
+                <Frame x:Name="PieFrame" Grid.Column="0" CornerRadius="10" HorizontalOptions="Center"  VerticalOptions="FillAndExpand" Margin="16,16,8,16" BackgroundColor="#ffffff"
+                   HasShadow="True" IsClippedToBounds="True" Padding="0">
 
-                    <!--Adding Vessel List Displays (2x)   -->
-                    <Button x:Name="unitlabelname" Grid.Column="1" Grid.Row="0" Grid.ColumnSpan="2" Text="temp" HorizontalOptions="Fill"  Clicked="DeleteUnitSelected" 
-                        BorderWidth="0" Margin="5,2,5,2" Padding="0" FontSize="20" TextColor="Black" BackgroundColor="#3992e3" >
-                    </Button>
+                    <Grid RowSpacing="5">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="30" />
+                            <RowDefinition Height="5" />
+                            <RowDefinition Height="*" />
+                        </Grid.RowDefinitions>
 
-                    <ListView Grid.Column="1" Grid.Row="1" x:Name="vesselview1" SeparatorVisibility="Default" RowHeight="30"
-                      Style="{StaticResource listviewstyle}" BackgroundColor="Transparent"
-                      ItemSelected="VesselSelected1">
-                        <ListView.ItemTemplate>
-                            <DataTemplate>
-                                <ViewCell>
-                                    <Label   Text="{Binding Name}" Style="{StaticResource lablebodystyle}"/>
-                                </ViewCell>
-                            </DataTemplate>
+                        <Label  Grid.Row="0" Text="Locations" HorizontalOptions="Fill" FontAttributes="Bold"   HorizontalTextAlignment="center"
+                                 Margin="0" Padding="0" FontSize="20" TextColor="Black" BackgroundColor="#ffffff" >
+                        </Label>
 
-                        </ListView.ItemTemplate>
-                    </ListView>
+                        <BoxView Grid.Row="1" HorizontalOptions="FillAndExpand" HeightRequest="1" Color="#67ceec" Margin="10,0,10,0"/>
 
-                    <ListView Grid.Column="2" Grid.Row="1" x:Name="vesselview2" SeparatorVisibility="Default" RowHeight="30"
-                      Style="{StaticResource listviewstyle}" BackgroundColor="Transparent"
-                      ItemSelected="VesselSelected2">
-                        <ListView.ItemTemplate>
-                            <DataTemplate>
-                                <ViewCell>
-                                    <Label   Text="{Binding Name}" Style="{StaticResource lablebodystyle}"/>
-                                </ViewCell>
-                            </DataTemplate>
+                        <!--Adding Pie Chart Display   -->
+                        <chart:SfChart  Grid.Column="0" Grid.Row="2" BackgroundColor="Transparent" Margin="5,0,5,0" VerticalOptions="CenterAndExpand">
 
-                        </ListView.ItemTemplate>
-                    </ListView>
+                            <chart:SfChart.Legend>
+                                <chart:ChartLegend OverflowMode="Wrap">
+                                    <chart:ChartLegend.LabelStyle>
+                                        <chart:ChartLegendLabelStyle TextColor="#020a45" Font="Bold"/>
+                                    </chart:ChartLegend.LabelStyle>
+                                </chart:ChartLegend>
+                            </chart:SfChart.Legend>
 
-                    <!--Adding Pie Chart Display   -->
-                    <chart:SfChart  Grid.Column="0" Grid.Row="0" Grid.RowSpan="2" BackgroundColor="Transparent" Margin="5,0,5,0" VerticalOptions="Fill" HeightRequest="200">
-
-                        <chart:SfChart.Title>
-                            <chart:ChartTitle FontSize="20" TextColor="Black" Font="Bold" Text="Heirarchy Overview" BackgroundColor="#3992e3"/>
-                        </chart:SfChart.Title>
-
-                        <chart:SfChart.Legend>
-                            <chart:ChartLegend>
-                                <chart:ChartLegend.LabelStyle>
-                                    <chart:ChartLegendLabelStyle TextColor="#020a45" Font="Bold"/>
-                                </chart:ChartLegend.LabelStyle>
-                            </chart:ChartLegend>
-                        </chart:SfChart.Legend>
-
-                        <chart:PieSeries  x:Name="pie" ExplodeIndex="{Binding pieselect, Mode=TwoWay}" ItemsSource="{Binding piemodel}" YBindingPath="Vesselcount" XBindingPath="Unitname" 
+                            <chart:PieSeries  x:Name="pie" ExplodeIndex="{Binding pieselect, Mode=TwoWay}" ItemsSource="{Binding piemodel}" YBindingPath="Vesselcount" XBindingPath="Unitname" 
                                   ExplodeOnTouch="True"  PropertyChanged="OnPickerSelectedIndexChanged"  DataMarkerPosition="Inside" >
 
-                            <chart:PieSeries.DataMarker>
-                                <chart:ChartDataMarker>
-                                    <chart:ChartDataMarker.LabelStyle>
+                                <chart:PieSeries.ColorModel>
+                                    <chart:ChartColorModel Palette="Custom" CustomBrushes="{StaticResource Colors}"/>
+                                </chart:PieSeries.ColorModel>
 
-                                        <chart:DataMarkerLabelStyle TextColor="#020a45"
+                                <chart:PieSeries.DataMarker>
+                                    <chart:ChartDataMarker>
+                                        <chart:ChartDataMarker.LabelStyle>
+
+                                            <chart:DataMarkerLabelStyle TextColor="#020a45"
 										BorderColor="Black" 
 										BorderThickness="2"
 										BackgroundColor="#a8cdee"
@@ -178,75 +288,45 @@ xmlns:chart="clr-namespace:Syncfusion.SfChart.XForms;assembly=Syncfusion.SfChart
 										
 										Font="Bold,18"/>
 
-                                    </chart:ChartDataMarker.LabelStyle>
-                                </chart:ChartDataMarker>
-                            </chart:PieSeries.DataMarker>
+                                        </chart:ChartDataMarker.LabelStyle>
+                                    </chart:ChartDataMarker>
+                                </chart:PieSeries.DataMarker>
 
-                        </chart:PieSeries>
-                    </chart:SfChart>
-                </Grid>
+                            </chart:PieSeries>
+                        </chart:SfChart>
+                    </Grid>
+                </Frame>
+            </Grid>
 
-                <!-- Navigation Bar -->
-                <Grid Margin="0,-6,0,0" Padding="0,0,0,0" ColumnSpacing="-5" RowSpacing="0" VerticalOptions="End" MinimumHeightRequest="75">
-                    <!-- Nav Bar Background Gradient-->
-                    <gradient:SfGradientView>
-                        <gradient:SfGradientView.BackgroundBrush>
-                            <gradient:SfLinearGradientBrush>
-                                <gradient:SfLinearGradientBrush.GradientStops>
-                                    <gradient:SfGradientStop Color="#2783d6" Offset="0.0" />
-                                    <gradient:SfGradientStop Color="#020a45" Offset="0.7" />
-                                </gradient:SfLinearGradientBrush.GradientStops>
-                            </gradient:SfLinearGradientBrush>
-                        </gradient:SfGradientView.BackgroundBrush>
-                    </gradient:SfGradientView>
 
-                    <!-- Nav Bar Display-->
-                    <StackLayout Padding="0" Margin="0">
-                        <Grid x:Name="NavBarGrid" >
-                            <Grid.GestureRecognizers>
-                                <SwipeGestureRecognizer Direction="Up" Swiped="NavSwipedUp"/>
-                                <SwipeGestureRecognizer Direction="Down" Swiped="NavSwipedDown"/>
-                            </Grid.GestureRecognizers>
+            <!-- Nav Bar Display-->
+            <Grid x:Name="NavBarGrid"  BackgroundColor="#ffffff" VerticalOptions="End">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="50"/>
+                </Grid.RowDefinitions>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
 
-                            <Grid.RowDefinitions>
-                                <RowDefinition Height="15"/>
-                                <RowDefinition Height="60"/>
-                            </Grid.RowDefinitions>
-                            <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="*"/>
-                                <ColumnDefinition Width="*"/>
-                                <ColumnDefinition Width="*"/>
-                                <ColumnDefinition Width="*"/>
-                                <ColumnDefinition Width="*"/>
-                            </Grid.ColumnDefinitions>
+                <!-- Nav Bar Selections-->
+                <ImageButton x:Name="CSEButton" Grid.Row="0"  Grid.Column="0"   Style="{StaticResource NavImageCSE}"
+                        Clicked = "OnCSEManagerClicked"/>
+                <ImageButton x:Name="StatusButton" Grid.Row="0"  Grid.Column="1"   Style="{StaticResource NavImageStatus}"
+                        Clicked = "OnSiteStatusButtonClicked" />
+                <ImageButton x:Name="HeirarchyButton" Grid.Row="0"  Grid.Column="2"   Style="{StaticResource NavImageHeirarchy}"
+                        Clicked = "OnVesselButtonClicked" />
+                <ImageButton x:Name="WorkerButton" Grid.Row="0"  Grid.Column="3"   Style="{StaticResource NavImageWorker}"
+                        Clicked = "OnWorkerButtonClicked" />
+                <ImageButton x:Name="AnalyticsButton" Grid.Row="0"  Grid.Column="4"   Style="{StaticResource NavImageAnalytics}"
+                        Clicked = "OnAnalyticsButtonClicked" />
+            </Grid>
 
-                            <!-- Nav Bar Selections-->
-                            <Label Grid.Row="0"  Grid.Column="0"  Style="{StaticResource NavLabel}" Text="Portal"/>
-                            <Label Grid.Row="0"  Grid.Column="1"  Style="{StaticResource NavLabel}" Text="Status"/>
-                            <Label Grid.Row="0"  Grid.Column="2"  Style="{StaticResource NavLabel}" Text="Heirarchy"/>
-                            <Label Grid.Row="0"  Grid.Column="3"  Style="{StaticResource NavLabel}" Text="Workers"/>
-                            <Label Grid.Row="0"  Grid.Column="4"  Style="{StaticResource NavLabel}" Text="Analytics"/>
 
-                            <Button Grid.Row="0" Grid.Column ="0" Grid.ColumnSpan="5" BackgroundColor="Transparent" Clicked = "ShowNavClicked"/>
-
-                            <ImageButton Grid.Row="1"  Grid.Column="0"   Style="{StaticResource NavImageCSE}"
-                    Clicked = "OnCSEManagerClicked" />
-                            <ImageButton Grid.Row="1"  Grid.Column="1"   Style="{StaticResource NavImageStatus}"
-                    Clicked = "OnSiteStatusButtonClicked" />
-                            <ImageButton Grid.Row="1"  Grid.Column="2"   Style="{StaticResource NavImageHeirarchy}"
-                    Clicked = "OnVesselButtonClicked" />
-                            <ImageButton Grid.Row="1"  Grid.Column="3"   Style="{StaticResource NavImageWorker}"
-                    Clicked = "OnWorkerButtonClicked" />
-                            <ImageButton Grid.Row="1"  Grid.Column="4"   Style="{StaticResource NavImageAnalytics}"
-                    Clicked = "OnAnalyticsButtonClicked" />
-                        </Grid>
-
-                    </StackLayout>
-                </Grid>
-
-            </StackLayout>
-
-        </Grid>
+        </StackLayout>
 
     </ContentPage.Content>
 </ContentPage>

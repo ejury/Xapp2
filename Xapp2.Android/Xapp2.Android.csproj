@@ -197,13 +197,13 @@
     <AndroidResource Include="Resources\drawable\FractionBackground.png" />
   </ItemGroup>
   <ItemGroup>
-    <AndroidResource Include="Resources\drawable\MainPageLeftFrac.png" />
+    <AndroidResource Include="Resources\drawable\MainPageLeftStatus.png" />
   </ItemGroup>
   <ItemGroup>
-    <AndroidResource Include="Resources\drawable\MainPageMidFrac.png" />
+    <AndroidResource Include="Resources\drawable\MainPageMidStatus.png" />
   </ItemGroup>
   <ItemGroup>
-    <AndroidResource Include="Resources\drawable\MainPageRightFrac.png" />
+    <AndroidResource Include="Resources\drawable\MainPageRightStatus.png" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Xamarin\Android\Xamarin.Android.CSharp.targets" />
 </Project>

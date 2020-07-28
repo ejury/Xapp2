@@ -76,11 +76,16 @@ namespace Xapp2.Data
         {
             return _connection.DeleteAsync<EntryLog>(ident);
         }
+        public Task<int> DeleteWorker(int ident)
+        {
+            return _connection.DeleteAsync<Worker>(ident);
+        }
+
 
         //Add Individual Entries to database list
         async public Task<int> AddWorker(Worker worker)
         {
-            await APIServer.Add(new Tuple<Unit, Vessel, Worker>(null, null, worker), "W");
+            await APIServer.AddWorker(worker);
             IEnumerable<Worker> tempW = await APIServer.GetAllWorkers();
 
             _connection.DropTableAsync<Worker>().Wait();
@@ -177,9 +182,9 @@ namespace Xapp2.Data
             Random rnd = new Random();
 
             //Add list of workers
-            List<string> workerfirst = new List<string> { "Carl", "Sam", "Nisbit", "Johnny", "Earl", "Pete", "Douglas", "Cara", "Avril", "Betty-Sue", "Dougy", "Alex", "Tom" };
-            List<string> workerlast = new List<string> { "Johnson", "Black", "Trout", "Smith", "Rogers", "Jury", "Slick", "Salty", "Hardy", "Bolton", "Carter", "Silversmith", "Snake" };
-            List<string> companyname = new List<string> { "IOL", "IOL", "IOL", "IOL", "CEDA", "CEDA", "TEAM", "TEAM", "TEAM", "TAMS", "TAMS", "TAMS", "TAMS" };
+            List<string> workerfirst = new List<string> { "Carl", "Sam", "Nisbit", "Johnny", "Earl", "Pete", "Douglas", "Cara", "Avril", "Betty-Sue", "Dougy", "Alex", "Tom", "Tara", "Indy", "Brad", "Stu","Eddy", "Nero" };
+            List<string> workerlast = new List<string> { "Johnson", "Black", "Trout", "Smith", "Rogers", "Jury", "Slick", "Salty", "Hardy", "Bolton", "Carter", "Silversmith", "Snake", "Black", "White", "Wattson", "Ericson", "Edge", "Winter" };
+            List<string> companyname = new List<string> { "IOL", "IOL", "IOL", "IOL", "CEDA", "CEDA", "TEAM", "TEAM", "TEAM", "TAMS", "TAMS", "TAMS", "TAMS", "Curren", "Curren", "Curren","Safway", "Safway", "Safway" };
 
             for (int i = 1; i <= workerfirst.Count - 1; i++)
             {

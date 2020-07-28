@@ -7,6 +7,11 @@ using System.Net.Http.Headers;
 using System.Text;
 using System.Threading.Tasks;
 using Xapp2.Models;
+using System.Security.Claims;
+using Newtonsoft.Json.Linq;
+using System.Linq;
+using System.Data.SqlClient;
+using System.Data;
 
 namespace Xapp2.Data
 {   
@@ -57,22 +62,53 @@ namespace Xapp2.Data
             Globals.client.DefaultRequestHeaders.Authorization = authenticationHeaderValue;
             return ;
         }
+        static public async Task<string> SEClient(Worker tempWorker)
+        {
+            var response = await Globals.client.PostAsync(Url + "Account/SEBadge/", new StringContent(JsonConvert.SerializeObject(tempWorker), Encoding.UTF8, "application/json"));
+            string content = await response.Content.ReadAsStringAsync();
+            var newcontent = JsonConvert.DeserializeObject<string>(content);
+
+
+            //Error Handler
+            if (newcontent == "Card Not Active")
+            {
+                return newcontent;
+            }
+
+
+            //Decode JWT Token
+            var handler = new JwtSecurityTokenHandler();
+            var jsonToken = handler.ReadJwtToken(newcontent);
+
+            
+            //Update globals with claims from JWT
+            Globals.SELevel = Int32.Parse(jsonToken.Claims.First(claim => claim.Type == "SELevel").Value);
+            string UFirst = jsonToken.Claims.First(claim => claim.Type == "FirstName").Value;
+            string ULast = jsonToken.Claims.First(claim => claim.Type == "LastName").Value;
+            Globals.UserDisplay = UFirst.FirstOrDefault().ToString() + ". " + ULast;
+
+            Globals.JWTkey = newcontent;
+            var authenticationHeaderValue = new AuthenticationHeaderValue("Bearer", Globals.JWTkey);
+            Globals.client.DefaultRequestHeaders.Authorization = authenticationHeaderValue;
+            return "Complete";
+        }
+
         public static async Task<IEnumerable<Unit>> GetAllUnits()
         {
 
-            string result = await Globals.client.GetStringAsync(Url + "units/");
+            string result = await Globals.client.GetStringAsync(Url + "DataRequest/UnitReq/");
             return JsonConvert.DeserializeObject<IEnumerable<Unit>>(result);
         }
         public static async Task<IEnumerable<Vessel>> GetAllVessels()
         {
 
-            string result = await Globals.client.GetStringAsync(Url + "vessels/");
+            string result = await Globals.client.GetStringAsync(Url + "DataRequest/VesselReq/");
             return JsonConvert.DeserializeObject<IEnumerable<Vessel>>(result);
         }
         public static async Task<IEnumerable<Worker>> GetAllWorkers()
         {
 
-            string result = await Globals.client.GetStringAsync(Url + "workers/");
+            string result = await Globals.client.GetStringAsync(Url + "DataRequest/WorkerReq/");
             return JsonConvert.DeserializeObject<IEnumerable<Worker>>(result);
         }
 
@@ -82,7 +118,12 @@ namespace Xapp2.Data
             var response = await Globals.client.PostAsync(Url+"units/" + tag, new StringContent(JsonConvert.SerializeObject(newdata), Encoding.UTF8, "application/json"));
             return;
         }
+        static async public Task AddWorker(Worker newdata)
+        {
 
+            var response = await Globals.client.PostAsync(Url + "units/Worker/", new StringContent(JsonConvert.SerializeObject(newdata), Encoding.UTF8, "application/json"));
+            return;
+        }
 
 
         static public async Task Delete(string tag)
