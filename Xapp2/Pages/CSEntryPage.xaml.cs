@@ -17,16 +17,16 @@ namespace Xapp2.Pages
     { 
         public string currentunit;
         public string currentvessel;
-        public bool InOutMode;
+        public bool ListViewMode;
         bool Nav;
-        List<EntryLog> currentworkers;
+        List<EntryLog> currentlogs;
         EntryLog newlog = new EntryLog();
 
         protected override async void OnAppearing()
         {
             base.OnAppearing();
             SetUnitList();
-            InOutMode = InOutButton.IsToggled;
+            ListViewMode = true;
         }
 
         private async void SetUnitList()
@@ -51,40 +51,75 @@ namespace Xapp2.Pages
             if (Globals.init)
             { vesselpicker.SelectedItem = currentvessel; }
         }
-        private async void SetWorkerList()
+/*        private async void SetWorkerList()
         {
             var workerlistall = await App.Database.GetWorkers();
             List<int> workerlist = workerlistall.Select(c => c.WorkerID).ToList();
 
-            workerpicker.ItemsSource = workerlist;
-        }
+            //workerpicker.ItemsSource = workerlist;
+        }*/
         private async void SetCSEList()
         {
-            List<EntryLog> workerlistall = await App.Database.GetLogs();
-            List<EntryLog> workerlist = workerlistall.Where(w => w.VesselName == currentvessel).ToList();
-            List<TimeDisplay> timedisplay = new List<TimeDisplay>();
-            //workerlist = workerlist.Where(w => w.InOut == 1);
-            currentworkers = workerlist.ToList();
-            CultureInfo format = new CultureInfo("en-US");
-
-            for (int i = 0; i < workerlist.Count; i++)
+            //Setting appropriate view state
+            if (ListViewMode==true)
             {
-                TimeDisplay tempdisplay = new TimeDisplay();
-                tempdisplay.DateLog = workerlist[i].TimeLog.ToString("dddd-dd", format);
-                tempdisplay.TimeLog = workerlist[i].TimeLog.ToString("h:mm tt", format);
-                tempdisplay.FirstName = workerlist[i].FirstName;
-                tempdisplay.LastName = workerlist[i].LastName;
-                tempdisplay.Company = workerlist[i].Company;
-                timedisplay.Add(tempdisplay);
+                LView1.TextColor= Color.White;
+                RView1.TextColor = Color.Aqua;
+                RView2.TextColor = Color.Aqua;
+                workersview.HeightRequest = 0;
+                CompanyList.HeightRequest = 400;
+                ListSym1.IsVisible = false;
+                ListSym2.IsVisible = true;
+                ListSym3.IsVisible = true;
+                Listname.Text = "Groups";
+            }
+            else
+            {
+                LView1.TextColor = Color.Aqua;
+                RView1.TextColor = Color.White;
+                RView2.TextColor = Color.White;
+                workersview.HeightRequest = 400;
+                CompanyList.HeightRequest = 0;
+                ListSym1.IsVisible = true;
+                ListSym2.IsVisible = false;
+                ListSym3.IsVisible = false;
+                Listname.Text = "Users";
             }
 
+            //Pull local database info to gather CSE entries
+            List<EntryLog> loglistall = await App.Database.GetLogs();
+            List<EntryLog> loglistU = loglistall.Where(w => w.UnitName == currentunit).ToList();
+            List<EntryLog> loglist = loglistU.Where(w => w.VesselName == currentvessel).ToList();
+            currentlogs = loglist.ToList();
+            var workerlistall = await App.Database.GetWorkers();
+
+            //Viewmodel for displaying list
+            List<TimeDisplay> timedisplay = new List<TimeDisplay>();
+            CultureInfo format = new CultureInfo("en-US");
+
+            //Pulling worker info from NFC tags and adding to UI display
+            for (int i = 0; i < loglist.Count; i++)
+            {
+                TimeDisplay tempdisplay = new TimeDisplay();
+                Worker tempworker = workerlistall.Where(w => w.ReferenceNFC == loglist[i].ReferenceNFC).FirstOrDefault();
+
+                tempdisplay.DateLog = loglist[i].TimeLog.ToString("dddd-dd", format);
+                tempdisplay.TimeLog = loglist[i].TimeLog.ToString("h:mm tt", format);
+                tempdisplay.FirstName = tempworker.FirstName;
+                tempdisplay.LastName = tempworker.LastName;
+                tempdisplay.Company = tempworker.Company;
+                timedisplay.Add(tempdisplay);
+            }
             workersview.ItemsSource = timedisplay;
 
-            var companylong = workerlist.Select(c => c.Company).ToList();
+            //Summarizing company count data
+            var companylong = timedisplay.Select(c => c.Company).ToList();
             var company = companylong.Distinct().ToList();
             int[] companycount = new int[company.Count];
             List<CompanyList> companylist = new List<CompanyList>();
-            if (workerlist.Any() == true)
+
+            //Only go through counters if data exists
+            if (loglist.Any() == true)
             {
                 int iteration = 0;
                 foreach (string i in company)
@@ -103,13 +138,16 @@ namespace Xapp2.Pages
                     iteration++;
                 }
             }
-
             CompanyList.ItemsSource = companylist;
             int t = 1;
         }
-        private async void InOutToggle(object sender, EventArgs e)
+        private void ListViewChange(object sender, EventArgs e)
         {
-            InOutMode = InOutButton.IsToggled;
+            if (ListViewMode==true) 
+            { ListViewMode = false; }
+            else 
+            { ListViewMode = true; }
+            SetCSEList();
         }
         public CSEntryPage()
         {
@@ -126,8 +164,8 @@ namespace Xapp2.Pages
             {
                 currentunit = (string)picker.ItemsSource[selectedIndex];
                 SetVesselList();
-                workerpicker.ItemsSource = null;
-                workerpicker.Title = "Select Vessel";
+                //workerpicker.ItemsSource = null;
+                //workerpicker.Title = "Select Vessel";
 
                 if (currentunit != Globals.unit)
                 {
@@ -143,8 +181,8 @@ namespace Xapp2.Pages
             if (selectedIndex != -1)
             {
                 currentvessel = (string)picker.ItemsSource[selectedIndex];
-                workerpicker.Title = "Select Worker";
-                SetWorkerList();
+                //workerpicker.Title = "Select Worker";
+                //SetWorkerList();
                 SetCSEList();
 
                 Globals.init = true; Globals.unit = currentunit; Globals.vessel = currentvessel; //Establishing global item selection
@@ -152,81 +190,74 @@ namespace Xapp2.Pages
         }
         async void OnWorkerPickerChanged(object sender, EventArgs e)
         {
-            var picker = (Picker)sender;
-            int selectedIndex = picker.SelectedIndex;
-            Worker worker = new Worker();
+            //Check if worker card exists and is activited
+            string NFCSwipe = SwipeEntry.Text;
+            var workerlistall = await App.Database.GetWorkers();
+            var properworker = workerlistall.Where(w => w.ReferenceNFC == NFCSwipe & w.Activated == 1);
+            int properworker2 = properworker.Count();
 
-            if (selectedIndex != -1)
+            
+
+            //If activated worker not found
+            if (properworker2 == 0)
             {
-                int selectedworker = (int)picker.ItemsSource[selectedIndex];
+                //Force update from database and recheck
+                workerlistall = await App.Database.GetWorkersAPI();
+                properworker = workerlistall.Where(w => w.ReferenceNFC == NFCSwipe & w.Activated == 1);
+                properworker2 = properworker.Count();
 
-                if (InOutMode)
+                //If database user is not active/exist return error
+                if (properworker2 == 0)
                 {
-                    var properworker = currentworkers.Where(w => w.WorkerID == selectedworker & w.InOut == 1);
-                    int properworker2 = properworker.Count();
-                    if (properworker2 == 0)
-                    {
-                        worker = await App.Database.GetWorker(selectedworker);
+                    await DisplayAlert("Error Worker Entry", "Worker Does Not Exist", "Return to Entry");
+                    return;
+                }
+            }
 
-                        newlog.WorkerID = selectedworker;
-                        newlog.Company = worker.Company;
-                        newlog.FirstName = worker.FirstName;
-                        newlog.LastName = worker.LastName;
-                        newlog.InOut = 1;
-                        newlog.TimeLog = DateTime.Now;
-                        newlog.VesselName = currentvessel;
-                        newlog.UnitName = currentunit;
-                        AnalyticsLog Alog = new AnalyticsLog();
-                        Alog.WorkerID = selectedworker;
-                        Alog.Company = worker.Company;
-                        Alog.FirstName = worker.FirstName;
-                        Alog.LastName = worker.LastName;
-                        Alog.InOut = 1;
-                        Alog.TimeLog = DateTime.Now;
-                        Alog.VesselName = currentvessel;
-                        Alog.UnitName = currentunit;
+            //Checking if user was already signed in
+            List<EntryLog> Loglistall = await App.Database.GetLogs();
+            List<EntryLog> LoglistU = Loglistall.Where(w => w.UnitName == currentunit).ToList();
+            List<EntryLog> Loglist = LoglistU.Where(w => w.VesselName == currentvessel & w.ReferenceNFC == NFCSwipe).ToList();
+            int Loglist2 = Loglist.Count();
+
+            if (Loglist2 == 0) //If Not signed in, create new log
+            {
+                Worker worker = new Worker();
+                worker = properworker.FirstOrDefault();
+
+/*                newlog.WorkerID = worker.WorkerID; //Removed due to NFC tie to worker. Redundant
+                newlog.Company = worker.Company;
+                newlog.FirstName = worker.FirstName;
+                newlog.LastName = worker.LastName;*/
+                newlog.ReferenceNFC = worker.ReferenceNFC;
+                newlog.TimeLog = DateTime.Now;
+                newlog.VesselName = currentvessel;
+                newlog.UnitName = currentunit;
+
+                AnalyticsLog Alog = new AnalyticsLog();
+                Alog.WorkerID = worker.WorkerID;
+                Alog.Company = worker.Company;
+                Alog.FirstName = worker.FirstName;
+                Alog.LastName = worker.LastName;
+                Alog.InOut = 1;
+                Alog.TimeLog = DateTime.Now;
+                Alog.VesselName = currentvessel;
+                Alog.UnitName = currentunit;
                       
-                        await App.Database.AddLog(newlog);
-                        await App.Database.AddAnalyticsLog(Alog);
-                        SetWorkerList();
-                        SetCSEList();
-                    }
-                    else
-                    {
-                        await DisplayAlert("Error Worker Entry", "Worker Already Signed In", "Return to Entry");
-                        workerpicker.SelectedIndex = -1;
-                    }
-                }
-                else
-                {
-                    var properworker = currentworkers.Where(w => w.WorkerID == selectedworker & w.InOut == 1);
-                    int properworker2 = properworker.Count();
-                    if (properworker2 == 1)
-                    {
-                        var deleteworker = properworker.FirstOrDefault();
-                  
-                        await App.Database.DeleteLog(deleteworker.EntryID);
+                await App.Database.AddLog(newlog);
+                await App.Database.AddAnalyticsLog(Alog);
 
-                        //worker = await App.Database.GetWorker(selectedworker);
+                SetCSEList();
 
-                        //newlog.WorkerID = selectedworker;
-                        //newlog.Company = worker.Company;
-                        //newlog.FirstName = worker.FirstName;
-                        //newlog.LastName = worker.LastName;
-                        //newlog.InOut = 1;
-                        //newlog.TimeLog = DateTime.Now;
-                        //newlog.VesselName = currentvessel;
+            }
+            else //If signed in, delete log
+            {
+                EntryLog templog = new EntryLog();
+                templog = Loglist[0];
 
-                        //App.Database.AddLog(newlog);
-                        SetWorkerList();
-                        SetCSEList();
-                    }
-                    else
-                    {
-                        await DisplayAlert("Error Worker Entry", "Worker Already Signed Out", "Return to Entry");
-                        workerpicker.SelectedIndex = -1;
-                    }
-                }
+                await App.Database.DeleteLog(templog.EntryID);
+
+                    SetCSEList();
             }
         }
         async void WorkerExitSelected(object sender, EventArgs e)

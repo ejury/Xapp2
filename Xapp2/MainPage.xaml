@@ -83,8 +83,8 @@
                     <Image Grid.Row="0" Grid.Column="0" Grid.RowSpan="3" Grid.ColumnSpan="2" Source="MainPageLeftStatus.png" VerticalOptions="CenterAndExpand" HorizontalOptions="FillAndExpand" />
                     <Label Grid.Row="1" Grid.Column="0" FontSize="Body" TextColor="Black" HorizontalOptions="Start" VerticalOptions="Center" FontAttributes="None" Text="Active:" Margin="12,0,0,0"/>
                     <Label Grid.Row="2" Grid.Column="0" FontSize="Body" TextColor="Black" HorizontalOptions="Start" VerticalOptions="Center" FontAttributes="None" Text="Total:" Margin="12,-5,0,12"/>
-                    <Label Grid.Row="1" Grid.Column="1" FontSize="Body" TextColor="Black" HorizontalOptions="Center" VerticalOptions="Center" FontAttributes="Bold" Text="2" Margin="0,0,12,0"/>
-                    <Label Grid.Row="2" Grid.Column="1" FontSize="Body" TextColor="Black" HorizontalOptions="Center" VerticalOptions="Center" FontAttributes="Bold" Text="12" Margin="0,-5,12,12"/>
+                    <Label x:Name="Uactive" Grid.Row="1" Grid.Column="1" FontSize="Body" TextColor="Black" HorizontalOptions="Center" VerticalOptions="Center" FontAttributes="Bold" Text="2" Margin="0,0,12,0"/>
+                    <Label x:Name="Utotal" Grid.Row="2" Grid.Column="1" FontSize="Body" TextColor="Black" HorizontalOptions="Center" VerticalOptions="Center" FontAttributes="Bold" Text="12" Margin="0,-5,12,12"/>
                 </Grid>
                 
                 <!-- Active Areas -->
@@ -102,8 +102,8 @@
                     <Image Grid.Row="0" Grid.Column="0" Grid.RowSpan="3" Grid.ColumnSpan="2" Source="MainPageMidStatus.png" VerticalOptions="CenterAndExpand" HorizontalOptions="FillAndExpand" />
                     <Label Grid.Row="1" Grid.Column="0" FontSize="Body" TextColor="Black" HorizontalOptions="Start" VerticalOptions="Center" FontAttributes="None" Text="Active:" Margin="12,0,0,0"/>
                     <Label Grid.Row="2" Grid.Column="0" FontSize="Body" TextColor="Black" HorizontalOptions="Start" VerticalOptions="Center" FontAttributes="None" Text="Total:" Margin="12,-5,0,12"/>
-                    <Label Grid.Row="1" Grid.Column="1" FontSize="Body" TextColor="Black" HorizontalOptions="Center" VerticalOptions="Center" FontAttributes="Bold" Text="2" Margin="0,0,12,0"/>
-                    <Label Grid.Row="2" Grid.Column="1" FontSize="Body" TextColor="Black" HorizontalOptions="Center" VerticalOptions="Center" FontAttributes="Bold" Text="12" Margin="0,-5,12,12"/>
+                    <Label x:Name="Aactive" Grid.Row="1" Grid.Column="1" FontSize="Body" TextColor="Black" HorizontalOptions="Center" VerticalOptions="Center" FontAttributes="Bold" Text="2" Margin="0,0,12,0"/>
+                    <Label x:Name="Atotal" Grid.Row="2" Grid.Column="1" FontSize="Body" TextColor="Black" HorizontalOptions="Center" VerticalOptions="Center" FontAttributes="Bold" Text="12" Margin="0,-5,12,12"/>
                 </Grid>
 
                 <!-- Active Locations -->
@@ -121,8 +121,8 @@
                     <Image Grid.Row="0" Grid.Column="0" Grid.RowSpan="3" Grid.ColumnSpan="2" Source="MainPageRightStatus.png" VerticalOptions="CenterAndExpand" HorizontalOptions="CenterAndExpand"/>
                     <Label Grid.Row="1" Grid.Column="0" FontSize="Body" TextColor="Black" HorizontalOptions="Start" VerticalOptions="Center" FontAttributes="None" Text="Active:" Margin="12,0,0,0"/>
                     <Label Grid.Row="2" Grid.Column="0" FontSize="Body" TextColor="Black" HorizontalOptions="Start" VerticalOptions="Center" FontAttributes="None" Text="Total:" Margin="12,-5,0,12"/>
-                    <Label Grid.Row="1" Grid.Column="1" FontSize="Body" TextColor="Black" HorizontalOptions="Center" VerticalOptions="Center" FontAttributes="Bold" Text="2" Margin="0,0,12,0"/>
-                    <Label Grid.Row="2" Grid.Column="1" FontSize="Body" TextColor="Black" HorizontalOptions="Center" VerticalOptions="Center" FontAttributes="Bold" Text="12" Margin="0,-5,12,12"/>
+                    <Label x:Name="Lactive" Grid.Row="1" Grid.Column="1" FontSize="Body" TextColor="Black" HorizontalOptions="Center" VerticalOptions="Center" FontAttributes="Bold" Text="2" Margin="0,0,12,0"/>
+                    <Label x:Name="Ltotal" Grid.Row="2" Grid.Column="1" FontSize="Body" TextColor="Black" HorizontalOptions="Center" VerticalOptions="Center" FontAttributes="Bold" Text="12" Margin="0,-5,12,12"/>
                 </Grid>
             </Grid>
 

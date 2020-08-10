@@ -3,6 +3,7 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:d="http://xamarin.com/schemas/2014/forms/design"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:buttons="clr-namespace:Syncfusion.XForms.Buttons;assembly=Syncfusion.Buttons.XForms"
              xmlns:gradient="clr-namespace:Syncfusion.XForms.Graphics;assembly=Syncfusion.Core.XForms"
              mc:Ignorable="d"
              x:Class="Xapp2.Pages.CSEntryPage">
@@ -12,7 +13,7 @@
 
             <!-- Top Header Details -->
             <Grid
-                BackgroundColor="#2783d6" >
+                BackgroundColor="#000000" >
                 <Grid.RowDefinitions>
                     <RowDefinition Height="40" />
 
@@ -23,188 +24,246 @@
                     <ColumnDefinition Width="40"/>
                 </Grid.ColumnDefinitions>
                 <Image Grid.Column="0"   Source="SEWhite.jpg"   HorizontalOptions="Center"   VerticalOptions="Center"  Margin="3" />
-                <Label Grid.Column="1"   Style="{StaticResource labletitlestyle}"  Text="CSE Manager"    />
+                <Label Grid.Column="1"   Style="{StaticResource labletitlestyle}"  Text="Entry Portal"  TextColor="White"  />
                 <ImageButton Grid.Column="2" Source="HomeButton.png" Margin="5"  BackgroundColor="Transparent"  Clicked = "OnMainNavClicked" />
             </Grid>
             <!-- Top Header Ends -->
 
-            <Grid
-                HorizontalOptions="CenterAndExpand"
-                VerticalOptions="Center">
-                
-                
+            <!-- User Entry Section -->
+            <Frame CornerRadius="10" HorizontalOptions="Center"  VerticalOptions="Start" Margin="16" BackgroundColor="#ffffff"
+           HasShadow="True"   IsClippedToBounds="True"   Padding="0">
+                <StackLayout>
+                    
+
+                <Label Margin="0,10,0,0" Text=" &#xe746; Manage Location"   HeightRequest="25" Grid.ColumnSpan="2" HorizontalOptions="Start"
+                       Style="{StaticResource lablebodystyle}" FontAttributes="bold" FontFamily="{StaticResource FontIcons}" TextColor="Black"/>
+                <BoxView Margin="16,-5,16,0"  HorizontalOptions="FillAndExpand" HeightRequest="3" Color="#2F9BDF" />
+
+
+                    <Grid RowSpacing="0" Margin="5,0,5,0">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="40"/>
+                            <RowDefinition Height="80"/>
+                        </Grid.RowDefinitions>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="*" />
+                        </Grid.ColumnDefinitions>
+
+
+                        <Label Grid.Row="0" Grid.Column="0" Text="  &#xe733;"  Margin="0,0,0,0"  HorizontalOptions="Start"
+                           Style="{StaticResource lablebodystyle}" FontAttributes="bold" FontFamily="{StaticResource FontIcons}" TextColor="#000000"/>
+
+                        <Picker Grid.Row="0" Grid.Column="0" Margin="40,0,10,0" HorizontalOptions="FillAndExpand"   x:Name="unitpicker"  Title="Area"  
+                        ItemsSource="{Binding unitlist}"     SelectedItem="{Binding SelectedUnit}"     SelectedIndexChanged="OnUnitPickerChanged"/>
+
+                        <Label Grid.Row="0" Grid.Column="1" Text="  &#xe729;"  Margin="0,0,0,0"  HorizontalOptions="Start"
+                           Style="{StaticResource lablebodystyle}" FontAttributes="bold" FontFamily="{StaticResource FontIcons}" TextColor="#000000"/>
+
+                        <Picker Grid.Row="0" Grid.Column="1" Margin="40,0,10,0" HorizontalOptions="FillAndExpand"  x:Name="vesselpicker"   Title="Location" 
+                        ItemsSource="{Binding vessellist}"  SelectedItem="{Binding SelectedVessel}"  SelectedIndexChanged="OnVesselPickerChanged"/>
+
+                        <buttons:SfButton Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2" Margin="5" CornerRadius="5" Text="Start Scanner" FontSize="25" >
+
+                            <buttons:SfButton.BackgroundGradient>
+                                <gradient:SfLinearGradientBrush>
+                                    <gradient:SfLinearGradientBrush.GradientStops>
+                                        <gradient:SfGradientStop Color="#2F9BDF" Offset="0"/>
+                                        <gradient:SfGradientStop Color="#51F1F2" Offset="1"/>
+                                    </gradient:SfLinearGradientBrush.GradientStops>
+                                </gradient:SfLinearGradientBrush>
+                            </buttons:SfButton.BackgroundGradient>
+
+                            <VisualStateManager.VisualStateGroups>
+                                <VisualStateGroup x:Name="CommonStates">
+                                    <VisualState x:Name="Normal">
+                                        <VisualState.Setters>
+                                            <Setter Property="TextColor" Value="Black" />
+
+                                        </VisualState.Setters>
+                                    </VisualState>
+
+                                    <VisualState x:Name="Pressed">
+                                        <VisualState.Setters>
+                                            <Setter Property="TextColor" Value="Green" />
+                                            <Setter Property="BackgroundColor" Value="Blue" />
+                                        </VisualState.Setters>
+                                    </VisualState>
+                                </VisualStateGroup>
+                            </VisualStateManager.VisualStateGroups>
+
+                        </buttons:SfButton>
+                    </Grid>
+                </StackLayout>
+            </Frame>
+
+            <Entry   x:Name="SwipeEntry" Margin="0" Placeholder="NFC#"  Completed="OnWorkerPickerChanged" VerticalOptions="Start"
+                           FontSize="Body" TextColor="Black" HorizontalOptions="FillAndExpand" IsReadOnly="False" HorizontalTextAlignment="Start"/>
+            <!-- InOut Selection -->
+            <!--Grid  HorizontalOptions="CenterAndExpand">
                 <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto" />
                     <RowDefinition Height="Auto" />
                 </Grid.RowDefinitions>
                 <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="Auto" />
                     <ColumnDefinition Width="*" />
                     <ColumnDefinition Width="Auto" />
                     <ColumnDefinition Width="*" />
                 </Grid.ColumnDefinitions>
 
-                <Label Grid.Column="0"  Text="Unit:"   VerticalOptions="Center"   Style="{StaticResource lablebodystyle}"/>
+                <Label Grid.Column="0" Grid.Row="0"  Text="Entry Mode"  HorizontalOptions="End"  VerticalOptions="Center"  Style="{StaticResource lablebodystyle}"/>
 
-                <Picker Grid.Column="1"
-                    x:Name="unitpicker" 
-                    Title="Select Unit"  
-                    ItemsSource="{Binding unitlist}" 
-                    SelectedItem="{Binding SelectedUnit}"
-                    SelectedIndexChanged="OnUnitPickerChanged"/>
-
-                <Label Grid.Column="2"  Text="Vessel:"  VerticalOptions="Center"  Style="{StaticResource lablebodystyle}"/>
-
-                <Picker Grid.Column="3"
-                    x:Name="vesselpicker" 
-                    Title="Select Vessel"  
-                    ItemsSource="{Binding vessellist}" 
-                    SelectedItem="{Binding SelectedVessel}"
-                    SelectedIndexChanged="OnVesselPickerChanged"/>
-
-            </Grid>
-
-            <Grid
-                HorizontalOptions="CenterAndExpand">
-                <Grid.RowDefinitions>
-                    <RowDefinition Height="Auto" />
-                </Grid.RowDefinitions>
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="*" />
-                    <ColumnDefinition Width="Auto" />
-                    <ColumnDefinition Width="*" />
-                </Grid.ColumnDefinitions>
-
-                <Label Grid.Column="0"   Text="Entry Mode"  HorizontalOptions="End"  VerticalOptions="Center"  Style="{StaticResource lablebodystyle}"/>
-                
-                <Switch Grid.Column ="1" 
+                <Switch Grid.Column ="1" Grid.Row="0"
                         x:Name="InOutButton"
-                        IsToggled="True"
-                        Toggled="InOutToggle" RotationY="180"
-                        HorizontalOptions="Center"
-                        VerticalOptions="Center"/>
+                        IsToggled="True"  Toggled="InOutToggle" RotationY="180"  HorizontalOptions="Center" VerticalOptions="Center"/>
 
-                <Label Grid.Column="2"  Text="Exit Mode"  HorizontalOptions="Start"  VerticalOptions="Center"  Style="{StaticResource lablebodystyle}"/>
-            </Grid>
+                <Label Grid.Column="2" Grid.Row="0" Text="Exit Mode"  HorizontalOptions="Start"  VerticalOptions="Center"  Style="{StaticResource lablebodystyle}"/>
 
-            <Grid
-                HorizontalOptions="CenterAndExpand">
+                <Entry x:Name="SwipeEntry" Grid.Column="0" Grid.ColumnSpan="3" Grid.Row="1" Placeholder="NFC#" Completed="OnWorkerPickerChanged" />
+            </-->
+
+            <!-- Middle Label -->
+            <Grid BackgroundColor="Black">
                 <Grid.RowDefinitions>
-                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="40"/>
                 </Grid.RowDefinitions>
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="Auto" />
-                    <ColumnDefinition Width="*" />
-                </Grid.ColumnDefinitions>
-                <Label Grid.Column="0"  Text="Worker"   VerticalOptions="Center"  Style="{StaticResource lablebodystyle}"/>
+                <!-- Left Symbol For Users Display -->
+                <Label x:Name="LView1" Grid.Row="0" Text=" &#xe723;"  Margin="10,0,10,0" HorizontalOptions="Start"
+                       Style="{StaticResource lablebodystyle}" FontSize="Large" FontAttributes="bold" FontFamily="{StaticResource FontIcons}" TextColor="Aqua"/>
+                    <!-- Right Symbol For Users Display -->
+                <Label x:Name="RView1" Grid.Row="0" Text=" &#xe723; &#xe723;"  Margin="0,0,0,-8" HorizontalOptions="End"
+                       Style="{StaticResource lablebodystyle}" FontAttributes="bold" FontFamily="{StaticResource FontIcons}" TextColor="#ffffff"/>
+                <Label x:Name="RView2" Grid.Row="0" Text=" &#xe723;"  Margin="10,0,10,5" HorizontalOptions="End"
+                       Style="{StaticResource lablebodystyle}" FontAttributes="bold" FontFamily="{StaticResource FontIcons}" TextColor="#ffffff"/>
+                <!-- Main Label -->
+                <Label Grid.Row="0" Text="Occupied List" TextColor="White"  Style="{StaticResource labletitlestyle}"  FontSize="Large" VerticalTextAlignment="Center"/>
+                <Button x:Name="LButton" Grid.Row="0" BorderColor="Aqua" BorderWidth="0" HeightRequest="40" WidthRequest="60" BackgroundColor="Transparent" Clicked="ListViewChange"/>
 
-                <Picker x:Name="workerpicker"
-                        Grid.Column="1"
-                    Title="Select Worker"
-                    ItemsSource="{Binding workerlist}"
-                    SelectedItem="{Binding SelectedWorker}"
-                    SelectedIndexChanged="OnWorkerPickerChanged"/>
             </Grid>
 
             <!-- Main worker list display section-->
-            <StackLayout BackgroundColor="#3992e3">
-                <Label Text="CSE Company Summary" TextColor="Black"  Style="{StaticResource labletitlestyle}" FontSize="Medium" HeightRequest="25" Padding="0,2,0,0"  VerticalTextAlignment="Center"/>
-                <ListView x:Name="CompanyList"   Style="{StaticResource listviewstyle}" VerticalOptions="Center" RowHeight="25" HeightRequest="200">
+            <Frame CornerRadius="10" HorizontalOptions="Center"  VerticalOptions="Start" Margin="16" BackgroundColor="#ffffff"
+            HasShadow="True"   IsClippedToBounds="True"   Padding="0">
 
-                    <ListView.ItemTemplate>
-                        <DataTemplate>
-                            <ViewCell>
-                                <Grid >
-                                    <Grid.RowDefinitions>
-                                        <RowDefinition  Height="20" />
-                                    </Grid.RowDefinitions>
-                                    <Grid.ColumnDefinitions>
-                                        <ColumnDefinition Width="25*" />
-                                        <ColumnDefinition Width="25*" />
-                                    </Grid.ColumnDefinitions>
-
-                                    <!-- List of workers per company  -->
-                                    <Label Grid.Column="0" Text="{Binding CompanyListName}"   Style="{StaticResource lablebodystyle}" TextColor="Black"/>
-                                    <Label Grid.Column="1" Text="{Binding CompanyListNum}"    Style="{StaticResource lablebodystyle}" TextColor="Black"/>
-                                </Grid>
-                            </ViewCell>
-
-                        </DataTemplate>
-                    </ListView.ItemTemplate>
-                </ListView>
-
-                <Label Text="CSE Worker Summary"  HorizontalOptions="Center" Style="{StaticResource labletitlestyle}" FontSize="Medium" TextColor="Black" HeightRequest="20" Padding="0,-2,0,-1" VerticalTextAlignment="Center"/>
-                <ListView x:Name="workersview"  Style="{StaticResource listviewstyle}"  ItemSelected="WorkerExitSelected" HeightRequest="300">
-                    <ListView.ItemTemplate>
-                        <DataTemplate>
-                            <ViewCell>
-                                <Grid>
-                                    <Grid.RowDefinitions>
-                                        <RowDefinition Height="Auto" />
-                                    </Grid.RowDefinitions>
-                                    <Grid.ColumnDefinitions>
-                                        <ColumnDefinition Width="25*" />
-                                        <ColumnDefinition Width="25*" />
-                                        <ColumnDefinition Width="25*" />
-                                        <ColumnDefinition Width="25*" />
-                                    </Grid.ColumnDefinitions>
-
-                                    <!-- List of workers  -->
-                                    <Label Grid.Column="0"  Text="{Binding FirstName}" Style="{StaticResource lablebodystyle}" TextColor="Black"/>
-                                    <Label Grid.Column="1"  Text="{Binding LastName}" Style="{StaticResource lablebodystyle}" TextColor="Black"/>
-                                    <Label Grid.Column="2"  Text="{Binding Company}" Style="{StaticResource lablebodystyle}" TextColor="Black"/>
-                                    <Label Grid.Column="3"  Text="{Binding TimeLog}" Style="{StaticResource lablebodystyle}" TextColor="Black"/>
-                                </Grid>
-                            </ViewCell>
-
-                        </DataTemplate>
-
-                    </ListView.ItemTemplate>
-                </ListView>
-
-                <!-- Navigation Bar -->
-                <Grid Margin="0,-6,0,0" Padding="0,0,0,0" ColumnSpacing="-5" MinimumHeightRequest="75">
-                    <!-- Nav Bar Background Gradient-->
-                    <gradient:SfGradientView>
-                        <gradient:SfGradientView.BackgroundBrush>
-                            <gradient:SfLinearGradientBrush>
-                                <gradient:SfLinearGradientBrush.GradientStops>
-                                    <gradient:SfGradientStop Color="#2783d6" Offset="0.0" />
-                                    <gradient:SfGradientStop Color="#020a45" Offset="0.7" />
-                                </gradient:SfLinearGradientBrush.GradientStops>
-                            </gradient:SfLinearGradientBrush>
-                        </gradient:SfGradientView.BackgroundBrush>
-                    </gradient:SfGradientView>
-
-                    <!-- Nav Bar Display-->
-                    <Grid x:Name="NavBarGrid"  BackgroundColor="#ffffff">
+                <StackLayout Padding="0">
+                    <Grid Margin="0,10,0,0">
                         <Grid.RowDefinitions>
-                            <RowDefinition Height="50"/>
+                            <RowDefinition Height="25"/>
                         </Grid.RowDefinitions>
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="*"/>
-                            <ColumnDefinition Width="*"/>
-                            <ColumnDefinition Width="*"/>
-                            <ColumnDefinition Width="*"/>
-                            <ColumnDefinition Width="*"/>
-                        </Grid.ColumnDefinitions>
-
-                        <!-- Nav Bar Selections-->
-                        <ImageButton x:Name="CSEButton" Grid.Row="0"  Grid.Column="0"   Style="{StaticResource NavImageCSE}"
-                        Clicked = "OnCSEManagerClicked"/>
-                        <ImageButton x:Name="StatusButton" Grid.Row="0"  Grid.Column="1"   Style="{StaticResource NavImageStatus}"
-                        Clicked = "OnSiteStatusButtonClicked" />
-                        <ImageButton x:Name="HeirarchyButton" Grid.Row="0"  Grid.Column="2"   Style="{StaticResource NavImageHeirarchy}"
-                        Clicked = "OnVesselButtonClicked" />
-                        <ImageButton x:Name="WorkerButton" Grid.Row="0"  Grid.Column="3"   Style="{StaticResource NavImageWorker}"
-                        Clicked = "OnWorkerButtonClicked" />
-                        <ImageButton x:Name="AnalyticsButton" Grid.Row="0"  Grid.Column="4"   Style="{StaticResource NavImageAnalytics}"
-                        Clicked = "OnAnalyticsButtonClicked" />
+                        <!-- User Display symbol-->
+                        <Label x:Name="ListSym1" Grid.Row="0" Text=" &#xe723;"  Margin="6,0,10,0" IsVisible="True" HorizontalOptions="Start"
+                           Style="{StaticResource lablebodystyle}" FontSize="Large" FontAttributes="bold" FontFamily="{StaticResource FontIcons}" TextColor="#2F9BDF"/>
+                        <!-- Group Display symbpl -->
+                        <Label x:Name="ListSym2" Grid.Row="0" Text=" &#xe723; &#xe723;"  Margin="0,0,0,-8" IsVisible="False" HorizontalOptions="Start"
+                           Style="{StaticResource lablebodystyle}" FontAttributes="bold" FontFamily="{StaticResource FontIcons}" TextColor="#2F9BDF"/>
+                        <Label x:Name="ListSym3" Grid.Row="0" Text=" &#xe723;"  Margin="10,0,10,5" IsVisible="False" HorizontalOptions="Start"
+                           Style="{StaticResource lablebodystyle}" FontAttributes="bold" FontFamily="{StaticResource FontIcons}" TextColor="#2F9BDF"/>
+                   
+                        <!-- Main Label -->
+                        <Label x:Name="Listname" Grid.Row="0" Text="Users" TextColor="Black" HorizontalOptions="Start" Style="{StaticResource lablebodystyle}" HeightRequest="25"  
+                                VerticalTextAlignment="Center" Margin="45,0,0,0"/>
                     </Grid>
+                    <BoxView HorizontalOptions="FillAndExpand" HeightRequest="3" Color="#2F9BDF" Margin="16,-5,16,0"/>
+
+                    <ListView x:Name="CompanyList"   Style="{StaticResource listviewstyle}" VerticalOptions="Center" RowHeight="25" HeightRequest="0" BackgroundColor="#ffffff">
+
+                        <ListView.ItemTemplate>
+                            <DataTemplate>
+                                <ViewCell>
+                                    <Grid >
+                                        <Grid.RowDefinitions>
+                                            <RowDefinition  Height="20" />
+                                        </Grid.RowDefinitions>
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="25*" />
+                                            <ColumnDefinition Width="25*" />
+                                        </Grid.ColumnDefinitions>
+
+                                        <!-- List of workers per company  -->
+                                        <Label Grid.Column="0" Text="{Binding CompanyListName}"   Style="{StaticResource lablebodystyle}" TextColor="Black"/>
+                                        <Label Grid.Column="1" Text="{Binding CompanyListNum}"    Style="{StaticResource lablebodystyle}" TextColor="Black"/>
+                                    </Grid>
+                                </ViewCell>
+
+                            </DataTemplate>
+                        </ListView.ItemTemplate>
+                    </ListView>
+
+                    <!-- Label x:Name="workerviewLabel" Text="User Summary"  HorizontalOptions="Center" Style="{StaticResource labletitlestyle}" FontSize="Medium" TextColor="Black" HeightRequest="25"  VerticalTextAlignment="Center"/>
+                    <BoxView x:Name="workerviewBox" HorizontalOptions="FillAndExpand" HeightRequest="3" Color="#51F1F2" Margin="10,0,10,0"/-->
+
+                    <ListView x:Name="workersview"  Style="{StaticResource listviewstyle}"  ItemSelected="WorkerExitSelected" HeightRequest="400" BackgroundColor="Transparent">
+                        <ListView.ItemTemplate>
+                            <DataTemplate>
+                                <ViewCell>
+                                    <Grid>
+                                        <Grid.RowDefinitions>
+                                            <RowDefinition Height="Auto" />
+                                        </Grid.RowDefinitions>
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="25*" />
+                                            <ColumnDefinition Width="25*" />
+                                            <ColumnDefinition Width="25*" />
+                                            <ColumnDefinition Width="25*" />
+                                        </Grid.ColumnDefinitions>
+
+                                        <!-- List of workers  -->
+                                        <Label Grid.Column="0"  Text="{Binding FirstName}" Style="{StaticResource lablebodystyle}" TextColor="Black"/>
+                                        <Label Grid.Column="1"  Text="{Binding LastName}" Style="{StaticResource lablebodystyle}" TextColor="Black"/>
+                                        <Label Grid.Column="2"  Text="{Binding Company}" Style="{StaticResource lablebodystyle}" TextColor="Black"/>
+                                        <Label Grid.Column="3"  Text="{Binding TimeLog}" Style="{StaticResource lablebodystyle}" TextColor="Black"/>
+                                    </Grid>
+                                </ViewCell>
+
+                            </DataTemplate>
+
+                        </ListView.ItemTemplate>
+                    </ListView>
+                </StackLayout>
+            </Frame>
+
+            <!-- Navigation Bar -->
+            <Grid Margin="0,-6,0,0" Padding="0,0,0,0" ColumnSpacing="-5" MinimumHeightRequest="75">
+                <!-- Nav Bar Background Gradient-->
+                <gradient:SfGradientView>
+                    <gradient:SfGradientView.BackgroundBrush>
+                        <gradient:SfLinearGradientBrush>
+                            <gradient:SfLinearGradientBrush.GradientStops>
+                                <gradient:SfGradientStop Color="#2783d6" Offset="0.0" />
+                                <gradient:SfGradientStop Color="#020a45" Offset="0.7" />
+                            </gradient:SfLinearGradientBrush.GradientStops>
+                        </gradient:SfLinearGradientBrush>
+                    </gradient:SfGradientView.BackgroundBrush>
+                </gradient:SfGradientView>
+
+                <!-- Nav Bar Display-->
+                <Grid x:Name="NavBarGrid"  BackgroundColor="#ffffff">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="50"/>
+                    </Grid.RowDefinitions>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+
+                    <!-- Nav Bar Selections-->
+                    <ImageButton x:Name="CSEButton" Grid.Row="0"  Grid.Column="0"   Style="{StaticResource NavImageCSE}"
+                        Clicked = "OnCSEManagerClicked"/>
+                    <ImageButton x:Name="StatusButton" Grid.Row="0"  Grid.Column="1"   Style="{StaticResource NavImageStatus}"
+                        Clicked = "OnSiteStatusButtonClicked" />
+                    <ImageButton x:Name="HeirarchyButton" Grid.Row="0"  Grid.Column="2"   Style="{StaticResource NavImageHeirarchy}"
+                        Clicked = "OnVesselButtonClicked" />
+                    <ImageButton x:Name="WorkerButton" Grid.Row="0"  Grid.Column="3"   Style="{StaticResource NavImageWorker}"
+                        Clicked = "OnWorkerButtonClicked" />
+                    <ImageButton x:Name="AnalyticsButton" Grid.Row="0"  Grid.Column="4"   Style="{StaticResource NavImageAnalytics}"
+                        Clicked = "OnAnalyticsButtonClicked" />
                 </Grid>
+            </Grid>
 
-            </StackLayout>
+
         </StackLayout>
-
-        
     </ContentPage.Content>
 </ContentPage>

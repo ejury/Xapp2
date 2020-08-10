@@ -235,13 +235,13 @@ namespace Xapp2.Pages
             if (hide)
             {
                 hide = false;
-                HideButton.Text = "Hide";
+                HideButton.Source = "StatusPageHide.png";
                 SetViewList();
             }
             else
             {
                 hide = true;
-                HideButton.Text = "Unhide";
+                HideButton.Source = "StatusPageHide2.png";
                 SetViewList();
             }
         }
@@ -250,7 +250,7 @@ namespace Xapp2.Pages
             if (collapse)
             {
                 collapse = false;
-                CollapseButton.Text = "Expand";
+                CollapseButton.Source = "StatusPageExpand.png";
                 for (int i=0; i<unitexpanded.Count; i++)
                 { unitexpanded[i] = 0; }
                 SetViewList();
@@ -258,7 +258,7 @@ namespace Xapp2.Pages
             else
             {
                 collapse = true;
-                CollapseButton.Text = "Collapse";
+                CollapseButton.Source = "StatusPageExpand2.png";
                 for (int i = 0; i < unitexpanded.Count; i++)
                 { unitexpanded[i] = 1; }
                 SetViewList();

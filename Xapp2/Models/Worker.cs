@@ -18,6 +18,7 @@ namespace Xapp2.Models
         public int SELevel { get; set; }
 
         public int Activated { get; set; }
+        public DateTime CreatedTime { get; set; }
 
     }
 }

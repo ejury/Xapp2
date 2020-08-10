@@ -31,6 +31,17 @@ namespace Xapp2.Data
         {
             return _connection.Table<Worker>().ToListAsync();
         }
+         async public Task<List<Worker>> GetWorkersAPI()
+        {
+            IEnumerable<Worker> tempW = await APIServer.GetAllWorkers();
+
+            _connection.DropTableAsync<Worker>().Wait();
+            _connection.CreateTableAsync<Worker>().Wait();
+
+             await _connection.InsertAllAsync(tempW);
+            return await _connection.Table<Worker>().ToListAsync();
+
+        }
         public Task<List<Vessel>> GetVessels()
         {
             return _connection.Table<Vessel>().ToListAsync();
@@ -74,6 +85,7 @@ namespace Xapp2.Data
         }
         public Task<int> DeleteLog(int ident)
         {
+            APIServer.DeleteLog(ident);
             return _connection.DeleteAsync<EntryLog>(ident);
         }
         public Task<int> DeleteWorker(int ident)
@@ -99,7 +111,7 @@ namespace Xapp2.Data
         async public Task<int> AddVessel(Vessel vessel)
         {
 
-            await APIServer.Add(new Tuple<Unit, Vessel, Worker>(null, vessel, null), "V");
+            await APIServer.Add(new Tuple<Unit, Vessel>(null, vessel), "V");
             IEnumerable<Vessel> tempV = await APIServer.GetAllVessels();
 
             _connection.DropTableAsync<Vessel>().Wait();
@@ -112,7 +124,7 @@ namespace Xapp2.Data
         async public Task<int> AddUnit(Unit unit)
         {
 
-            await APIServer.Add(new Tuple <Unit, Vessel, Worker> (unit,null,null), "U");
+            await APIServer.Add(new Tuple <Unit, Vessel> (unit,null), "U");
             IEnumerable<Unit> tempU = await APIServer.GetAllUnits();
 
             _connection.DropTableAsync<Unit>().Wait();
@@ -122,10 +134,20 @@ namespace Xapp2.Data
             int t = 1;
             return t;
         }
-        public Task<int> AddLog(EntryLog entrylog)
+       
+        async public Task<int> AddLog(EntryLog entrylog)
         {
-            return _connection.InsertAsync(entrylog);
 
+            await APIServer.AddLog(entrylog);
+            IEnumerable<EntryLog> tempL = await APIServer.GetAllEntryLogs();
+
+            _connection.DropTableAsync<EntryLog>().Wait();
+            _connection.CreateTableAsync<EntryLog>().Wait();
+
+
+            await _connection.InsertAllAsync(tempL);
+            int t = 1;
+            return t;
         }
         public Task<int> AddAnalyticsLog(AnalyticsLog entrylog)
         {
@@ -160,14 +182,15 @@ namespace Xapp2.Data
         }
         public Task ClearLogs()
         {
+            APIServer.Delete("LxClearx");
             _connection.DropTableAsync<EntryLog>().Wait();
             _connection.CreateTableAsync<EntryLog>().Wait();
             return Task.CompletedTask;
         }
         public Task ClearAnalytics()
         {
-            _connection.DropTableAsync<EntryLog>().Wait();
-            _connection.CreateTableAsync<EntryLog>().Wait();
+            _connection.DropTableAsync<AnalyticsLog>().Wait();
+            _connection.CreateTableAsync<AnalyticsLog>().Wait();
             return Task.CompletedTask;
         }
 
@@ -185,14 +208,16 @@ namespace Xapp2.Data
             List<string> workerfirst = new List<string> { "Carl", "Sam", "Nisbit", "Johnny", "Earl", "Pete", "Douglas", "Cara", "Avril", "Betty-Sue", "Dougy", "Alex", "Tom", "Tara", "Indy", "Brad", "Stu","Eddy", "Nero" };
             List<string> workerlast = new List<string> { "Johnson", "Black", "Trout", "Smith", "Rogers", "Jury", "Slick", "Salty", "Hardy", "Bolton", "Carter", "Silversmith", "Snake", "Black", "White", "Wattson", "Ericson", "Edge", "Winter" };
             List<string> companyname = new List<string> { "IOL", "IOL", "IOL", "IOL", "CEDA", "CEDA", "TEAM", "TEAM", "TEAM", "TAMS", "TAMS", "TAMS", "TAMS", "Curren", "Curren", "Curren","Safway", "Safway", "Safway" };
+            List<string> nfclist = new List<string> { "101", "102", "103", "104", "105", "106", "107", "108", "109", "110", "111", "112", "113", "114", "115", "116", "117", "118", "119" };
 
-            for (int i = 1; i <= workerfirst.Count - 1; i++)
+            for (int i = 0; i <= workerfirst.Count - 1; i++)
             {
                 worker.FirstName = workerfirst[i];
                 worker.LastName = workerlast[i];
                 worker.Company = companyname[i];
+                worker.CreatedTime = DateTime.Now;
                 Globals.NFCtempcount++;
-                worker.ReferenceNFC = Globals.NFCtempcount.ToString();
+                worker.ReferenceNFC = nfclist[i];
                 await AddWorker(worker);
 
             }
@@ -230,18 +255,20 @@ namespace Xapp2.Data
                         List<string> Ctemp = new List<string>(); Ctemp.AddRange(companyname);
                         List<string> Ftemp = new List<string>(); Ftemp.AddRange(workerfirst);
                         List<string> Ltemp = new List<string>(); Ltemp.AddRange(workerlast);
+                        List<string> Ntemp = new List<string>(); Ntemp.AddRange(nfclist);
                         for (int k = 0; k < EntriesV; k++)
                         {
                             //Randomize worker selection and datetime stamp
                             int W = rnd.Next(0, workerfirst.Count-k);
                             int timestamp = rnd.Next(0, 180);
 
-                            //Create workerID
+/*                            //Create workerID Redundent due to NFC tie to worker
                             newlog.WorkerID = W+1;
                             newlog.Company = Ctemp[W];
                             newlog.FirstName = Ftemp[W];
-                            newlog.LastName = Ltemp[W];
-                            newlog.InOut = 1;
+                            newlog.LastName = Ltemp[W];*/
+                            newlog.ReferenceNFC = Ntemp[W];
+                            //newlog.InOut = 1; phased out
                             newlog.TimeLog = DateTime.Now.AddMinutes(-timestamp);
                             newlog.VesselName = vessel.Name;
                             newlog.UnitName = vessel.Unitname;
@@ -251,7 +278,7 @@ namespace Xapp2.Data
                             for (int z=0; z < 3; z++)
                             {
                                 //adding time randomizers
-                                int xhour = rnd.Next(1, 4);
+                                int xhour = rnd.Next(1, 11);
                                 int xmin = rnd.Next(0, 60);
                                 int xmin2 = rnd.Next(0, 60);
                                 DateTime xtime = new DateTime();
@@ -295,7 +322,7 @@ namespace Xapp2.Data
                             await AddAnalyticsLog(Alog);
 
                             //Removing worker from list to avoid duplication
-                            Ctemp.RemoveAt(W); Ftemp.RemoveAt(W); Ltemp.RemoveAt(W);
+                            Ctemp.RemoveAt(W); Ftemp.RemoveAt(W); Ltemp.RemoveAt(W); Ntemp.RemoveAt(W);
                             
                         }
                     }

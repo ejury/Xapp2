@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -16,23 +17,16 @@ namespace Xapp2.Pages
     public partial class VesselEntryPage : ContentPage
     {
         public string currentunit;
-        // Task<List<Vessel>> _fetchingUnits;
         Vessel vessels = new Vessel();
         Unit units = new Unit();
         UnitPieView pieview = new UnitPieView();
         int currentselect;
         bool Nav;
+        int ListViewMode = 2; //Bool property for what view is displayed
 
-        async Task Screenset()
-        {
-            ListFrame.HeightRequest = 0;
-            ForceLayout();
-        }
         protected override async void OnAppearing()
         {
             base.OnAppearing();
-
-            //await Screenset(); //Ensure listview does not overexpand
 
             //Create Initial Unit List Selection
             var unitslist = await App.Database.GetUnits();
@@ -40,7 +34,6 @@ namespace Xapp2.Pages
             if (unitslist.Count>0 & vessellist.Count > 0)
             {
                 picker.ItemsSource = unitslist;
-
 
                 //Set Initial Unit Selection
                 currentselect = 0;
@@ -54,10 +47,7 @@ namespace Xapp2.Pages
                     await SetVesselList();
                     //ListFrame.HeightRequest = PieFrame.Height; //set listview size
                 }
-                
             }
-            
-            
         }
         private async void SetUnitList()
         {
@@ -74,24 +64,7 @@ namespace Xapp2.Pages
             //Setting vessellist per current unit selection
             var vessellistFilter = vessellist.Where(w => w.Unitname == currentunit); //Filter for vessels in selected unit
             List<Vessel> v22 = (List < Vessel>)vessellistFilter.ToList();
-            
-/*            //Split list of vessels into two columns
-            int NumOfVes = vessellistFilter.Count();
-            IEnumerable<Vessel> v1; IEnumerable<Vessel> v2;
-            List<string> u1 = new List<string>();
-            if (NumOfVes%2 == 0)// number is even
-            {
-                v1 = v22.Take(NumOfVes / 2);
-                v2 = (v22.Skip(NumOfVes / 2).Take(NumOfVes / 2));
-            }
-            else
-            {
-                v1 = v22.Take((NumOfVes+1) / 2);
-                v2 = (v22.Skip((NumOfVes +1)/2).Take(NumOfVes-1 / 2));
-            }*/
             vesselview1.ItemsSource = v22;
-            //vesselview1.ItemsSource = v1;
-            //vesselview2.ItemsSource = v2;
 
             var temp = currentunit;
             unitlabelname.Text = currentunit;
@@ -123,9 +96,15 @@ namespace Xapp2.Pages
 
             Nav = true;
             InitializeComponent();
-            //Screenset(); //ensure listview does not overexpand
             BindingContext = pieview;   //Pie Chart Context
 
+        }
+        void PieChanged(object sender, PropertyChangedEventArgs e)
+        {
+            if (e.PropertyName == "ExplodeIndex") //Only trigger update for new chart selection (Optimization)
+            {
+                OnPickerSelectedIndexChanged(sender, e);
+            }
         }
         async void OnPickerSelectedIndexChanged(object sender, EventArgs e)
         {
@@ -169,7 +148,45 @@ namespace Xapp2.Pages
                 }
             }
         }
+        private void ListViewChange(object sender, EventArgs e)
+        {
+            //Move listview mode through 3 states - 1=both visible, 2=pie visible, 3=list visible
+            if (ListViewMode < 3)
+            { ListViewMode++; }
+            else
+            { ListViewMode = 1; }
 
+            //Setting appropriate view state
+            if (ListViewMode == 1)
+            {
+                LView1.TextColor = Color.Aqua;
+                RView1.TextColor = Color.Aqua;
+                RView2.TextColor = Color.Aqua;
+
+                LDisplay.Width= GridLength.Star;
+                RDisplay.Width = GridLength.Star;
+            }
+            if (ListViewMode == 2)
+            {
+                LView1.TextColor = Color.Aqua;
+                RView1.TextColor = Color.White;
+                RView2.TextColor = Color.White;
+
+                LDisplay.Width = GridLength.Star;
+                RDisplay.Width = 0;
+            }
+            if (ListViewMode == 3)
+            {
+                LView1.TextColor = Color.White;
+                RView1.TextColor = Color.Aqua;
+                RView2.TextColor = Color.Aqua;
+
+                LDisplay.Width = 0;
+                RDisplay.Width = GridLength.Star;
+            }
+
+            SetVesselList();
+        }
         async void OnUnitEntryCompleted(object sender, EventArgs e)
         {
             units.Name = UnitEntryText.Text;

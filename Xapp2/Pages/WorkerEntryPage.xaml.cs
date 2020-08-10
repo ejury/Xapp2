@@ -1,6 +1,7 @@
 ﻿using Newtonsoft.Json.Serialization;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -17,6 +18,7 @@ namespace Xapp2.Pages
         WorkerDoughnutView doughnutview = new WorkerDoughnutView();
         int currentselect;
         bool Nav;
+        int ListViewMode = 2; //Captured data view mode
         public string currentcompany;
         Task<List<Worker>> _fetchingWorkers;
         Worker workers = new Worker();
@@ -51,9 +53,6 @@ namespace Xapp2.Pages
             List<string> companylistlong = workerlist.Select(c => c.Company).ToList();
             List<string> companylist = companylistlong.Distinct().ToList();
 
-
-            // picker.SelectedItem = currentcompany;
-
             FilterWorkerList();
 
             //Generating Pie Chart
@@ -68,7 +67,6 @@ namespace Xapp2.Pages
                 tempdoughnut.Companyname = companylist[i];
                 tempdoughnut.Workercount = workerlist.Where(w => w.Company == companylist[i]).Count();
 
-
                 //Updating Pie Chart
                 doughnutview.doughnutmodel.Add(tempdoughnut);
                 doughnutview.doughnutlabels.Add(companylist[i]);
@@ -80,12 +78,15 @@ namespace Xapp2.Pages
             //Update worker list for the current selected company
             var workerlist = await App.Database.GetWorkers();
             var workerlist2 = workerlist.Where(w => w.Company == currentcompany);
-            
-            //Abreviate first names to one Char
-            for (int i = 0; i < workerlist2.Count(); i++)
+
+/*            //Abreviate first names to one Char if on shortened viewmode
+            if (ListViewMode == 1)
             {
-                workerlist2.ElementAt(i).FirstName = workerlist2.ElementAt(i).FirstName.FirstOrDefault().ToString() + ".";
-            }
+                for (int i = 0; i < workerlist2.Count(); i++)
+                {
+                    workerlist2.ElementAt(i).FirstName = workerlist2.ElementAt(i).FirstName.FirstOrDefault().ToString() + ".";
+                }
+            }*/
             workersview.ItemsSource = workerlist2;
             companylabelname.Text = currentcompany;
 
@@ -97,7 +98,58 @@ namespace Xapp2.Pages
             BindingContext = doughnutview;
         }
 
-         void OnPickerSelectedIndexChanged(object sender, EventArgs e)
+        private void ListViewChange(object sender, EventArgs e)
+        {
+            //Move listview mode through 3 states - 1=both visible, 2=pie visible, 3=list visible
+            if (ListViewMode < 3)
+            { ListViewMode++; }
+            else
+            { ListViewMode = 1; }
+
+            //Setting appropriate view state
+            if (ListViewMode == 1)
+            {
+                LView1.TextColor = Color.Aqua;
+                RView1.TextColor = Color.Aqua;
+                RView2.TextColor = Color.Aqua;
+
+                LDisplay.Width = GridLength.Star;
+                RDisplay.Width = GridLength.Star;
+                workersview.Margin = 5;
+            }
+            if (ListViewMode == 2)
+            {
+                LView1.TextColor = Color.Aqua;
+                RView1.TextColor = Color.White;
+                RView2.TextColor = Color.White;
+
+                LDisplay.Width = GridLength.Star;
+                RDisplay.Width = 0;
+            }
+            if (ListViewMode == 3)
+            {
+                LView1.TextColor = Color.White;
+                RView1.TextColor = Color.Aqua;
+                RView2.TextColor = Color.Aqua;
+
+                LDisplay.Width = 0;
+                RDisplay.Width = GridLength.Star;
+                workersview.Margin = 15;
+            }
+
+            SetWorkerList();
+        }
+
+
+        void PieChanged(object sender, PropertyChangedEventArgs e)
+        {
+            if(e.PropertyName == "ExplodeIndex") //Only trigger update for new chart selection (Optimization)
+            {
+                OnPickerSelectedIndexChanged(sender,e);
+            }
+        }
+
+            void OnPickerSelectedIndexChanged(object sender, EventArgs e)
         {
             //Error handler due to events during page changes. Verifies both pickers can be accessed and skips updates if models not loaded
             int selectedIndex = -1;
@@ -105,8 +157,8 @@ namespace Xapp2.Pages
             {
                 if (companypicker.SelectedIndex != -1)
                 { selectedIndex = companypicker.SelectedIndex; }
-                if (doughnutview.doughnutselect != -1)
-                { selectedIndex = doughnutview.doughnutselect; }
+                if (doughnut.ExplodeIndex != -1)
+                { selectedIndex = doughnut.ExplodeIndex; }
             }
             catch (Exception e1)
             {  
@@ -118,17 +170,19 @@ namespace Xapp2.Pages
 
             if (selectedIndex != -1)
             {
+
                 //Updating company selection state variables
-                if (doughnutview.doughnutselect != currentselect & doughnutview.doughnutselect != -1) //checks if chart was updated
+                if (doughnut.ExplodeIndex != currentselect & doughnut.ExplodeIndex != -1) //checks if chart was updated
                 {
-                    currentselect = doughnutview.doughnutselect;
-                    companypicker.SelectedIndex = doughnutview.doughnutselect;
+                    currentselect = doughnut.ExplodeIndex;
+                    doughnutview.doughnutselect = currentselect;
+                    companypicker.SelectedIndex = currentselect;
                     changed = 1;
                 }
-                if (companypicker.SelectedIndex != currentselect & companypicker.SelectedIndex != -1) //checks if picker was updated
+                if (companypicker.SelectedIndex != currentselect & companypicker.SelectedIndex != -1 & changed==0) //checks if picker was updated
                 {
                     currentselect = companypicker.SelectedIndex;
-                    doughnutview.doughnutselect = companypicker.SelectedIndex;
+                    doughnutview.doughnutselect = currentselect;
                     changed = 1;
                 }
 
@@ -181,6 +235,7 @@ namespace Xapp2.Pages
                     Globals.NFCtempcount++;
                     workers.ReferenceNFC = Globals.NFCtempcount.ToString();
                     workers.Company = currentcompany;
+                    workers.CreatedTime = DateTime.Now;
 
                     await App.Database.AddWorker(workers);
 
@@ -225,41 +280,6 @@ namespace Xapp2.Pages
         private async void OnMainNavClicked(object sender, EventArgs e)
         {
             await Navigation.PushModalAsync(new MainPage(), false).ConfigureAwait(false);
-        }
-
-        //Nav Bar Show/Hide
-        private async void ShowNavClicked(object sender, EventArgs e)
-        {
-            if (Nav)
-            {
-                Nav = false;
-                NavBarGrid.RowDefinitions[1].Height = 0;
-                NavBarGrid.RowDefinitions[1].Height = 0;
-            }
-            else
-            {
-                Nav = true;
-                NavBarGrid.RowDefinitions[1].Height = 15;
-                NavBarGrid.RowDefinitions[1].Height = 60;
-            }
-        }
-        private async void NavSwipedUp(object sender, EventArgs e)
-        {
-            if (!Nav)
-            {
-                Nav = true;
-                NavBarGrid.RowDefinitions[1].Height = 15;
-                NavBarGrid.RowDefinitions[1].Height = 60;
-            }
-        }
-        private async void NavSwipedDown(object sender, EventArgs e)
-        {
-            if (!Nav)
-            {
-                Nav = false;
-                NavBarGrid.RowDefinitions[1].Height = 0;
-                NavBarGrid.RowDefinitions[1].Height = 0;
-            }
         }
 
         //Nav Bar Navigations

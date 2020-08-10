@@ -12,6 +12,8 @@ using Newtonsoft.Json.Linq;
 using System.Linq;
 using System.Data.SqlClient;
 using System.Data;
+using System.Globalization;
+using System.Net;
 
 namespace Xapp2.Data
 {   
@@ -111,8 +113,14 @@ namespace Xapp2.Data
             string result = await Globals.client.GetStringAsync(Url + "DataRequest/WorkerReq/");
             return JsonConvert.DeserializeObject<IEnumerable<Worker>>(result);
         }
+        public static async Task<IEnumerable<EntryLog>> GetAllEntryLogs()
+        {
 
-        static async public Task Add(Tuple <Unit,Vessel,Worker> newdata, string tag)
+            string result = await Globals.client.GetStringAsync(Url + "DataRequest/EntryLogReq/");
+            return JsonConvert.DeserializeObject<IEnumerable<EntryLog>>(result);
+        }
+
+        static async public Task Add(Tuple <Unit,Vessel> newdata, string tag)
         {
 
             var response = await Globals.client.PostAsync(Url+"units/" + tag, new StringContent(JsonConvert.SerializeObject(newdata), Encoding.UTF8, "application/json"));
@@ -121,10 +129,37 @@ namespace Xapp2.Data
         static async public Task AddWorker(Worker newdata)
         {
 
-            var response = await Globals.client.PostAsync(Url + "units/Worker/", new StringContent(JsonConvert.SerializeObject(newdata), Encoding.UTF8, "application/json"));
+            var response = await Globals.client.PostAsync(Url + "units/PostWorker/", new StringContent(JsonConvert.SerializeObject(newdata), Encoding.UTF8, "application/json"));
             return;
         }
+        static async public Task AddLog(EntryLog newdata)
+        {
+            /*////////////
+            string constring = "Server = tcp:192.168.1.42,1433;  Database = Local_SE; Integrated Security = False; User Id = test; password = test";
+            SqlConnection con = new SqlConnection(constring);
+            con.Open();
+            string tablename = "Logs";
+            
+            string insertString = @" insert into " + tablename + "(ReferenceNFC,VesselName,UnitName,Timelog) values (@param1,@param2,@param3,@param4)";
 
+
+            // 1. Instantiate a new command with a query and connection
+            using (SqlCommand cmd = new SqlCommand(insertString, con))
+            {
+                cmd.Parameters.Add("@param1", SqlDbType.NVarChar, 50).Value = newdata.ReferenceNFC;
+                cmd.Parameters.Add("@param2", SqlDbType.NVarChar, 50).Value = newdata.VesselName;
+                cmd.Parameters.Add("@param3", SqlDbType.NVarChar, 50).Value = newdata.UnitName;
+                cmd.Parameters.Add("@param4", SqlDbType.NVarChar, 50).Value = newdata.TimeLog.ToString("dd-MM-yyyy-hh-mm", CultureInfo.InvariantCulture);
+
+                cmd.CommandType = CommandType.Text;
+                cmd.ExecuteNonQuery();
+            }
+            //////////*/
+
+
+            var response = await Globals.client.PostAsync(Url + "units/PostLog/", new StringContent(JsonConvert.SerializeObject(newdata), Encoding.UTF8, "application/json"));
+            return;
+        }
 
         static public async Task Delete(string tag)
         {
@@ -132,6 +167,13 @@ namespace Xapp2.Data
 
             return;
         
+        }
+        static public async Task DeleteLog(int tag)
+        {
+            var response = await Globals.client.DeleteAsync(Url + "units/DeleteLog/" + tag);
+
+            return;
+
         }
 
         public async Task Update(Unit unit)
