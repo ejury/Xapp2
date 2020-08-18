@@ -16,10 +16,12 @@
 
     </ContentPage.BindingContext>
     <ContentPage.Content>
-        <StackLayout>
+        <StackLayout VerticalOptions="Start"
+            Style="{StaticResource pageStyle}">
+
             <!-- Top Header Details -->
             <Grid
-                BackgroundColor="#2783d6" >
+                BackgroundColor="#000000" >
                 <Grid.RowDefinitions>
                     <RowDefinition Height="40" />
 
@@ -30,101 +32,102 @@
                     <ColumnDefinition Width="40"/>
                 </Grid.ColumnDefinitions>
                 <Image Grid.Column="0"   Source="SEWhite.jpg"   HorizontalOptions="Center"   VerticalOptions="Center"  Margin="3" />
-                <Label Grid.Column="1"   Style="{StaticResource labletitlestyle}"  Text="Analytics"    />
+                <Label Grid.Column="1"   Style="{StaticResource labletitlestyle}"  Text="Activity"  TextColor="White"  />
                 <ImageButton Grid.Column="2" Source="HomeButton.png" Margin="5"  BackgroundColor="Transparent"  Clicked = "OnMainNavClicked" />
             </Grid>
             <!-- Top Header Ends -->
 
             <!--Data Entry Section   -->
-            <Grid RowSpacing="0" BackgroundColor="#d0e8ff" Margin="0,-6,0,0">
-                <Grid.RowDefinitions>
-                    <!--RowDefinition Height="20" /-->
-                    <RowDefinition Height="40" />
-                    <RowDefinition Height="40" />
+            <Frame Grid.Column="0" CornerRadius="10" HorizontalOptions="StartAndExpand"  VerticalOptions="Start" Margin="16,16,16,16" BackgroundColor="#ffffff"
+           HasShadow="True"   IsClippedToBounds="True"  Padding="0">
+                <Grid RowSpacing="0"  Margin="0,-6,0,0">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="30"/>
+                        <RowDefinition Height="5"/>
+                        <RowDefinition Height="40" />
+                        <RowDefinition Height="40" />
+                    </Grid.RowDefinitions>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="100"/>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
 
-                </Grid.RowDefinitions>
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="100"/>
-                    <ColumnDefinition Width="*"/>
-                    <ColumnDefinition Width="*"/>
-                </Grid.ColumnDefinitions>
+                    <!-- Top header of user entry multiuser&#xe714 hierarchy&#xe704-->
+                    <Label Text=" &#xe727; Select"  Margin="0,0,0,-5" Grid.Row="0" Grid.Column="0"  Grid.ColumnSpan="3" HorizontalOptions="Start"
+                       Style="{StaticResource lablebodystyle}" FontAttributes="bold" FontFamily="{StaticResource FontIcons}" TextColor="#0f2696"/>
+                    <BoxView Grid.Row="1" Grid.ColumnSpan="3" HorizontalOptions="FillAndExpand" HeightRequest="1" Color="#0f2696" Margin="10,0,10,0"/>
 
-                <!--Label Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="3" Text="Select Criteria" HorizontalOptions="Center" Style="{StaticResource lablebodystyle}"/-->
+                    <!-- Data Section -->
+                    <Label Grid.Row="2" Grid.Column="0" Text="Location:" VerticalOptions="Center" HorizontalOptions="Start" Style="{StaticResource lablebodystyle}"/>
+                    <Label Grid.Row="3" Grid.Column="0" Text="Series:" VerticalOptions="Center" HorizontalOptions="Start" Style="{StaticResource lablebodystyle}"/>
 
-                <Label Grid.Row="0" Grid.Column="0" Text="Location:" VerticalOptions="Center" HorizontalOptions="Start" Style="{StaticResource lablebodystyle}"/>
-                <Label Grid.Row="1" Grid.Column="0" Text="Display:" VerticalOptions="Center" HorizontalOptions="Start" Style="{StaticResource lablebodystyle}"/>
-
-
-                <Picker Grid.Row="0" Grid.Column="1"
+                    <Picker Grid.Row="2" Grid.Column="1"
                         x:Name="unitpicker" 
                         Style="{StaticResource pickerstyle}"
-                        Title="Select Unit"  
+                        Title="Area"  
                         ItemsSource="{Binding unitspicker}" 
                         SelectedItem="{Binding SelectedUnit}"
                         SelectedIndexChanged="OnUnitPickerChanged"/>
 
-                <Picker Grid.Row="0" Grid.Column="2"
+                    <Picker Grid.Row="2" Grid.Column="2"
                         x:Name="vesselpicker" 
                         Style="{StaticResource pickerstyle}"
-                        Title="Select Vessel"  
+                        Title="Location"  
                         ItemsSource="{Binding vesselspicker}" 
                         SelectedItem="{Binding SelectedVessel}"
                         SelectedIndexChanged="OnVesselPickerChanged"/>
 
-                       
-                    <Picker Grid.Row="1" Grid.Column="1" x:Name="Company1picker"  Title="Default"  Style="{StaticResource pickerstyle}"
+                    <Picker Grid.Row="3" Grid.Column="1" x:Name="Company1picker"  Title="Default"  Style="{StaticResource pickerstyle}"
                         ItemsSource="{Binding companypicker}" IsEnabled="False"
                         SelectedIndexChanged="OnCompanyPickerChanged"/>
 
- 
-
-                       
-                   <Picker Grid.Row="1" Grid.Column="2" x:Name="Company2picker"  Title="NA"    Style="{StaticResource pickerstyle}"
+                    <Picker Grid.Row="3" Grid.Column="2" x:Name="Company2picker"  Title="NA"    Style="{StaticResource pickerstyle}"
                         ItemsSource="{Binding companypicker}" IsEnabled="False"
                         SelectedIndexChanged="OnCompanyPickerChanged"/>
 
-            </Grid>
+                </Grid>
+            </Frame>
 
             <!--BoxView HorizontalOptions="FillAndExpand" HeightRequest="1" Color="DarkBlue" Margin="10,0,10,0"/-->
             
             <!-- Analytics Graph Area   -->
-            
-            <Grid VerticalOptions="FillAndExpand" >
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="*"/>
-                    <ColumnDefinition Width="*"/>
-                </Grid.ColumnDefinitions>
 
-                <chart:SfChart  Grid.Column="0" Grid.ColumnSpan="2" VerticalOptions="FillAndExpand">
+                <Grid VerticalOptions="FillAndExpand" HeightRequest="10000" Margin="5,0">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
 
-                    <chart:SfChart.PrimaryAxis>
-                        <chart:DateTimeAxis x:Name="xaxis" IntervalType="Days"  LabelsIntersectAction="MultipleRows" >
-                            <chart:DateTimeAxis.Title>
-                                <chart:ChartAxisTitle Text="Time" FontSize="14" TextColor="#020a45"></chart:ChartAxisTitle>
-                            </chart:DateTimeAxis.Title>
-                        </chart:DateTimeAxis>
-                    </chart:SfChart.PrimaryAxis>
+                    <chart:SfChart  VerticalOptions="FillAndExpand">
 
-                    <chart:SfChart.SecondaryAxis>
-                        <chart:NumericalAxis>
-                            <chart:NumericalAxis.Title>
-                                <chart:ChartAxisTitle Text="Count #" FontSize="14" TextColor="#020a45"></chart:ChartAxisTitle>
-                            </chart:NumericalAxis.Title>
-                        </chart:NumericalAxis>
-                    </chart:SfChart.SecondaryAxis>
+                        <chart:SfChart.PrimaryAxis>
+                            <chart:DateTimeAxis x:Name="xaxis" IntervalType="Days"  LabelsIntersectAction="MultipleRows" >
+                                <chart:DateTimeAxis.Title>
+                                    <chart:ChartAxisTitle Text="Time" FontSize="14" TextColor="#020a45"></chart:ChartAxisTitle>
+                                </chart:DateTimeAxis.Title>
+                            </chart:DateTimeAxis>
+                        </chart:SfChart.PrimaryAxis>
 
-                    <chart:SfChart.Series>
-                        <chart:StepAreaSeries x:Name = "sfchart" ItemsSource ="{Binding DatetimeData}"  XBindingPath="Date"
+                        <chart:SfChart.SecondaryAxis>
+                            <chart:NumericalAxis>
+                                <chart:NumericalAxis.Title>
+                                    <chart:ChartAxisTitle Text="Count #" FontSize="14" TextColor="#020a45"></chart:ChartAxisTitle>
+                                </chart:NumericalAxis.Title>
+                            </chart:NumericalAxis>
+                        </chart:SfChart.SecondaryAxis>
+
+                        <chart:SfChart.Series>
+                            <chart:StepAreaSeries x:Name = "sfchart" ItemsSource ="{Binding DatetimeData}"  XBindingPath="Date"
                             YBindingPath="Value" Color="#2783d6" >
-                        </chart:StepAreaSeries>
-                        <chart:StepAreaSeries x:Name = "sfchart2" ItemsSource ="{Binding DatetimeData}"  XBindingPath="Date"
+                            </chart:StepAreaSeries>
+                            <chart:StepAreaSeries x:Name = "sfchart2" ItemsSource ="{Binding DatetimeData}"  XBindingPath="Date"
                             YBindingPath="Value" Color="#091149">
-                        </chart:StepAreaSeries>
-                    </chart:SfChart.Series>
+                            </chart:StepAreaSeries>
+                        </chart:SfChart.Series>
 
-                </chart:SfChart>
-            </Grid>
-          
+                    </chart:SfChart>
+                </Grid>
+
 
             <!--  Range and Series Selection Tools   -->
             <!--Grid BackgroundColor="#d0e8ff">
@@ -133,99 +136,101 @@
                     <ColumnDefinition Width="*"/>
                 </Grid.ColumnDefinitions-->
 
+            <Frame Grid.Column="0" CornerRadius="10" HorizontalOptions="StartAndExpand"  VerticalOptions="Start" Margin="16,16,16,16" BackgroundColor="#ffffff"
+           HasShadow="True"   IsClippedToBounds="True"  Padding="0">
 
-            <Grid Grid.Column="0" RowSpacing="0" BackgroundColor="#d0e8ff" Margin="0,-6,0,0">
-                <Grid.RowDefinitions>
-                    <RowDefinition Height="25"/>
-                    <RowDefinition Height="30"/>
-                    <RowDefinition Height="30"/>
-                    <RowDefinition Height="30"/>
-                </Grid.RowDefinitions>
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="60"/>
-                    <ColumnDefinition Width="*"/>
-                    <ColumnDefinition Width="*"/>
-                    <ColumnDefinition Width="60"/>
-                    <ColumnDefinition Width="*"/>
-                    <ColumnDefinition Width="*"/>
-                    <ColumnDefinition Width="60"/>
-                </Grid.ColumnDefinitions>
+                <Grid Grid.Column="0" RowSpacing="0" Margin="0,-6,0,0">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="25"/>
+                        <RowDefinition Height="30"/>
+                        <RowDefinition Height="30"/>
+                        <RowDefinition Height="30"/>
+                    </Grid.RowDefinitions>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="60"/>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="60"/>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="60"/>
+                    </Grid.ColumnDefinitions>
 
-                <Label Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="3" Text="Range Start:"  Style="{StaticResource lablebodystyle}" />
-                <Label Grid.Row="0" Grid.Column="4" Grid.ColumnSpan="3" Text="Range End:" Style="{StaticResource lablebodystyle}"/>
+                    <Label Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="3" Text="Range Start:"  Style="{StaticResource lablebodystyle}" />
+                    <Label Grid.Row="0" Grid.Column="4" Grid.ColumnSpan="3" Text="Range End:" Style="{StaticResource lablebodystyle}"/>
 
-                <Label Grid.Row="1" Grid.Column="0" Text="Hour" Style="{StaticResource lablebodystyle}"  />
-                <Label Grid.Row="2" Grid.Column="0" Text="Day" Style="{StaticResource lablebodystyle}"  />
-                <Label Grid.Row="3" Grid.Column="0" Text="Month" Style="{StaticResource lablebodystyle}"  />
-                <Label Grid.Row="1" Grid.Column="6" Text="Hour" Style="{StaticResource lablebodystyle}"  />
-                <Label Grid.Row="2" Grid.Column="6" Text="Day" Style="{StaticResource lablebodystyle}"  />
-                <Label Grid.Row="3" Grid.Column="6" Text="Month" Style="{StaticResource lablebodystyle}"  />
-                
-                <Button Grid.Row="1" Grid.Column="1" StyleId="1" AutomationId="1" Text="-" Style="{StaticResource ButtonAnalytics}" Clicked="RangeChangeClicked"/>
-                <Button Grid.Row="2" Grid.Column="1" StyleId="1" AutomationId="2" Text="-" Style="{StaticResource ButtonAnalytics}" Clicked="RangeChangeClicked"/>
-                <Button Grid.Row="3" Grid.Column="1" StyleId="1" AutomationId="3" Text="-" Style="{StaticResource ButtonAnalytics}" Clicked="RangeChangeClicked"/>
-                <Button Grid.Row="1" Grid.Column="2" StyleId="1" AutomationId="4" Text="+" Style="{StaticResource ButtonAnalytics}" Clicked="RangeChangeClicked"/>
-                <Button Grid.Row="2" Grid.Column="2" StyleId="1" AutomationId="5" Text="+" Style="{StaticResource ButtonAnalytics}" Clicked="RangeChangeClicked"/>
-                <Button Grid.Row="3" Grid.Column="2" StyleId="1" AutomationId="6" Text="+" Style="{StaticResource ButtonAnalytics}" Clicked="RangeChangeClicked"/>
+                    <Label Grid.Row="1" Grid.Column="0" Text="Hour" Style="{StaticResource lablebodystyle}"  />
+                    <Label Grid.Row="2" Grid.Column="0" Text="Day" Style="{StaticResource lablebodystyle}"  />
+                    <Label Grid.Row="3" Grid.Column="0" Text="Month" Style="{StaticResource lablebodystyle}"  />
+                    <Label Grid.Row="1" Grid.Column="6" Text="Hour" Style="{StaticResource lablebodystyle}"  />
+                    <Label Grid.Row="2" Grid.Column="6" Text="Day" Style="{StaticResource lablebodystyle}"  />
+                    <Label Grid.Row="3" Grid.Column="6" Text="Month" Style="{StaticResource lablebodystyle}"  />
 
-                <Button Grid.Row="1" Grid.Column="4" StyleId="2" AutomationId="1" Text="-" Style="{StaticResource ButtonAnalytics}" Clicked="RangeChangeClicked"/>
-                <Button Grid.Row="2" Grid.Column="4" StyleId="2" AutomationId="2" Text="-" Style="{StaticResource ButtonAnalytics}" Clicked="RangeChangeClicked"/>
-                <Button Grid.Row="3" Grid.Column="4" StyleId="2" AutomationId="3" Text="-" Style="{StaticResource ButtonAnalytics}" Clicked="RangeChangeClicked"/>
-                <Button Grid.Row="1" Grid.Column="5" StyleId="2" AutomationId="4" Text="+" Style="{StaticResource ButtonAnalytics}" Clicked="RangeChangeClicked"/>
-                <Button Grid.Row="2" Grid.Column="5" StyleId="2" AutomationId="5" Text="+" Style="{StaticResource ButtonAnalytics}" Clicked="RangeChangeClicked"/>
-                <Button Grid.Row="3" Grid.Column="5" StyleId="2" AutomationId="6" Text="+" Style="{StaticResource ButtonAnalytics}" Clicked="RangeChangeClicked"/>
+                    <Button Grid.Row="1" Grid.Column="1" StyleId="1" AutomationId="1" Text="-" Style="{StaticResource ButtonAnalytics}" Clicked="RangeChangeClicked"/>
+                    <Button Grid.Row="2" Grid.Column="1" StyleId="1" AutomationId="2" Text="-" Style="{StaticResource ButtonAnalytics}" Clicked="RangeChangeClicked"/>
+                    <Button Grid.Row="3" Grid.Column="1" StyleId="1" AutomationId="3" Text="-" Style="{StaticResource ButtonAnalytics}" Clicked="RangeChangeClicked"/>
+                    <Button Grid.Row="1" Grid.Column="2" StyleId="1" AutomationId="4" Text="+" Style="{StaticResource ButtonAnalytics}" Clicked="RangeChangeClicked"/>
+                    <Button Grid.Row="2" Grid.Column="2" StyleId="1" AutomationId="5" Text="+" Style="{StaticResource ButtonAnalytics}" Clicked="RangeChangeClicked"/>
+                    <Button Grid.Row="3" Grid.Column="2" StyleId="1" AutomationId="6" Text="+" Style="{StaticResource ButtonAnalytics}" Clicked="RangeChangeClicked"/>
 
-
-                <combobox:SfComboBox x:Name="comboBox1" Grid.Row="1" Grid.Column="3" Margin="10,-8,2,-2" ShowBorder="False" SelectedValue="1">
-                    <combobox:SfComboBox.ComboBoxSource>
-                        <ListCollection:List x:TypeArguments="x:String">
-                            <x:String>1</x:String>
-                            <x:String>2</x:String>
-                            <x:String>3</x:String>
-                            <x:String>4</x:String>
-                            <x:String>5</x:String>
-                            <x:String>6</x:String>
-                            <x:String>7</x:String>
-                            <x:String>8</x:String>
-                            <x:String>9</x:String>
-                        </ListCollection:List>
-                    </combobox:SfComboBox.ComboBoxSource>
-                </combobox:SfComboBox>
-
-                <combobox:SfComboBox x:Name="comboBox2" Grid.Row="2" Grid.Column="3" Margin="10,-8,2,-2" ShowBorder="False" SelectedValue="1">
-                    <combobox:SfComboBox.ComboBoxSource>
-                        <ListCollection:List x:TypeArguments="x:String">
-                            <x:String>1</x:String>
-                            <x:String>2</x:String>
-                            <x:String>3</x:String>
-                            <x:String>4</x:String>
-                            <x:String>5</x:String>
-                            <x:String>6</x:String>
-                            <x:String>7</x:String>
-                            <x:String>8</x:String>
-                            <x:String>9</x:String>
-                        </ListCollection:List>
-                    </combobox:SfComboBox.ComboBoxSource>
-                </combobox:SfComboBox>
-
-                <combobox:SfComboBox x:Name="comboBox3" Grid.Row="3" Grid.Column="3" Margin="10,-8,2,-2" ShowBorder="False" SelectedValue="1">
-                    <combobox:SfComboBox.ComboBoxSource>
-                        <ListCollection:List x:TypeArguments="x:String">
-                            <x:String>1</x:String>
-                            <x:String>2</x:String>
-                            <x:String>3</x:String>
-                            <x:String>4</x:String>
-                            <x:String>5</x:String>
-                            <x:String>6</x:String>
-                            <x:String>7</x:String>
-                            <x:String>8</x:String>
-                            <x:String>9</x:String>
-                        </ListCollection:List>
-                    </combobox:SfComboBox.ComboBoxSource>
-                </combobox:SfComboBox>
-            </Grid>
+                    <Button Grid.Row="1" Grid.Column="4" StyleId="2" AutomationId="1" Text="-" Style="{StaticResource ButtonAnalytics}" Clicked="RangeChangeClicked"/>
+                    <Button Grid.Row="2" Grid.Column="4" StyleId="2" AutomationId="2" Text="-" Style="{StaticResource ButtonAnalytics}" Clicked="RangeChangeClicked"/>
+                    <Button Grid.Row="3" Grid.Column="4" StyleId="2" AutomationId="3" Text="-" Style="{StaticResource ButtonAnalytics}" Clicked="RangeChangeClicked"/>
+                    <Button Grid.Row="1" Grid.Column="5" StyleId="2" AutomationId="4" Text="+" Style="{StaticResource ButtonAnalytics}" Clicked="RangeChangeClicked"/>
+                    <Button Grid.Row="2" Grid.Column="5" StyleId="2" AutomationId="5" Text="+" Style="{StaticResource ButtonAnalytics}" Clicked="RangeChangeClicked"/>
+                    <Button Grid.Row="3" Grid.Column="5" StyleId="2" AutomationId="6" Text="+" Style="{StaticResource ButtonAnalytics}" Clicked="RangeChangeClicked"/>
 
 
+                    <combobox:SfComboBox x:Name="comboBox1" Grid.Row="1" Grid.Column="3" Margin="10,-8,2,-2" ShowBorder="False" SelectedValue="1">
+                        <combobox:SfComboBox.ComboBoxSource>
+                            <ListCollection:List x:TypeArguments="x:String">
+                                <x:String>1</x:String>
+                                <x:String>2</x:String>
+                                <x:String>3</x:String>
+                                <x:String>4</x:String>
+                                <x:String>5</x:String>
+                                <x:String>6</x:String>
+                                <x:String>7</x:String>
+                                <x:String>8</x:String>
+                                <x:String>9</x:String>
+                            </ListCollection:List>
+                        </combobox:SfComboBox.ComboBoxSource>
+                    </combobox:SfComboBox>
+
+                    <combobox:SfComboBox x:Name="comboBox2" Grid.Row="2" Grid.Column="3" Margin="10,-8,2,-2" ShowBorder="False" SelectedValue="1">
+                        <combobox:SfComboBox.ComboBoxSource>
+                            <ListCollection:List x:TypeArguments="x:String">
+                                <x:String>1</x:String>
+                                <x:String>2</x:String>
+                                <x:String>3</x:String>
+                                <x:String>4</x:String>
+                                <x:String>5</x:String>
+                                <x:String>6</x:String>
+                                <x:String>7</x:String>
+                                <x:String>8</x:String>
+                                <x:String>9</x:String>
+                            </ListCollection:List>
+                        </combobox:SfComboBox.ComboBoxSource>
+                    </combobox:SfComboBox>
+
+                    <combobox:SfComboBox x:Name="comboBox3" Grid.Row="3" Grid.Column="3" Margin="10,-8,2,-2" ShowBorder="False" SelectedValue="1">
+                        <combobox:SfComboBox.ComboBoxSource>
+                            <ListCollection:List x:TypeArguments="x:String">
+                                <x:String>1</x:String>
+                                <x:String>2</x:String>
+                                <x:String>3</x:String>
+                                <x:String>4</x:String>
+                                <x:String>5</x:String>
+                                <x:String>6</x:String>
+                                <x:String>7</x:String>
+                                <x:String>8</x:String>
+                                <x:String>9</x:String>
+                            </ListCollection:List>
+                        </combobox:SfComboBox.ComboBoxSource>
+                    </combobox:SfComboBox>
+                </Grid>
+
+            </Frame>
 
             <!-- Navigation Bar -->
             <Grid Margin="0,-6,0,0"  Padding="0,0,0,0" ColumnSpacing="-5" RowSpacing="0" VerticalOptions="End" MinimumHeightRequest="75">

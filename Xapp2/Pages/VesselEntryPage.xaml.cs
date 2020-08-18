@@ -151,10 +151,10 @@ namespace Xapp2.Pages
         private void ListViewChange(object sender, EventArgs e)
         {
             //Move listview mode through 3 states - 1=both visible, 2=pie visible, 3=list visible
-            if (ListViewMode < 3)
-            { ListViewMode++; }
+            if (ListViewMode > 1)
+            { ListViewMode--; }
             else
-            { ListViewMode = 1; }
+            { ListViewMode = 3; }
 
             //Setting appropriate view state
             if (ListViewMode == 1)
@@ -296,12 +296,14 @@ namespace Xapp2.Pages
             bool answer = await DisplayAlert("Reset Full Database?", "Confirmation", "Yes", "No");
             if (answer)
             {
+                AIndicator.IsRunning=true;
                 await App.Database.ClearVessel();
                 await App.Database.ClearUnit();
                 await App.Database.ClearWorker();
                 await App.Database.ClearLogs();
                 await App.Database.ClearAnalytics();
                 await App.Database.RefreshDatabase();
+                AIndicator.IsRunning = false;
             }
         }
         private async void OnDatabaseClear(object sender, EventArgs e)

@@ -8,6 +8,7 @@ using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
 using Xapp2.Models;
 using Xapp2.Data;
+using Syncfusion.XForms.Graphics;
 
 namespace Xapp2.Pages
 {
@@ -18,7 +19,7 @@ namespace Xapp2.Pages
         public string currentunit;
         public string currentvessel;
         public bool ListViewMode;
-        bool Nav;
+        bool IsScanning = false;
         List<EntryLog> currentlogs;
         EntryLog newlog = new EntryLog();
 
@@ -51,13 +52,30 @@ namespace Xapp2.Pages
             if (Globals.init)
             { vesselpicker.SelectedItem = currentvessel; }
         }
-/*        private async void SetWorkerList()
+        private async void ScanClicked(object sender, EventArgs e)
         {
-            var workerlistall = await App.Database.GetWorkers();
-            List<int> workerlist = workerlistall.Select(c => c.WorkerID).ToList();
+            if (IsScanning)
+            {
+                IsScanning = false;
+                ScanButton.Text = "Start Scanner";
+                ScanButtonColor.Color = Color.FromHex("#51F1F2");
+                ScanButtonColor2.Color = Color.LightGray;
+                ScanButtonColor3.Color = Color.LightGray;
+                PageLayout.BackgroundColor = Color.FromHex("#f0f3f6");
+            }
+            else
+            {
+                IsScanning = true;
+                ScanButton.Text = "Swipe SE Card";
+                ScanButtonColor.Color = Color.FromHex("#5bf2df");
+                ScanButtonColor2.Color = Color.FromHex("#78e7ff");
+                ScanButtonColor3.Color = Color.FromHex("#78e7ff");
+                //PageLayout.BackgroundColor = Color.FromHex("#6bb4b6");
+                PageLayout.BackgroundColor = Color.FromHex("#226776");
+            }
 
-            //workerpicker.ItemsSource = workerlist;
-        }*/
+
+        }
         private async void SetCSEList()
         {
             //Setting appropriate view state
@@ -151,7 +169,6 @@ namespace Xapp2.Pages
         }
         public CSEntryPage()
         {
-            Nav = true;
             InitializeComponent();
         }
 
@@ -235,10 +252,7 @@ namespace Xapp2.Pages
                 newlog.UnitName = currentunit;
 
                 AnalyticsLog Alog = new AnalyticsLog();
-                Alog.WorkerID = worker.WorkerID;
-                Alog.Company = worker.Company;
-                Alog.FirstName = worker.FirstName;
-                Alog.LastName = worker.LastName;
+                Alog.ReferenceNFC = worker.ReferenceNFC;
                 Alog.InOut = 1;
                 Alog.TimeLog = DateTime.Now;
                 Alog.VesselName = currentvessel;
@@ -275,41 +289,6 @@ namespace Xapp2.Pages
             await App.Database.ClearLogs();
             SetCSEList();
 
-        }
-
-        //Nav Bar Show/Hide
-        private async void ShowNavClicked(object sender, EventArgs e)
-        {
-            if (Nav)
-            {
-                Nav = false;
-                NavBarGrid.RowDefinitions[1].Height = 0;
-                NavBarGrid.RowDefinitions[1].Height = 0;
-            }
-            else
-            {
-                Nav = true;
-                NavBarGrid.RowDefinitions[1].Height = 15;
-                NavBarGrid.RowDefinitions[1].Height = 60;
-            }
-        }
-        private async void NavSwipedUp(object sender, EventArgs e)
-        {
-            if (!Nav)
-            {
-                Nav = true;
-                NavBarGrid.RowDefinitions[1].Height = 15;
-                NavBarGrid.RowDefinitions[1].Height = 60;
-            }
-        }
-        private async void NavSwipedDown(object sender, EventArgs e)
-        {
-            if (!Nav)
-            {
-                Nav = false;
-                NavBarGrid.RowDefinitions[1].Height = 0;
-                NavBarGrid.RowDefinitions[1].Height = 0;
-            }
         }
 
         //Nav Bar Navigations

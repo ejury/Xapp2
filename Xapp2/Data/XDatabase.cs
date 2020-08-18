@@ -31,14 +31,16 @@ namespace Xapp2.Data
         {
             return _connection.Table<Worker>().ToListAsync();
         }
-         async public Task<List<Worker>> GetWorkersAPI()
+         async public Task<List<Worker>> GetWorkersAPI() //Get workerrequest forcing update from database
         {
-            IEnumerable<Worker> tempW = await APIServer.GetAllWorkers();
+            //Determine max ID already pulled from server
+            var internalworkers = _connection.Table<Worker>().ToListAsync().Result;
+            int maxID = internalworkers.Select(c => c.WorkerID).Max();
 
-            _connection.DropTableAsync<Worker>().Wait();
-            _connection.CreateTableAsync<Worker>().Wait();
+            //Pull only new entries from server
+            IEnumerable<Worker> tempW = await APIServer.GetAllWorkers(maxID.ToString());
 
-             await _connection.InsertAllAsync(tempW);
+            await _connection.InsertAllAsync(tempW); //insert database entries into local db (if any)
             return await _connection.Table<Worker>().ToListAsync();
 
         }
@@ -70,6 +72,7 @@ namespace Xapp2.Data
         public Task<Worker> GetWorker(int ident)
         {
             return _connection.Table<Worker>().FirstOrDefaultAsync(t => t.WorkerID == ident);
+            
         }
 
         //Delete individual IDs from database list
@@ -97,16 +100,22 @@ namespace Xapp2.Data
         //Add Individual Entries to database list
         async public Task<int> AddWorker(Worker worker)
         {
-            await APIServer.AddWorker(worker);
-            IEnumerable<Worker> tempW = await APIServer.GetAllWorkers();
+            //Determine max ID already pulled from server
+            var internalworkers = _connection.Table<Worker>().ToListAsync().Result;
+            int maxID = internalworkers.Select(c => c.WorkerID).Max();
 
-            _connection.DropTableAsync<Worker>().Wait();
-            _connection.CreateTableAsync<Worker>().Wait();
+            //Add worker and retrieve assigned ID
+            int newID = await APIServer.AddWorker(worker); //Add worker
 
+            //No query to database for missing workers as this will be handled during app load or when new user is swiped
 
-            await  _connection.InsertAllAsync(tempW);
-            int t = 1;
-            return t;
+            if (newID > 0) //New ID reports of -1 (invalid card) and 0 (already activated card) will not be updated locally or in SQL Db
+            {
+                //Add worker to local database
+                worker.WorkerID = newID;
+                await _connection.InsertAsync(worker);
+            }
+            return newID;
         }
         async public Task<int> AddVessel(Vessel vessel)
         {
@@ -149,18 +158,22 @@ namespace Xapp2.Data
             int t = 1;
             return t;
         }
-        public Task<int> AddAnalyticsLog(AnalyticsLog entrylog)
+        async public Task<int> AddAnalyticsLog(AnalyticsLog analyticlog)
         {
-            return _connection.InsertAsync(entrylog);
+            await APIServer.AddRecord(analyticlog);
+            IEnumerable<AnalyticsLog> tempA = await APIServer.GetAllAnalyticsLogs();
 
+            _connection.DropTableAsync<AnalyticsLog>().Wait();
+            _connection.CreateTableAsync<AnalyticsLog>().Wait();
+            await _connection.InsertAllAsync(tempA);
+            int t = 1;
+            return t;
         }
 
         //Remove entire database tables
         public Task ClearUnit()
         {
             APIServer.Delete("UxClearx");
-           
-
             _connection.DropTableAsync<Unit>().Wait();
             _connection.CreateTableAsync<Unit>().Wait();
             return Task.CompletedTask;
@@ -189,6 +202,7 @@ namespace Xapp2.Data
         }
         public Task ClearAnalytics()
         {
+            APIServer.Delete("RxClearx");
             _connection.DropTableAsync<AnalyticsLog>().Wait();
             _connection.CreateTableAsync<AnalyticsLog>().Wait();
             return Task.CompletedTask;
@@ -216,6 +230,7 @@ namespace Xapp2.Data
                 worker.LastName = workerlast[i];
                 worker.Company = companyname[i];
                 worker.CreatedTime = DateTime.Now;
+                worker.Activated = 1;
                 Globals.NFCtempcount++;
                 worker.ReferenceNFC = nfclist[i];
                 await AddWorker(worker);
@@ -260,7 +275,7 @@ namespace Xapp2.Data
                         {
                             //Randomize worker selection and datetime stamp
                             int W = rnd.Next(0, workerfirst.Count-k);
-                            int timestamp = rnd.Next(0, 180);
+                            int timestamp = rnd.Next(1, 10);
 
 /*                            //Create workerID Redundent due to NFC tie to worker
                             newlog.WorkerID = W+1;
@@ -269,62 +284,60 @@ namespace Xapp2.Data
                             newlog.LastName = Ltemp[W];*/
                             newlog.ReferenceNFC = Ntemp[W];
                             //newlog.InOut = 1; phased out
-                            newlog.TimeLog = DateTime.Now.AddMinutes(-timestamp);
+                            newlog.TimeLog = DateTime.Now.AddHours(-timestamp);
                             newlog.VesselName = vessel.Name;
                             newlog.UnitName = vessel.Unitname;
                             await AddLog(newlog);
 
                             //Create analytics log (z days of data)
-                            for (int z=0; z < 3; z++)
+                            for (int z=1; z < 4; z++)
                             {
                                 //adding time randomizers
-                                int xhour = rnd.Next(1, 11);
-                                int xmin = rnd.Next(0, 60);
-                                int xmin2 = rnd.Next(0, 60);
+                                int xhour = rnd.Next(1, 8);
+                                int xhour2 = rnd.Next(1, 8);
+                                int xmin = rnd.Next(0, 59);
+                                int xmin2 = rnd.Next(0, 59);
                                 DateTime xtime = new DateTime();
 
                                 //Create entry log
-                                Alog.WorkerID = W + 1;
-                                Alog.Company = Ctemp[W];
-                                Alog.FirstName = Ftemp[W];
-                                Alog.LastName = Ltemp[W];
+                                Alog.ReferenceNFC = Ntemp[W];
                                 Alog.InOut = 1;
                                     xtime = DateTime.Now.AddHours(-(24*z+xhour));
                                     xtime = xtime.AddMinutes(-xmin);
                                 Alog.TimeLog = xtime;
                                 Alog.VesselName = vessel.Name;
                                 Alog.UnitName = vessel.Unitname;
-                                await AddAnalyticsLog(Alog);
+                                await APIServer.AddRecord(Alog);
 
                                 //create exit log
-                                Alog.WorkerID = W + 1;
-                                Alog.Company = Ctemp[W];
-                                Alog.FirstName = Ftemp[W];
-                                Alog.LastName = Ltemp[W];
+                                Alog.ReferenceNFC = Ntemp[W];
                                 Alog.InOut = 0;
-                                     xtime = xtime.AddHours(xhour);
+                                     xtime = DateTime.Now.AddHours(-(24 * z - xhour2)); 
                                      xtime = xtime.AddMinutes(+xmin2);
                                 Alog.TimeLog = xtime;
                                 Alog.VesselName = vessel.Name;
                                 Alog.UnitName = vessel.Unitname;
-                                await AddAnalyticsLog(Alog);
+                                await APIServer.AddRecord(Alog);
                             }
 
                             // matching most recent entry of  Entrylog
-                            Alog.WorkerID = W + 1;
-                            Alog.Company = Ctemp[W];
-                            Alog.FirstName = Ftemp[W];
-                            Alog.LastName = Ltemp[W];
+                            Alog.ReferenceNFC = Ntemp[W];
                             Alog.InOut = 1;
-                            Alog.TimeLog = DateTime.Now.AddMinutes(-timestamp);
+                            Alog.TimeLog = DateTime.Now.AddHours(-timestamp);
                             Alog.VesselName = vessel.Name;
                             Alog.UnitName = vessel.Unitname;
-                            await AddAnalyticsLog(Alog);
+                            await APIServer.AddRecord(Alog);
 
                             //Removing worker from list to avoid duplication
                             Ctemp.RemoveAt(W); Ftemp.RemoveAt(W); Ltemp.RemoveAt(W); Ntemp.RemoveAt(W);
                             
                         }
+                        //Populate analytics list with database
+                        IEnumerable<AnalyticsLog> tempA = await APIServer.GetAllAnalyticsLogs();
+
+                        _connection.DropTableAsync<AnalyticsLog>().Wait();
+                        _connection.CreateTableAsync<AnalyticsLog>().Wait();
+                        await _connection.InsertAllAsync(tempA);
                     }
                 }
             }

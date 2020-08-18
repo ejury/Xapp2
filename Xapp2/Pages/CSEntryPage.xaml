@@ -8,8 +8,8 @@
              mc:Ignorable="d"
              x:Class="Xapp2.Pages.CSEntryPage">
     <ContentPage.Content>
-        <StackLayout
-            Style="{StaticResource pageStyle}">
+        <StackLayout x:Name="PageLayout"
+            Style="{StaticResource pageStyle}" >
 
             <!-- Top Header Details -->
             <Grid
@@ -25,7 +25,8 @@
                 </Grid.ColumnDefinitions>
                 <Image Grid.Column="0"   Source="SEWhite.jpg"   HorizontalOptions="Center"   VerticalOptions="Center"  Margin="3" />
                 <Label Grid.Column="1"   Style="{StaticResource labletitlestyle}"  Text="Entry Portal"  TextColor="White"  />
-                <ImageButton Grid.Column="2" Source="HomeButton.png" Margin="5"  BackgroundColor="Transparent"  Clicked = "OnMainNavClicked" />
+                <Button Grid.Column="2" BackgroundColor="Transparent" BorderWidth="0    " BorderColor="White" Clicked = "OnMainNavClicked"/>
+                <ImageButton Grid.Column="2" Source="HomeButton.png"  Margin="5"  BackgroundColor="Transparent"  Clicked = "OnMainNavClicked" />
             </Grid>
             <!-- Top Header Ends -->
 
@@ -40,10 +41,9 @@
                 <BoxView Margin="16,-5,16,0"  HorizontalOptions="FillAndExpand" HeightRequest="3" Color="#2F9BDF" />
 
 
-                    <Grid RowSpacing="0" Margin="5,0,5,0">
+                    <Grid RowSpacing="0" Margin="5,0,5,15">
                         <Grid.RowDefinitions>
                             <RowDefinition Height="40"/>
-                            <RowDefinition Height="80"/>
                         </Grid.RowDefinitions>
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="*" />
@@ -63,40 +63,42 @@
                         <Picker Grid.Row="0" Grid.Column="1" Margin="40,0,10,0" HorizontalOptions="FillAndExpand"  x:Name="vesselpicker"   Title="Location" 
                         ItemsSource="{Binding vessellist}"  SelectedItem="{Binding SelectedVessel}"  SelectedIndexChanged="OnVesselPickerChanged"/>
 
-                        <buttons:SfButton Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2" Margin="5" CornerRadius="5" Text="Start Scanner" FontSize="25" >
 
-                            <buttons:SfButton.BackgroundGradient>
-                                <gradient:SfLinearGradientBrush>
-                                    <gradient:SfLinearGradientBrush.GradientStops>
-                                        <gradient:SfGradientStop Color="#2F9BDF" Offset="0"/>
-                                        <gradient:SfGradientStop Color="#51F1F2" Offset="1"/>
-                                    </gradient:SfLinearGradientBrush.GradientStops>
-                                </gradient:SfLinearGradientBrush>
-                            </buttons:SfButton.BackgroundGradient>
-
-                            <VisualStateManager.VisualStateGroups>
-                                <VisualStateGroup x:Name="CommonStates">
-                                    <VisualState x:Name="Normal">
-                                        <VisualState.Setters>
-                                            <Setter Property="TextColor" Value="Black" />
-
-                                        </VisualState.Setters>
-                                    </VisualState>
-
-                                    <VisualState x:Name="Pressed">
-                                        <VisualState.Setters>
-                                            <Setter Property="TextColor" Value="Green" />
-                                            <Setter Property="BackgroundColor" Value="Blue" />
-                                        </VisualState.Setters>
-                                    </VisualState>
-                                </VisualStateGroup>
-                            </VisualStateManager.VisualStateGroups>
-
-                        </buttons:SfButton>
                     </Grid>
                 </StackLayout>
             </Frame>
 
+            <!-- start scanning button-->
+            <buttons:SfButton x:Name="ScanButton" Margin="5" CornerRadius="5" Text="Start Scanner" FontSize="25" HeightRequest="80"   Clicked="ScanClicked">
+
+                <buttons:SfButton.BackgroundGradient>
+                    <gradient:SfLinearGradientBrush> 
+                        <gradient:SfLinearGradientBrush.GradientStops>
+                            <gradient:SfGradientStop x:Name="ScanButtonColor3"  Color="LightGray" Offset="0"/>   <!-- Color="#78e7ff" -->
+                            <gradient:SfGradientStop x:Name="ScanButtonColor"   Color="#51F1F2" Offset=".5"/>    <!--   Color="#5bf2df" -->
+                            <gradient:SfGradientStop x:Name="ScanButtonColor2" Color="LightGray"  Offset="1"/>   <!-- Color="LightGray" -->
+                        </gradient:SfLinearGradientBrush.GradientStops>
+                    </gradient:SfLinearGradientBrush>
+                </buttons:SfButton.BackgroundGradient>
+
+                <VisualStateManager.VisualStateGroups>
+                    <VisualStateGroup x:Name="CommonStates">
+                        <VisualState x:Name="Normal">
+                            <VisualState.Setters>
+                                <Setter Property="TextColor" Value="Black" />
+
+                            </VisualState.Setters>
+                        </VisualState>
+
+                        <VisualState x:Name="Pressed">
+                            <VisualState.Setters>
+                                <Setter Property="TextColor" Value="Gray" />
+                            </VisualState.Setters>
+                        </VisualState>
+                    </VisualStateGroup>
+                </VisualStateManager.VisualStateGroups>
+
+            </buttons:SfButton>
             <Entry   x:Name="SwipeEntry" Margin="0" Placeholder="NFC#"  Completed="OnWorkerPickerChanged" VerticalOptions="Start"
                            FontSize="Body" TextColor="Black" HorizontalOptions="FillAndExpand" IsReadOnly="False" HorizontalTextAlignment="Start"/>
             <!-- InOut Selection -->

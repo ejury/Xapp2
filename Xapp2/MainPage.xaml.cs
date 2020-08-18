@@ -63,6 +63,8 @@ namespace Xapp2
         {
             // Pull and filter all entry logs on specific location
             logs = await App.Database.GetAnalytics();
+            var workerlistall = await App.Database.GetWorkers();
+            
 
             logs.Sort((x, y) => DateTime.Compare(x.TimeLog, y.TimeLog));
 
@@ -78,11 +80,12 @@ namespace Xapp2
                     {
                         LogModel temprange = new LogModel(); //New graphical point at different Y point
                         LogModel temprange2 = new LogModel();//Carry old Y value to new X value to create step effect
+                        IEnumerable<Worker> properworker = workerlistall.Where(w => w.ReferenceNFC == logs[z].ReferenceNFC);
 
                         temprange.Date = logs[z].TimeLog;
                         temprange2.Date = logs[z].TimeLog;
-                        temprange.Company = logs[z].Company;
-                        temprange2.Company = logs[z].Company;
+                        temprange.Company = properworker.FirstOrDefault().Company;
+                        temprange2.Company = temprange.Company;
 
                         if (chartdata.DateTimeData.Count == 0)
                         {
@@ -109,7 +112,7 @@ namespace Xapp2
                     }
                 }
 
-                start = chartdata.DateTimeData[0].Date;
+                //start = chartdata.DateTimeData[0].Date;
                 /*                if (start.Year == 1)
                                 {
                                     start = chartdata[0].DateTimeData[0].Date;

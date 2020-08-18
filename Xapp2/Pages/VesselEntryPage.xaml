@@ -56,12 +56,14 @@ xmlns:chart="clr-namespace:Syncfusion.SfChart.XForms;assembly=Syncfusion.SfChart
             </Grid>
             <!-- Top Header Ends -->
 
+
             <!--Data Entry Section   -->
             <Grid VerticalOptions="StartAndExpand" MinimumHeightRequest="197">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="*"/>
                     <ColumnDefinition Width="*"/>
                 </Grid.ColumnDefinitions>
+                <ActivityIndicator Grid.Column="0" Grid.ColumnSpan="2" x:Name="AIndicator" IsRunning="False"></ActivityIndicator>
 
                 <!-- Vessel Entry Section -->
                 <Frame Grid.Column="0" CornerRadius="10" HorizontalOptions="StartAndExpand"  VerticalOptions="Start" Margin="16,16,8,16" BackgroundColor="#ffffff"

@@ -70,13 +70,11 @@ namespace Xapp2.Data
             string content = await response.Content.ReadAsStringAsync();
             var newcontent = JsonConvert.DeserializeObject<string>(content);
 
-
             //Error Handler
             if (newcontent == "Card Not Active")
             {
                 return newcontent;
             }
-
 
             //Decode JWT Token
             var handler = new JwtSecurityTokenHandler();
@@ -90,90 +88,88 @@ namespace Xapp2.Data
             Globals.UserDisplay = UFirst.FirstOrDefault().ToString() + ". " + ULast;
 
             Globals.JWTkey = newcontent;
-            var authenticationHeaderValue = new AuthenticationHeaderValue("Bearer", Globals.JWTkey);
-            Globals.client.DefaultRequestHeaders.Authorization = authenticationHeaderValue;
+            //var authenticationHeaderValue = new AuthenticationHeaderValue("Bearer", Globals.JWTkey);
+            Globals.client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", Globals.JWTkey);
             return "Complete";
         }
 
         public static async Task<IEnumerable<Unit>> GetAllUnits()
         {
-
             string result = await Globals.client.GetStringAsync(Url + "DataRequest/UnitReq/");
             return JsonConvert.DeserializeObject<IEnumerable<Unit>>(result);
         }
         public static async Task<IEnumerable<Vessel>> GetAllVessels()
         {
-
             string result = await Globals.client.GetStringAsync(Url + "DataRequest/VesselReq/");
             return JsonConvert.DeserializeObject<IEnumerable<Vessel>>(result);
         }
-        public static async Task<IEnumerable<Worker>> GetAllWorkers()
+        public static async Task<IEnumerable<Worker>> GetAllWorkers(string tag)
         {
-
-            string result = await Globals.client.GetStringAsync(Url + "DataRequest/WorkerReq/");
+            string result = await Globals.client.GetStringAsync(Url + "DataRequest/WorkerReq/" + tag);
             return JsonConvert.DeserializeObject<IEnumerable<Worker>>(result);
+ 
         }
         public static async Task<IEnumerable<EntryLog>> GetAllEntryLogs()
         {
 
-            string result = await Globals.client.GetStringAsync(Url + "DataRequest/EntryLogReq/");
-            return JsonConvert.DeserializeObject<IEnumerable<EntryLog>>(result);
+            try
+            {
+                string result = await Globals.client.GetStringAsync(Url + "DataRequest/EntryLogReq/");
+                return JsonConvert.DeserializeObject<IEnumerable<EntryLog>>(result);
+            }
+            catch (Exception ex)
+            {
+                string result = await Globals.client.GetStringAsync(Url + "DataRequest/EntryLogReq/");
+                return JsonConvert.DeserializeObject<IEnumerable<EntryLog>>(result);
+            }
+            
         }
-
+        public static async Task<IEnumerable<AnalyticsLog>> GetAllAnalyticsLogs()
+        {
+            try
+            {
+                string result = await Globals.client.GetStringAsync(Url + "DataRequest/RecordLogReq/");
+                return JsonConvert.DeserializeObject<IEnumerable<AnalyticsLog>>(result);
+            }
+            catch (Exception ex)
+            {
+                string result = await Globals.client.GetStringAsync(Url + "DataRequest/RecordLogReq/");
+                return JsonConvert.DeserializeObject<IEnumerable<AnalyticsLog>>(result);
+            }
+        }
         static async public Task Add(Tuple <Unit,Vessel> newdata, string tag)
         {
-
-            var response = await Globals.client.PostAsync(Url+"units/" + tag, new StringContent(JsonConvert.SerializeObject(newdata), Encoding.UTF8, "application/json"));
+            var response = await Globals.client.PostAsync(Url + "units/" + tag, new StringContent(JsonConvert.SerializeObject(newdata), Encoding.UTF8, "application/json"));
             return;
+
+
         }
-        static async public Task AddWorker(Worker newdata)
+        static async public Task<int> AddWorker(Worker newdata)
         {
-
             var response = await Globals.client.PostAsync(Url + "units/PostWorker/", new StringContent(JsonConvert.SerializeObject(newdata), Encoding.UTF8, "application/json"));
-            return;
+            int newID = (int)JsonConvert.DeserializeObject<int>(response.Content.ReadAsStringAsync().Result);
+            return newID;
+
         }
         static async public Task AddLog(EntryLog newdata)
         {
-            /*////////////
-            string constring = "Server = tcp:192.168.1.42,1433;  Database = Local_SE; Integrated Security = False; User Id = test; password = test";
-            SqlConnection con = new SqlConnection(constring);
-            con.Open();
-            string tablename = "Logs";
-            
-            string insertString = @" insert into " + tablename + "(ReferenceNFC,VesselName,UnitName,Timelog) values (@param1,@param2,@param3,@param4)";
-
-
-            // 1. Instantiate a new command with a query and connection
-            using (SqlCommand cmd = new SqlCommand(insertString, con))
-            {
-                cmd.Parameters.Add("@param1", SqlDbType.NVarChar, 50).Value = newdata.ReferenceNFC;
-                cmd.Parameters.Add("@param2", SqlDbType.NVarChar, 50).Value = newdata.VesselName;
-                cmd.Parameters.Add("@param3", SqlDbType.NVarChar, 50).Value = newdata.UnitName;
-                cmd.Parameters.Add("@param4", SqlDbType.NVarChar, 50).Value = newdata.TimeLog.ToString("dd-MM-yyyy-hh-mm", CultureInfo.InvariantCulture);
-
-                cmd.CommandType = CommandType.Text;
-                cmd.ExecuteNonQuery();
-            }
-            //////////*/
-
-
-            var response = await Globals.client.PostAsync(Url + "units/PostLog/", new StringContent(JsonConvert.SerializeObject(newdata), Encoding.UTF8, "application/json"));
+             var response = await Globals.client.PostAsync(Url + "units/PostLog/", new StringContent(JsonConvert.SerializeObject(newdata), Encoding.UTF8, "application/json"));
             return;
         }
-
+        static async public Task AddRecord(AnalyticsLog newdata)
+        {
+            var response = await Globals.client.PostAsync(Url + "units/PostRecord/", new StringContent(JsonConvert.SerializeObject(newdata), Encoding.UTF8, "application/json"));
+            return;
+        }
         static public async Task Delete(string tag)
         {
             var response = await Globals.client.DeleteAsync(Url + "units/" + tag);
-
-            return;
-        
+            return; 
         }
         static public async Task DeleteLog(int tag)
         {
             var response = await Globals.client.DeleteAsync(Url + "units/DeleteLog/" + tag);
-
             return;
-
         }
 
         public async Task Update(Unit unit)

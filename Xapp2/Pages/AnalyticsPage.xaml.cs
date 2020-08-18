@@ -145,6 +145,8 @@ namespace Xapp2.Pages
             logs = logs.Where(w => w.VesselName == currentvessel & w.UnitName == currentunit).ToList();
             logs.Sort((x, y) => DateTime.Compare(x.TimeLog, y.TimeLog));
 
+            var workerlistall = await App.Database.GetWorkers();
+
             if (logs.Count > 0) //only generate chart data if logs exist
             {
 
@@ -166,11 +168,12 @@ namespace Xapp2.Pages
 
                             LogModel temprange = new LogModel(); //New graphical point at different Y point
                             LogModel temprange2 = new LogModel();//Carry old Y value to new X value to create step effect
+                            IEnumerable<Worker> properworker = workerlistall.Where(w => w.ReferenceNFC == logs[z].ReferenceNFC);
 
                             temprange.Date = logs[z].TimeLog;
                             temprange2.Date = logs[z].TimeLog;
-                            temprange.Company = logs[z].Company;
-                            temprange2.Company = logs[z].Company;
+                            temprange.Company = properworker.FirstOrDefault().Company;
+                            temprange2.Company = temprange.Company;
 
                             if (chartdata[k].DateTimeData.Count == 0)
                             {

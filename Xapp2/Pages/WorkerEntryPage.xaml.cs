@@ -88,6 +88,7 @@ namespace Xapp2.Pages
                 }
             }*/
             workersview.ItemsSource = workerlist2;
+            workersview2.ItemsSource = workerlist2;
             companylabelname.Text = currentcompany;
 
         }
@@ -100,6 +101,8 @@ namespace Xapp2.Pages
 
         private void ListViewChange(object sender, EventArgs e)
         {
+            workersview.IsVisible = false;
+            workersview2.IsVisible = false;
             //Move listview mode through 3 states - 1=both visible, 2=pie visible, 3=list visible
             if (ListViewMode < 3)
             { ListViewMode++; }
@@ -115,7 +118,8 @@ namespace Xapp2.Pages
 
                 LDisplay.Width = GridLength.Star;
                 RDisplay.Width = GridLength.Star;
-                workersview.Margin = 5;
+                XAMLdatelist.Width = 0;
+                workersview2.IsVisible = true;
             }
             if (ListViewMode == 2)
             {
@@ -125,6 +129,7 @@ namespace Xapp2.Pages
 
                 LDisplay.Width = GridLength.Star;
                 RDisplay.Width = 0;
+                workersview2.IsVisible = true;
             }
             if (ListViewMode == 3)
             {
@@ -134,7 +139,8 @@ namespace Xapp2.Pages
 
                 LDisplay.Width = 0;
                 RDisplay.Width = GridLength.Star;
-                workersview.Margin = 15;
+                workersview.IsVisible = true;
+                XAMLdatelist.Width = GridLength.Star;
             }
 
             SetWorkerList();
@@ -215,7 +221,7 @@ namespace Xapp2.Pages
                 string FirstEntry = FirstNameText.Text;
                 string LastEntry = LastNameText.Text;
 
-                string ManualCompanyEntry = CompanyNameText.Text;
+                string ManualCompanyEntry = CompanyNameText.Text;  //Test to see if manual company name was entered
                 if (ManualCompanyEntry != null)
                 {
                     if (ManualCompanyEntry.Length > 0)
@@ -224,6 +230,8 @@ namespace Xapp2.Pages
                         companypicker.ItemsSource.Add(currentcompany);
                     }
                 }
+
+                //Check if User name already exists
                 var workerslist = await App.Database.GetWorkers();
                 var properworker = workerslist.Where(w => w.FirstName == FirstEntry & w.LastName == LastEntry);
                 int properworker2 = properworker.Count();
@@ -232,12 +240,23 @@ namespace Xapp2.Pages
                     //string newworker = ((Entry)sender).Text;
                     workers.FirstName = FirstEntry;
                     workers.LastName = LastEntry;
+                    workers.Activated = 1;
                     Globals.NFCtempcount++;
-                    workers.ReferenceNFC = Globals.NFCtempcount.ToString();
+                    //workers.ReferenceNFC = Globals.NFCtempcount.ToString();
+                    workers.ReferenceNFC = TempSECardEntry.Text;
                     workers.Company = currentcompany;
                     workers.CreatedTime = DateTime.Now;
 
-                    await App.Database.AddWorker(workers);
+                    //Add worker to database
+                    int ValidCard = await App.Database.AddWorker(workers);
+                    if (ValidCard==0)//Card already active flag from dB
+                    {
+                        await DisplayAlert("Error Worker Creation", "Card already assigned to a user", "Return to Entry");
+                    }
+                    if (ValidCard==-1)//Card not valid in dB
+                    {
+                        await DisplayAlert("Error Worker Creation", "Invalid Card Used", "Return to Entry");
+                    }
 
                     FirstNameText.Text = string.Empty;
                     LastNameText.Text = string.Empty;
@@ -247,7 +266,7 @@ namespace Xapp2.Pages
                 }
                 else
                 {
-                    await DisplayAlert("Error Worker Creation", "Worker Already Created", "Return to Entry");
+                    await DisplayAlert("Error Worker Creation", "Worker Name Alreadly In Use", "Return to Entry");
                 }
             }
             else

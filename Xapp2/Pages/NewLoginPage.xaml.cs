@@ -33,9 +33,10 @@ namespace Xapp2.Pages
 
         private async void SEClicked(object sender, EventArgs e)
         {
+            AIndicator.IsRunning = true;
             Worker tempWorker = new Worker();
             tempWorker.ReferenceNFC = UserEntry.Text;
-            
+
             string IsValid = await APIServer.SEClient(tempWorker);
 
             if (IsValid == "Card Not Active")
@@ -47,7 +48,7 @@ namespace Xapp2.Pages
                 await Navigation.PushModalAsync(new MainPage(), false).ConfigureAwait(false);
             }
 
-
+            AIndicator.IsRunning = true;
         }
     }
 }

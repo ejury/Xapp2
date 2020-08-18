@@ -48,40 +48,21 @@
                         </Grid.RowDefinitions>
 
                         <!--  Label to display the title of this page  -->
-                        <Label
-                            FontFamily="{StaticResource Montserrat-SemiBold}"
-                            FontSize="20"
-                            HorizontalTextAlignment="Center"
-                            Style="{StaticResource LabelStyle}"
-                            Text="Log In" />
+                        <Label  FontFamily="{StaticResource Montserrat-SemiBold}" FontSize="20" HorizontalTextAlignment="Center"
+                            Style="{StaticResource LabelStyle}"  Text="Log In" />
 
                         <!--  Label to display the description of this page  -->
-                        <Label
-                            Grid.Row="1"
-                            Margin="0,8"
-                            FontFamily="{StaticResource Montserrat-Medium}"
-                            HorizontalTextAlignment="Center"
-                            Style="{StaticResource LabelStyle}"
-                            Text="Let's get to work" />
+                        <Label  Grid.Row="1" Margin="0,8"  FontFamily="{StaticResource Montserrat-Medium}" HorizontalTextAlignment="Center"
+                            Style="{StaticResource LabelStyle}" Text="Let's get to work" />
 
                         <!--  Entry to get email ID from user  -->
-                        <border:SfBorder
-                            Grid.Row="2" Margin="0,0,0,10"
-                            BorderColor="{Binding Source={x:Reference PasswordEntry}, Path=IsFocused}"
-                            Style="{StaticResource SfBorderStyle}">
-                            <control:BorderlessEntry
-                                x:Name="UserEntry"
-                                IsPassword="False"
-                                Placeholder="Username@debug.ca"
-                                Style="{StaticResource EntryStyle}"
-                                Text="{Binding Password}" />
+                        <border:SfBorder Grid.Row="2" Margin="0,0,0,10" BorderColor="{Binding Source={x:Reference PasswordEntry}, Path=IsFocused}" Style="{StaticResource SfBorderStyle}">
+                            <control:BorderlessEntry   x:Name="UserEntry"  IsPassword="False" Placeholder="Username@debug.ca"
+                                Style="{StaticResource EntryStyle}" Text="{Binding Password}" />
                         </border:SfBorder>
 
                         <!--  Entry to get password from user  -->
-                        <border:SfBorder
-                            Grid.Row="3"
-                            BorderColor="{Binding Source={x:Reference PasswordEntry}, Path=IsFocused}"
-                            Style="{StaticResource SfBorderStyle}">
+                        <border:SfBorder Grid.Row="3" BorderColor="{Binding Source={x:Reference PasswordEntry}, Path=IsFocused}" Style="{StaticResource SfBorderStyle}">
                             <control:BorderlessEntry
                                 x:Name="PasswordEntry"
                                 IsPassword="True"
@@ -114,7 +95,7 @@
                             Text="LOG IN" 
                             Clicked="LoginClicked"/>
 
-
+                        <ActivityIndicator x:Name="AIndicator" IsRunning="False"></ActivityIndicator> 
                         <!--Label
                             Grid.Row="6"
                             FontFamily="{StaticResource Montserrat-Medium}"

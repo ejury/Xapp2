@@ -66,6 +66,9 @@
                     <Label Text=" &#xe723; Add"  Margin="0,0,0,-5" Grid.Row="0" Grid.Column="0"  Grid.ColumnSpan="3" HorizontalOptions="Start"
                        Style="{StaticResource lablebodystyle}" FontAttributes="bold" FontFamily="{StaticResource FontIcons}" TextColor="#0f2696"/>
                     <BoxView Grid.Row="1" Grid.ColumnSpan="3" HorizontalOptions="FillAndExpand" HeightRequest="1" Color="#0f2696" Margin="10,0,10,0"/>
+                    
+                    <!-- temp entry for SEcard Number -->
+                    <Entry x:Name="TempSECardEntry" Grid.Row="0" Grid.Column="0"  Grid.ColumnSpan="3" HorizontalOptions="End" WidthRequest="50" Margin="0,0,0,-7" FontSize="10"/>
 
                     <!-- User Entry Data Section -->
                     <Label Text="Name:"  Grid.Row="2" Grid.Column="0"  Style="{StaticResource lablebodystyle}"  HorizontalOptions="Start" />
@@ -119,13 +122,14 @@
                 </Grid.ColumnDefinitions>
 
                 <!-- Adding Worklist List Display-->
-                <Frame Grid.Column="1" CornerRadius="10" HorizontalOptions="Center"  VerticalOptions="Start" Margin="8,16,16,16" BackgroundColor="#ffffff"
+                <Frame Grid.Column="1" CornerRadius="10" HorizontalOptions="Fill"  VerticalOptions="Fill" Margin="8,16,16,16" BackgroundColor="#ffffff"
                    HasShadow="True" IsClippedToBounds="True" Padding="0">
 
                     <Grid RowSpacing="5">
                         <Grid.RowDefinitions>
                             <RowDefinition Height="30" />
                             <RowDefinition Height="5" />
+                            <RowDefinition Height="20" />
                             <RowDefinition Height="*" />
                         </Grid.RowDefinitions>
 
@@ -135,7 +139,18 @@
 
                         <BoxView Grid.Row="1" HorizontalOptions="FillAndExpand" HeightRequest="1" Color="#0f2696" Margin="10,0,10,0"/>
 
-                        <ListView Grid.Row="2" x:Name="workersview" SeparatorVisibility="Default" RowHeight="22"
+                        <Grid Grid.Row="2" Margin="15,0,15,0" RowSpacing="-5">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="1.5*" />
+                                <ColumnDefinition Width="1.5*" />
+                                <ColumnDefinition x:Name="XAMLdatelist" Width="*" />
+                            </Grid.ColumnDefinitions>
+                            <Label Grid.Column="0" Text="First:" TextColor="Black"  FontSize="Body" FontAttributes="Bold" HorizontalTextAlignment="start"/>
+                            <Label Grid.Column="1" Text="Last:" TextColor="Black"  FontSize="Body" FontAttributes="Bold" HorizontalTextAlignment="start"/>
+                            <Label Grid.Column="2" Text="Created:" TextColor="Black"  FontSize="Body" FontAttributes="Bold" HorizontalTextAlignment="start"/>
+                        </Grid>
+                        <!-- View with no date -->
+                        <ListView Grid.Row="3" x:Name="workersview" SeparatorVisibility="Default" RowHeight="22" Margin="5,0,5,0" IsVisible="true"
                               Style="{StaticResource listviewstyle}" BackgroundColor="Transparent" VerticalOptions="Fill"  ItemSelected="WorkerSelected">
 
                             <ListView.ItemTemplate>
@@ -143,8 +158,36 @@
                                     <ViewCell>
                                         <Grid Margin="10,0,10,0" RowSpacing="-5">
                                             <Grid.ColumnDefinitions>
-                                                <ColumnDefinition Width="*" />
-                                                <ColumnDefinition Width="*" />
+                                                <ColumnDefinition Width="1.5*" />
+                                                <ColumnDefinition Width="1.5*" />
+                                                <ColumnDefinition  Width="*" />
+                                            </Grid.ColumnDefinitions>
+
+                                            <!-- Left column - First Name of Worker  -->
+                                            <Label Grid.Column="0" TextColor="Black"  FontSize="Body" HorizontalTextAlignment="start" Text="{Binding FirstName}"/>
+
+                                            <!-- Middle column - Last Name of Worker -->
+                                            <Label Grid.Column="1"   TextColor="Black"  FontSize="Body" HorizontalTextAlignment="start"  Text="{Binding LastName}"/>
+
+                                            <!-- Middle column - Last Name of Worker -->
+                                            <Label x:Name="datelist" Grid.Column="2"   TextColor="Black"  FontSize="Body" HorizontalTextAlignment="center"  Text="{Binding CreatedTime}"/>
+
+                                        </Grid>
+                                    </ViewCell>
+                                </DataTemplate>
+                            </ListView.ItemTemplate>
+                        </ListView>
+                        <!-- View with date -->
+                        <ListView Grid.Row="3" x:Name="workersview2" SeparatorVisibility="Default" RowHeight="22" Margin="5,0,5,0" IsVisible="false"
+                              Style="{StaticResource listviewstyle}" BackgroundColor="Transparent" VerticalOptions="Fill"  ItemSelected="WorkerSelected">
+
+                            <ListView.ItemTemplate>
+                                <DataTemplate>
+                                    <ViewCell>
+                                        <Grid Margin="10,0,10,0" RowSpacing="-5">
+                                            <Grid.ColumnDefinitions>
+                                                <ColumnDefinition Width="1.5*" />
+                                                <ColumnDefinition Width="1.5*" />
                                             </Grid.ColumnDefinitions>
 
                                             <!-- Left column - First Name of Worker  -->
