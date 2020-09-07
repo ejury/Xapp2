@@ -18,15 +18,9 @@ xmlns:chart="clr-namespace:Syncfusion.SfChart.XForms;assembly=Syncfusion.SfChart
                 <Color>#1cbcdf</Color>
                 <Color>#6e28b8</Color>
                 <Color>#1cdfc6</Color>
-
-
-
                 <Color>#282bb8</Color>
-                
-
                 <Color>#adf0a3</Color>
                 <Color>#e8e5fd</Color>
-
             </chart:ChartColorCollection>
         </ResourceDictionary>
     </ContentPage.Resources>
@@ -66,15 +60,15 @@ xmlns:chart="clr-namespace:Syncfusion.SfChart.XForms;assembly=Syncfusion.SfChart
                 <ActivityIndicator Grid.Column="0" Grid.ColumnSpan="2" x:Name="AIndicator" IsRunning="False"></ActivityIndicator>
 
                 <!-- Vessel Entry Section -->
-                <Frame Grid.Column="0" CornerRadius="10" HorizontalOptions="StartAndExpand"  VerticalOptions="Start" Margin="16,16,8,16" BackgroundColor="#ffffff"
+                <Frame Grid.Column="0" CornerRadius="10" HorizontalOptions="StartAndExpand"  VerticalOptions="Start" Margin="16,10,8,10" BackgroundColor="#ffffff"
            HasShadow="True"   IsClippedToBounds="True"  Padding="0">
 
                     <Grid RowSpacing="0">
                         <Grid.RowDefinitions>
                             <RowDefinition Height="30"/>
                             <RowDefinition Height="5"/>
-                            <RowDefinition Height="40" />
-                            <RowDefinition Height="40" />
+                            <RowDefinition Height="35" />
+                            <RowDefinition Height="35" />
                             <RowDefinition Height="50"/>
                         </Grid.RowDefinitions>
                         <Grid.ColumnDefinitions>
@@ -93,13 +87,13 @@ xmlns:chart="clr-namespace:Syncfusion.SfChart.XForms;assembly=Syncfusion.SfChart
                         <Label Grid.Row="2" Text="  &#xe730;"  Margin="0,0,0,0"  HorizontalOptions="Start"
                        Style="{StaticResource lablebodystyle}" FontAttributes="bold" FontFamily="{StaticResource FontIcons}" TextColor="#000000"/>
                         
-                        <Entry Grid.Row="2"   x:Name ="VesselEntryText" Margin="40,0,10,0" HorizontalOptions="FillAndExpand"
-                       Style="{StaticResource entrystyle}"  VerticalOptions="Center"   Placeholder="Location Name"/>
+                        <Entry Grid.Row="2"   x:Name ="VesselEntryText" Margin="40,0,10,-7" HorizontalOptions="FillAndExpand"
+                       Style="{StaticResource entrystyle}"  VerticalOptions="Center"   Placeholder="Entry"/>
 
                         <Label Grid.Row="3" Text="  &#xe733;"  Margin="0,0,0,0"  HorizontalOptions="Start"
                        Style="{StaticResource lablebodystyle}" FontAttributes="bold" FontFamily="{StaticResource FontIcons}" TextColor="#000000"/>
                         
-                        <Picker Grid.Row="3"   x:Name="picker" Margin="40,0,10,0"
+                        <Picker Grid.Row="3"   x:Name="picker" Margin="40,0,10,-7"
                         Style="{StaticResource pickerstyle}"  Title="Select Area"    ItemsSource="{Binding unitspicker}"  HorizontalOptions="FillAndExpand"
                         ItemDisplayBinding="{Binding Name}"     SelectedItem="{Binding SelectedUnit}"   SelectedIndexChanged="OnPickerSelectedIndexChanged"/>
                    
@@ -125,15 +119,15 @@ xmlns:chart="clr-namespace:Syncfusion.SfChart.XForms;assembly=Syncfusion.SfChart
                 </Frame>
 
                 <!-- Unit Entry Section -->
-                <Frame Grid.Column="1" CornerRadius="10" HorizontalOptions="Center"   Margin="8,16,16,16" BackgroundColor="#ffffff"
+                <Frame Grid.Column="1" CornerRadius="10" HorizontalOptions="Center"   Margin="8,10,16,10" BackgroundColor="#ffffff"
            HasShadow="True"   IsClippedToBounds="True"  Padding="0" VerticalOptions="Fill">
 
                     <Grid RowSpacing="0">
                         <Grid.RowDefinitions>
                             <RowDefinition Height="30"/>
                             <RowDefinition Height="5"/>
-                            <RowDefinition Height="40" />
-                            <RowDefinition Height="40" />
+                            <RowDefinition Height="35" />
+                            <RowDefinition Height="35" />
                             <RowDefinition Height="50"/>
                         </Grid.RowDefinitions>
                         <Grid.ColumnDefinitions>
@@ -151,8 +145,8 @@ xmlns:chart="clr-namespace:Syncfusion.SfChart.XForms;assembly=Syncfusion.SfChart
                         <Label Grid.Row="2" Text="  &#xe730;"  Margin="0,0,0,0"  HorizontalOptions="Start"
                        Style="{StaticResource lablebodystyle}" FontAttributes="bold" FontFamily="{StaticResource FontIcons}" TextColor="#000000"/>
 
-                        <Entry Grid.Row="2"  x:Name ="UnitEntryText" Margin="40,0,10,0" HorizontalOptions="FillAndExpand"
-                       Style="{StaticResource entrystyle}"   VerticalOptions="End"  Placeholder="Area Name" />
+                        <Entry Grid.Row="2"  x:Name ="UnitEntryText" Margin="40,0,10,-7" HorizontalOptions="FillAndExpand"
+                       Style="{StaticResource entrystyle}"   VerticalOptions="End"  Placeholder="Entry" />
                      
                         <!--Label Text=" &#xe733;&#xe703;&#xe704; &#xe729; &#xe730; &#xe715;&#xe716;&#xe717;&#xe719;"  Margin="0,0,0,-5" Grid.Row="3"  HorizontalOptions="Start"
                        Style="{StaticResource lablebodystyle}" FontAttributes="bold" FontFamily="{StaticResource FontIcons}" TextColor="#0f2696"/-->
@@ -224,12 +218,12 @@ xmlns:chart="clr-namespace:Syncfusion.SfChart.XForms;assembly=Syncfusion.SfChart
                         </Grid.RowDefinitions>
 
                         <!--Adding Vessel List Display Header  -->
+                        <!--Label Grid.Row="0" Text=" &#xe729;"  Margin="5,5,0,-5" HorizontalOptions="Start" FontSize="20"
+                       Style="{StaticResource lablebodystyle}" FontAttributes="bold" FontFamily="{StaticResource FontIcons}" TextColor="Black"/-->
 
                         <Button x:Name="unitlabelname" Grid.Row="0" Text="temp" HorizontalOptions="Fill"   FontAttributes="Bold"
-                                BorderWidth="0" Padding="0" FontSize="20" TextColor="Black" BackgroundColor="#FFFFFF" Margin="0,3,0,-3">
+                                BorderWidth="0" Padding="0" FontSize="16" TextColor="Black" BackgroundColor="#FFFFFF" Margin="0,3,0,-3">
                         </Button>
-                        <Label Grid.Row="0" Text=" &#xe729;"  Margin="5,5,0,-5" HorizontalOptions="Start" FontSize="20"
-                       Style="{StaticResource lablebodystyle}" FontAttributes="bold" FontFamily="{StaticResource FontIcons}" TextColor="Black"/>
 
                         <BoxView Grid.Row="1" HorizontalOptions="FillAndExpand" HeightRequest="1" Color="#69ecce" Margin="10,0,10,0"/>
 
@@ -273,7 +267,7 @@ xmlns:chart="clr-namespace:Syncfusion.SfChart.XForms;assembly=Syncfusion.SfChart
                         </Grid.RowDefinitions>
 
                         <Label  Grid.Row="0" Text="Areas" HorizontalOptions="Fill" FontAttributes="Bold"   HorizontalTextAlignment="center"
-                                 Margin="0,5,0,-5" Padding="0" FontSize="20" TextColor="Black" BackgroundColor="#ffffff" >
+                                 Margin="0,5,0,-5" Padding="0" FontSize="16" TextColor="Black" BackgroundColor="#ffffff" >
                         </Label>
                         <Label Grid.Row="0" Text=" &#xe733;"  Margin="5,5,0,-5" HorizontalOptions="Start" FontSize="15"
                        Style="{StaticResource lablebodystyle}" FontAttributes="bold" FontFamily="{StaticResource FontIcons}" TextColor="Black"/>

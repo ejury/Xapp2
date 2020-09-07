@@ -28,8 +28,15 @@ namespace Xapp2
         {
             Nav = true;
             InitializeComponent();
+
             SetAnalyticsList();
             SetActiveLists();
+        }
+        protected override void OnAppearing()
+        {
+            base.OnAppearing();
+            HeaderName.Text = Globals.UserDisplay;
+            HeaderServer.Text = "(Server)" + Globals.ServerName;
         }
 
         async void SetActiveLists()

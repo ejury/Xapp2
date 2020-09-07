@@ -40,7 +40,7 @@
             <!--Data Entry Section   -->
             <Frame Grid.Column="0" CornerRadius="10" HorizontalOptions="StartAndExpand"  VerticalOptions="Start" Margin="16,16,16,16" BackgroundColor="#ffffff"
            HasShadow="True"   IsClippedToBounds="True"  Padding="0">
-                <Grid RowSpacing="0"  Margin="0,-6,0,0">
+                <Grid RowSpacing="0" Margin="5,0,5,7">
                     <Grid.RowDefinitions>
                         <RowDefinition Height="30"/>
                         <RowDefinition Height="5"/>

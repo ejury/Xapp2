@@ -21,6 +21,7 @@
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
     <PackageReference Include="Newtonsoft.Json" Version="12.0.3" />
+    <PackageReference Include="Rg.Plugins.Popup" Version="2.0.0.4" />
     <PackageReference Include="sqlite-net-pcl" Version="1.6.292" />
     <PackageReference Include="Syncfusion.Xamarin.Buttons" Version="17.4.0.44" />
     <PackageReference Include="Syncfusion.Xamarin.Core" Version="17.4.0.44" />
@@ -28,7 +29,7 @@
     <PackageReference Include="Syncfusion.Xamarin.SfComboBox" Version="17.4.0.44" />
     <PackageReference Include="System.Data.SqlClient" Version="4.8.1" />
     <PackageReference Include="System.IdentityModel.Tokens.Jwt" Version="6.7.1" />
-    <PackageReference Include="Xamarin.Forms" Version="4.4.0.991477" />
+    <PackageReference Include="Xamarin.Forms" Version="4.8.0.1364" />
     <PackageReference Include="Xamarin.Essentials" Version="1.3.1" />
   </ItemGroup>
 
@@ -40,6 +41,9 @@
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
     </EmbeddedResource>
     <EmbeddedResource Update="Pages\NewLoginPage.xaml">
+      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Pages\Popups\VisitorPopup.xaml">
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
     </EmbeddedResource>
     <EmbeddedResource Update="Pages\SiteStatusPage.xaml">
@@ -61,5 +65,14 @@
 
   <ItemGroup>
     <Folder Include="Pages\LoginPage\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Update="Pages\Popups\AdminPopup.xaml.cs">
+      <DependentUpon>AdminPopup.xaml</DependentUpon>
+    </Compile>
+    <Compile Update="Pages\Popups\VisitorOutPopup.xaml.cs">
+      <DependentUpon>VisitorOutPopup.xaml</DependentUpon>
+    </Compile>
   </ItemGroup>
 </Project>

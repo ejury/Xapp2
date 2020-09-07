@@ -35,7 +35,10 @@ namespace Xapp2.Data
         {
             //Determine max ID already pulled from server
             var internalworkers = _connection.Table<Worker>().ToListAsync().Result;
-            int maxID = internalworkers.Select(c => c.WorkerID).Max();
+            int maxID;
+            try {   maxID = internalworkers.Select(c => c.WorkerID).Max();  }
+            catch { maxID = 0; }
+
 
             //Pull only new entries from server
             IEnumerable<Worker> tempW = await APIServer.GetAllWorkers(maxID.ToString());
@@ -48,20 +51,81 @@ namespace Xapp2.Data
         {
             return _connection.Table<Vessel>().ToListAsync();
         }
+        async public Task<List<Vessel>> GetVesselsAPI() //Get workerrequest forcing update from database
+        {
+            //Determine max ID already pulled from server
+            var internalvessels = _connection.Table<Vessel>().ToListAsync().Result;
+            int maxID;
+            try { maxID = internalvessels.Select(c => c.VesselID).Max(); }
+            catch { maxID = 0; }
+
+            //Pull only new entries from server
+            IEnumerable<Vessel> tempV = await APIServer.GetAllVessels(maxID.ToString());
+
+            await _connection.InsertAllAsync(tempV); //insert database entries into local db (if any)
+            return await _connection.Table<Vessel>().ToListAsync();
+
+        }
+
         public Task<List<Unit>> GetUnits()
         {
 
             return _connection.Table<Unit>().ToListAsync();
+        }
+        async public Task<List<Unit>> GetUnitsAPI() //Get workerrequest forcing update from database
+        {
+            //Determine max ID already pulled from server
+            var internalunits = _connection.Table<Unit>().ToListAsync().Result;
+            int maxID;
+            try { maxID = internalunits.Select(c => c.UnitID).Max(); }
+            catch { maxID = 0; }
+
+            //Pull only new entries from server
+            IEnumerable<Unit> tempU = await APIServer.GetAllUnits(maxID.ToString());
+
+            await _connection.InsertAllAsync(tempU); //insert database entries into local db (if any)
+            return await _connection.Table<Unit>().ToListAsync();
+
         }
         public Task<List<EntryLog>> GetLogs()
         {
 
             return _connection.Table<EntryLog>().ToListAsync();
         }
+        async public Task<List<EntryLog>> GetLogsAPI() //Get workerrequest forcing update from database
+        {
+            //Determine max ID already pulled from server
+            var internallogs = _connection.Table<EntryLog>().ToListAsync().Result;
+            int maxID;
+            try { maxID = internallogs.Select(c => c.EntryID).Max(); }
+            catch { maxID = 0; }
+
+            //Pull only new entries from server
+            IEnumerable<EntryLog> tempE = await APIServer.GetAllEntryLogs(maxID.ToString());
+
+            await _connection.InsertAllAsync(tempE); //insert database entries into local db (if any)
+            return await _connection.Table<EntryLog>().ToListAsync();
+
+        }
         public Task<List<AnalyticsLog>> GetAnalytics()
         {
 
             return _connection.Table<AnalyticsLog>().ToListAsync();
+        }
+        async public Task<List<AnalyticsLog>> GetAnalyticsAPI() //Get workerrequest forcing update from database
+        {
+            //Determine max ID already pulled from server
+            var internallogs = _connection.Table<AnalyticsLog>().ToListAsync().Result;
+            int maxID;
+            try { maxID = internallogs.Select(c => c.EntryID).Max(); }
+            catch { maxID = 0; }
+
+            //Pull only new entries from server
+            IEnumerable<AnalyticsLog> tempA = await APIServer.GetAllAnalyticsLogs(maxID.ToString());
+
+            await _connection.InsertAllAsync(tempA); //insert database entries into local db (if any)
+            return await _connection.Table<AnalyticsLog>().ToListAsync();
+
         }
 
         //Pull individual IDs from database list
@@ -101,76 +165,168 @@ namespace Xapp2.Data
         async public Task<int> AddWorker(Worker worker)
         {
             //Determine max ID already pulled from server
-            var internalworkers = _connection.Table<Worker>().ToListAsync().Result;
-            int maxID = internalworkers.Select(c => c.WorkerID).Max();
+            var internalcount = _connection.Table<Worker>().ToListAsync().Result;
+            int maxID;
+            if(internalcount.Count == 0)
+            { maxID = 0; }
+            else 
+            { maxID = internalcount.Select(c => c.WorkerID).Max(); }
+             
 
             //Add worker and retrieve assigned ID
             int newID = await APIServer.AddWorker(worker); //Add worker
 
             //No query to database for missing workers as this will be handled during app load or when new user is swiped
 
-            if (newID > 0) //New ID reports of -1 (invalid card) and 0 (already activated card) will not be updated locally or in SQL Db
+            if (newID == maxID + 1) //New ID reports of -1 (invalid card) and 0 (already activated card) will not be updated locally or in SQL Db
             {
                 //Add worker to local database
                 worker.WorkerID = newID;
+                if (worker.ReferenceNFC == Globals.ServerName + "_V")
+                {
+                    worker.ReferenceNFC = worker.ReferenceNFC + newID;
+                }
                 await _connection.InsertAsync(worker);
+            }
+            if (newID > maxID + 1) //Missing entries added by another user
+            {
+                IEnumerable<Worker> tempW = await APIServer.GetAllWorkers(maxID.ToString());
+
+                await _connection.InsertAllAsync(tempW);
             }
             return newID;
         }
         async public Task<int> AddVessel(Vessel vessel)
         {
+            //Determine max ID already pulled from server
+            var internalcount = _connection.Table<Vessel>().ToListAsync().Result;
+            int maxID;
+            if (internalcount.Count == 0)
+            { maxID = 0; }
+            else
+            { maxID = internalcount.Select(c => c.VesselID).Max(); }
 
-            await APIServer.Add(new Tuple<Unit, Vessel>(null, vessel), "V");
-            IEnumerable<Vessel> tempV = await APIServer.GetAllVessels();
+            //Add vessel and retrieve assigned ID
+            int newID = await APIServer.Add(new Tuple<Unit, Vessel>(null, vessel), "V");
 
-            _connection.DropTableAsync<Vessel>().Wait();
-            _connection.CreateTableAsync<Vessel>().Wait();
-            
-            await    _connection.InsertAllAsync(tempV);
-            int t = 1;
-            return t;
+            if (newID == maxID+1) //New ID reports of -1 (unsuccessful SQL) and 0 (incorrect API request) will not be updated locally or in SQL Db
+            {
+                //Add worker to local database
+                vessel.VesselID = newID;
+                await _connection.InsertAsync(vessel);
+            }
+            if (newID > maxID + 1) //Missing entries added by another user
+            {
+                IEnumerable<Vessel> tempV = await APIServer.GetAllVessels(maxID.ToString());
+
+                await _connection.InsertAllAsync(tempV);
+            }
+          
+            return newID;
         }
         async public Task<int> AddUnit(Unit unit)
         {
+            //Determine max ID already pulled from server
+            var internalcount = _connection.Table<Unit>().ToListAsync().Result;
+            int maxID;
+            if (internalcount.Count == 0)
+            { maxID = 0; }
+            else
+            { maxID = internalcount.Select(c => c.UnitID).Max(); }
 
-            await APIServer.Add(new Tuple <Unit, Vessel> (unit,null), "U");
-            IEnumerable<Unit> tempU = await APIServer.GetAllUnits();
+            //Add unit and retrieve assigned ID
+            int newID = await APIServer.Add(new Tuple <Unit, Vessel> (unit,null), "U");
 
-            _connection.DropTableAsync<Unit>().Wait();
-            _connection.CreateTableAsync<Unit>().Wait();
+            if (newID == maxID + 1) //New ID reports of -1 (unsuccessful SQL) and 0 (incorrect API request) will not be updated locally or in SQL Db
+            {
+                //Add worker to local database
+                unit.UnitID = newID;
+                await _connection.InsertAsync(unit);
+            }
+            if (newID > maxID + 1) //Missing entries added by another user
+            {
+                IEnumerable<Unit> tempU = await APIServer.GetAllUnits(maxID.ToString());
 
-            await _connection.InsertAllAsync(tempU);
-            int t = 1;
-            return t;
-        }
-       
+/*                _connection.DropTableAsync<Unit>().Wait();
+                _connection.CreateTableAsync<Unit>().Wait();*/
+
+                await _connection.InsertAllAsync(tempU);
+            }
+
+            return newID;
+        }  
         async public Task<int> AddLog(EntryLog entrylog)
         {
 
-            await APIServer.AddLog(entrylog);
-            IEnumerable<EntryLog> tempL = await APIServer.GetAllEntryLogs();
+            //Determine max ID already pulled from server
+            var internalcount = _connection.Table<EntryLog>().ToListAsync().Result;
+            int maxID;
+            if (internalcount.Count == 0)
+            { maxID = 0; }
+            else
+            { maxID = internalcount.Select(c => c.EntryID).Max(); }
 
-            _connection.DropTableAsync<EntryLog>().Wait();
-            _connection.CreateTableAsync<EntryLog>().Wait();
+            //Add unit and retrieve assigned ID
+            int newID = await APIServer.AddLog(entrylog);
 
+            if (newID == maxID + 1) //New ID reports of -1 (unsuccessful SQL) and 0 (incorrect API request) will not be updated locally or in SQL Db
+            {
+                //Add worker to local database
+                entrylog.EntryID = newID;
+                await _connection.InsertAsync(entrylog);
+            }
+            if (newID > maxID + 1) //Missing entries added by another user
+            {
+                IEnumerable<EntryLog> tempE = await APIServer.GetAllEntryLogs(maxID.ToString());
+                await _connection.InsertAllAsync(tempE);
+            }
 
-            await _connection.InsertAllAsync(tempL);
-            int t = 1;
-            return t;
+            return newID;
         }
         async public Task<int> AddAnalyticsLog(AnalyticsLog analyticlog)
         {
-            await APIServer.AddRecord(analyticlog);
-            IEnumerable<AnalyticsLog> tempA = await APIServer.GetAllAnalyticsLogs();
 
-            _connection.DropTableAsync<AnalyticsLog>().Wait();
-            _connection.CreateTableAsync<AnalyticsLog>().Wait();
-            await _connection.InsertAllAsync(tempA);
-            int t = 1;
-            return t;
+            //Determine max ID already pulled from server
+            var internalcount = _connection.Table<AnalyticsLog>().ToListAsync().Result;
+            int maxID;
+            if (internalcount.Count == 0)
+            { maxID = 0; }
+            else
+            { maxID = internalcount.Select(c => c.EntryID).Max(); }
+
+            //Add unit and retrieve assigned ID
+            int newID = await APIServer.AddRecord(analyticlog);
+
+            if (newID == maxID + 1) //New ID reports of -1 (unsuccessful SQL) and 0 (incorrect API request) will not be updated locally or in SQL Db
+            {
+                //Add worker to local database
+                analyticlog.EntryID = newID;
+                await _connection.InsertAsync(analyticlog);
+            }
+            if (newID > maxID + 1) //Missing entries added by another user
+            {
+                IEnumerable<EntryLog> tempE = await APIServer.GetAllEntryLogs(maxID.ToString());
+                await _connection.InsertAllAsync(tempE);
+            }
+
+            return newID;
         }
 
         //Remove entire database tables
+        public Task ClearLocal()
+        {
+            _connection.DropTableAsync<Unit>().Wait();
+            _connection.CreateTableAsync<Unit>().Wait();
+            _connection.DropTableAsync<Vessel>().Wait();
+            _connection.CreateTableAsync<Vessel>().Wait();
+            _connection.DropTableAsync<Worker>().Wait();
+            _connection.CreateTableAsync<Worker>().Wait();
+            _connection.DropTableAsync<EntryLog>().Wait();
+            _connection.CreateTableAsync<EntryLog>().Wait();
+            _connection.DropTableAsync<AnalyticsLog>().Wait();
+            _connection.CreateTableAsync<AnalyticsLog>().Wait();
+            return Task.CompletedTask;
+        }
         public Task ClearUnit()
         {
             APIServer.Delete("UxClearx");
@@ -223,7 +379,7 @@ namespace Xapp2.Data
             List<string> workerlast = new List<string> { "Johnson", "Black", "Trout", "Smith", "Rogers", "Jury", "Slick", "Salty", "Hardy", "Bolton", "Carter", "Silversmith", "Snake", "Black", "White", "Wattson", "Ericson", "Edge", "Winter" };
             List<string> companyname = new List<string> { "IOL", "IOL", "IOL", "IOL", "CEDA", "CEDA", "TEAM", "TEAM", "TEAM", "TAMS", "TAMS", "TAMS", "TAMS", "Curren", "Curren", "Curren","Safway", "Safway", "Safway" };
             List<string> nfclist = new List<string> { "101", "102", "103", "104", "105", "106", "107", "108", "109", "110", "111", "112", "113", "114", "115", "116", "117", "118", "119" };
-
+            string DB = "QQQ";
             for (int i = 0; i <= workerfirst.Count - 1; i++)
             {
                 worker.FirstName = workerfirst[i];
@@ -232,12 +388,12 @@ namespace Xapp2.Data
                 worker.CreatedTime = DateTime.Now;
                 worker.Activated = 1;
                 Globals.NFCtempcount++;
-                worker.ReferenceNFC = nfclist[i];
+                worker.ReferenceNFC = DB + "_" + nfclist[i];
                 await AddWorker(worker);
 
             }
 
-            string[] unitname = new string[]  { "CCIS","GCIS","COB"};
+            string[] unitname = new string[]  { "Office Building","Plant 1","Construction Site"};
             foreach (string t in unitname)
             {
                 //Add Unit from unitname list
@@ -251,9 +407,9 @@ namespace Xapp2.Data
                     int VorT = (int)rnd.Next(1, 3);
                     string Vtype;
                     if (VorT == 1)
-                    { Vtype = "T"; }
+                    { Vtype = "Entrance"; }
                     else
-                    { Vtype = "D"; }
+                    { Vtype = "Checkpoint"; }
                     int Vnum = rnd.Next(100, 400);
                     vessel.Name = Vtype + "-" + Vnum;
                     vessel.Unitname = t;
@@ -282,7 +438,7 @@ namespace Xapp2.Data
                             newlog.Company = Ctemp[W];
                             newlog.FirstName = Ftemp[W];
                             newlog.LastName = Ltemp[W];*/
-                            newlog.ReferenceNFC = Ntemp[W];
+                            newlog.ReferenceNFC = DB + "_" + Ntemp[W];
                             //newlog.InOut = 1; phased out
                             newlog.TimeLog = DateTime.Now.AddHours(-timestamp);
                             newlog.VesselName = vessel.Name;
@@ -300,7 +456,7 @@ namespace Xapp2.Data
                                 DateTime xtime = new DateTime();
 
                                 //Create entry log
-                                Alog.ReferenceNFC = Ntemp[W];
+                                Alog.ReferenceNFC = DB + "_" + Ntemp[W];
                                 Alog.InOut = 1;
                                     xtime = DateTime.Now.AddHours(-(24*z+xhour));
                                     xtime = xtime.AddMinutes(-xmin);
@@ -310,7 +466,7 @@ namespace Xapp2.Data
                                 await APIServer.AddRecord(Alog);
 
                                 //create exit log
-                                Alog.ReferenceNFC = Ntemp[W];
+                                Alog.ReferenceNFC = DB + "_" + Ntemp[W];
                                 Alog.InOut = 0;
                                      xtime = DateTime.Now.AddHours(-(24 * z - xhour2)); 
                                      xtime = xtime.AddMinutes(+xmin2);
@@ -321,7 +477,7 @@ namespace Xapp2.Data
                             }
 
                             // matching most recent entry of  Entrylog
-                            Alog.ReferenceNFC = Ntemp[W];
+                            Alog.ReferenceNFC = DB + "_" + Ntemp[W];
                             Alog.InOut = 1;
                             Alog.TimeLog = DateTime.Now.AddHours(-timestamp);
                             Alog.VesselName = vessel.Name;
@@ -333,7 +489,7 @@ namespace Xapp2.Data
                             
                         }
                         //Populate analytics list with database
-                        IEnumerable<AnalyticsLog> tempA = await APIServer.GetAllAnalyticsLogs();
+                        IEnumerable<AnalyticsLog> tempA = await APIServer.GetAllAnalyticsLogs("0");
 
                         _connection.DropTableAsync<AnalyticsLog>().Wait();
                         _connection.CreateTableAsync<AnalyticsLog>().Wait();

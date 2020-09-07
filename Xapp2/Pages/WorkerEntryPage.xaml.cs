@@ -31,12 +31,9 @@ namespace Xapp2.Pages
             List<string> companylistlong = workerlist.Select(c => c.Company).ToList();
             List<string> companylist = companylistlong.Distinct().ToList();
 
-            
-
             if (companylist.Count > 0 & workerlist.Count > 0)
             {
                 companypicker.ItemsSource = companylist;
-
 
                 //Set Initial Unit Selection
                 currentselect = 0;
@@ -50,6 +47,7 @@ namespace Xapp2.Pages
         private async void SetWorkerList()
         {
             var workerlist = await App.Database.GetWorkers();
+            workerlist.RemoveAll(s => s.SELevel == 6); //Remove visitors from list
             List<string> companylistlong = workerlist.Select(c => c.Company).ToList();
             List<string> companylist = companylistlong.Distinct().ToList();
 
@@ -146,7 +144,6 @@ namespace Xapp2.Pages
             SetWorkerList();
         }
 
-
         void PieChanged(object sender, PropertyChangedEventArgs e)
         {
             if(e.PropertyName == "ExplodeIndex") //Only trigger update for new chart selection (Optimization)
@@ -155,7 +152,7 @@ namespace Xapp2.Pages
             }
         }
 
-            void OnPickerSelectedIndexChanged(object sender, EventArgs e)
+        void OnPickerSelectedIndexChanged(object sender, EventArgs e)
         {
             //Error handler due to events during page changes. Verifies both pickers can be accessed and skips updates if models not loaded
             int selectedIndex = -1;
@@ -204,17 +201,9 @@ namespace Xapp2.Pages
             }
 
         }
-/*        async void OnManualCompanyChange(object sender, EventArgs e)
-        {
-            string ManualCompanyEntry = CompanyNameText.Text;
-            if (ManualCompanyEntry.Length > 0)
-            {
-                companypicker.SelectedItem = string.Empty;
-            }
-        }*/
+
         async void NewWorkerClicked(object sender, EventArgs e)
         {
-            
             //Ensure full name info has been entered
             if (FirstNameText.Text != null & LastNameText.Text != null)
             {
@@ -256,6 +245,11 @@ namespace Xapp2.Pages
                     if (ValidCard==-1)//Card not valid in dB
                     {
                         await DisplayAlert("Error Worker Creation", "Invalid Card Used", "Return to Entry");
+                    }
+                    if (ValidCard == -2)//Name&Company in use
+                    {
+                        await DisplayAlert("Error Worker Creation", "Username already created at Company", "Click to Sync Database, Then Retry");
+                        await App.Database.GetWorkersAPI();
                     }
 
                     FirstNameText.Text = string.Empty;
@@ -302,7 +296,6 @@ namespace Xapp2.Pages
         }
 
         //Nav Bar Navigations
-        
         private async void OnCSEManagerClicked(object sender, EventArgs e)
         {
             await Navigation.PushModalAsync(new CSEntryPage(), false);

@@ -9,6 +9,9 @@ using Xamarin.Forms.Xaml;
 using Xapp2.Models;
 using Xapp2.Data;
 using Syncfusion.XForms.Graphics;
+using Rg.Plugins.Popup.Services;
+using Xapp2.Pages.Popups;
+using Rg.Plugins.Popup.Contracts;
 
 namespace Xapp2.Pages
 {
@@ -62,6 +65,8 @@ namespace Xapp2.Pages
                 ScanButtonColor2.Color = Color.LightGray;
                 ScanButtonColor3.Color = Color.LightGray;
                 PageLayout.BackgroundColor = Color.FromHex("#f0f3f6");
+                VisitorButton.IsVisible = false;
+                VisitorButton2.IsVisible = false;
             }
             else
             {
@@ -72,11 +77,74 @@ namespace Xapp2.Pages
                 ScanButtonColor3.Color = Color.FromHex("#78e7ff");
                 //PageLayout.BackgroundColor = Color.FromHex("#6bb4b6");
                 PageLayout.BackgroundColor = Color.FromHex("#226776");
+                VisitorButton.IsVisible = true;
+                VisitorButton2.IsVisible = true;
             }
-
-
         }
-        private async void SetCSEList()
+        private async void VisitorClicked(object sender, EventArgs e)
+        {
+            if (currentunit == null | currentvessel == null)
+            {
+                await DisplayAlert("Visitor Sign-in Error", "Location & Area not selected", "Return to Portal");
+            }
+            else
+            {
+                var inputPopup = new VisitorPopup(currentunit, currentvessel);
+                await PopupNavigation.Instance.PushAsync(inputPopup, true);
+                var ret = await inputPopup.PopupClosedTask;
+                SetCSEList();
+            }
+        }
+        private async void VisitorOutClicked(object sender, EventArgs e)
+        {
+            if (currentunit == null | currentvessel == null)
+            {
+                await DisplayAlert("Visitor Sign-in Error", "Location & Area not selected", "Return to Portal");
+            }
+            else
+            {
+                List<EntryLog> loglistall = await App.Database.GetLogs();
+                List<EntryLog> loglist = loglistall.Where(w => w.UnitName == currentunit & w.VesselName == currentvessel & w.ReferenceNFC.StartsWith(Globals.ServerName+"_V")).ToList();
+                //////////////////////////////// Need to create list of visitors only
+
+                var workerlistall = await App.Database.GetWorkers();
+                workerlistall = workerlistall.Where(w => w.ReferenceNFC.StartsWith(Globals.ServerName + "_V")).ToList();
+
+                //Viewmodel for displaying list
+                List<TimeDisplay> timedisplay = new List<TimeDisplay>();
+                //List<string> NFClist = new List<string>();
+                CultureInfo format = new CultureInfo("en-US");
+
+                //Pulling worker info from NFC tags and adding to UI display
+                for (int i = 0; i < loglist.Count; i++)
+                {
+                    TimeDisplay tempdisplay = new TimeDisplay();
+                    Worker tempworker = workerlistall.Where(w => w.ReferenceNFC == loglist[i].ReferenceNFC).FirstOrDefault();
+
+                    tempdisplay.DateLog = loglist[i].TimeLog.ToString("dddd-dd", format);
+                    tempdisplay.TimeLog = loglist[i].TimeLog.ToString("h:mm tt", format);
+                    tempdisplay.FirstName = tempworker.FirstName;
+                    tempdisplay.LastName = tempworker.LastName;
+                    tempdisplay.Company = tempworker.Company;
+                    tempdisplay.EntryID = loglist[i].EntryID;
+                    timedisplay.Add(tempdisplay);
+                    //NFClist.Add(tempworker.ReferenceNFC);
+                }
+
+                if (timedisplay.Count == 0)
+                {
+                    await DisplayAlert("Visitor Sign-out Error", "No Visitors at Location", "Return to Portal");
+                }
+                else
+                {
+                    var inputPopup = new VisitorOutPopup(timedisplay);
+                    await PopupNavigation.Instance.PushAsync(inputPopup, true);
+                    var ret = await inputPopup.PopupClosedTask;
+                    SetCSEList();
+                }
+            }
+        }
+            private async void SetCSEList()
         {
             //Setting appropriate view state
             if (ListViewMode==true)

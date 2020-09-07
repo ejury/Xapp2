@@ -15,6 +15,7 @@ namespace Xapp2.Models
         // Tracking Logged in user details
         public static int SELevel = 0;
         public static string UserDisplay = null;
+        public static string ServerName = null;
 
         // WebAPI Variables
         public static HttpClient client = new HttpClient();

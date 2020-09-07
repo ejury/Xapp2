@@ -14,5 +14,7 @@ namespace Xapp2.Models
         public string FirstName { get; set; }
 
         public string Company { get; set; }
+
+        public int EntryID { get; set; }
     }
 }

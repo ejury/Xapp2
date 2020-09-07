@@ -21,8 +21,8 @@
                     <ColumnDefinition Width="*"/>
                 </Grid.ColumnDefinitions>
 
-                <Label  Grid.Row="0" Grid.Column="0" Text="(Server) LocalDB"  Style="{StaticResource lablebodystyle}" VerticalOptions="Center" HorizontalOptions="Start" TextColor="white" />
-                <Button  Grid.Row="0" Grid.Column="1" Text="&#xe723; TempUser" FontFamily="{StaticResource FontIcons}" BackgroundColor="Transparent" FontAttributes="Bold" TextColor="White" VerticalOptions="Center" HorizontalOptions="End" 
+                <Label x:Name="HeaderServer" Grid.Row="0" Grid.Column="0" Text="(Server) LocalDB"  Style="{StaticResource lablebodystyle}" VerticalOptions="Center" HorizontalOptions="Start" TextColor="white" />
+                <Button x:Name="HeaderName" Grid.Row="0" Grid.Column="1" Text="&#xe723; TempUser" FontFamily="{StaticResource FontIcons}" BackgroundColor="Transparent" FontAttributes="Bold" TextColor="White" VerticalOptions="Center" HorizontalOptions="End" 
                              Clicked="OnLogout"/>
             </Grid>
             
@@ -49,8 +49,6 @@
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="*"/>
                     </Grid.ColumnDefinitions>
-
-
                     <Image Grid.Row="0" Grid.Column="0" Grid.RowSpan="2" Source="SEHomePage.png" HorizontalOptions="Center"  IsOpaque="False"  VerticalOptions="FillAndExpand" />
                 </Grid>
             </Grid>
@@ -61,11 +59,11 @@
                     <RowDefinition Height="120" />
                 </Grid.RowDefinitions>
                 <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="120"/>
                     <ColumnDefinition Width="*"/>
-                    <ColumnDefinition Width="120"/>
+                    <ColumnDefinition Width=".05*"/>
                     <ColumnDefinition Width="*"/>
-                    <ColumnDefinition Width="120"/>
+                    <ColumnDefinition Width=".05*"/>
+                    <ColumnDefinition Width="*"/>
                 </Grid.ColumnDefinitions>
 
                  <!-- Active Users -->
