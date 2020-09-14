@@ -304,6 +304,7 @@ namespace Xapp2.Pages
                 await App.Database.ClearAnalytics();
                 await App.Database.RefreshDatabase();
                 AIndicator.IsRunning = false;
+                SetUnitList();
             }
         }
         private async void OnDatabaseClear(object sender, EventArgs e)
@@ -317,6 +318,7 @@ namespace Xapp2.Pages
                 await App.Database.ClearWorker();
                 await App.Database.ClearLogs();
                 await App.Database.ClearAnalytics();
+                SetUnitList();
             }
         }
         private async void OnMainNavClicked(object sender, EventArgs e)

@@ -7,7 +7,9 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              mc:Ignorable="d"
     xmlns:animations="clr-namespace:Rg.Plugins.Popup.Animations;assembly=Rg.Plugins.Popup"
-    xmlns:pages="clr-namespace:Rg.Plugins.Popup.Pages;assembly=Rg.Plugins.Popup" xmlns:buttons="clr-namespace:Syncfusion.XForms.Buttons;assembly=Syncfusion.Buttons.XForms">
+    xmlns:pages="clr-namespace:Rg.Plugins.Popup.Pages;assembly=Rg.Plugins.Popup" 
+    xmlns:buttons="clr-namespace:Syncfusion.XForms.Buttons;assembly=Syncfusion.Buttons.XForms">
+   
     <pages:PopupPage.Animation>
         <animations:ScaleAnimation
             DurationIn="400"
@@ -15,9 +17,9 @@
             EasingIn="SinOut"
             EasingOut="SinIn"
             HasBackgroundAnimation="True"
-            PositionIn="Center"
             PositionOut="Center"
             ScaleIn="1.2"
+            PositionIn="Center"
             ScaleOut="0.8" />
     </pages:PopupPage.Animation>
     <StackLayout
@@ -25,30 +27,41 @@
         Padding="24"
         BackgroundColor="Transparent"
         HorizontalOptions="Center"
-        VerticalOptions="Center">
+        VerticalOptions="Center" >
 
         <Frame CornerRadius="10" HorizontalOptions="Center"  VerticalOptions="Start" Margin="0" BackgroundColor="#ffffff" HasShadow="True"
            IsClippedToBounds="True"  Padding="0">
-
-            <Grid RowSpacing="0" Margin="12">
+            <Grid>
                 <Grid.RowDefinitions>
-                    <RowDefinition Height="30"/>
+                    <RowDefinition Height="*"/>
+                </Grid.RowDefinitions>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*" />
+                </Grid.ColumnDefinitions>
+                <Image Grid.Row="0" Grid.Column="0"  Source="BackgroundPopup"  Aspect="AspectFill" />
+
+                <Grid Grid.Row="0" Grid.Column="0" RowSpacing="0" Margin="12" HorizontalOptions="Fill">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="100"/>
                     <RowDefinition Height="5"/>
                     <RowDefinition Height="30"/>
                     <RowDefinition Height="30"/>
                     <RowDefinition Height="30"/>
                     <RowDefinition Height="30"/>
-                </Grid.RowDefinitions>
+                    <RowDefinition Height="50"/>
+                    </Grid.RowDefinitions>
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="100" />
                     <ColumnDefinition Width="*" />
                 </Grid.ColumnDefinitions>
+                
+
 
                 <!-- Top header of user entry -->
-                <Label Text=" &#xe723; Visitor Sign-Out"  Margin="0,0,0,-5" Grid.Row="0" Grid.Column="0"  Grid.ColumnSpan="2" HorizontalOptions="Center"
-                       FontSize="24" FontAttributes="bold" FontFamily="{StaticResource FontIcons}" TextColor="#0f2696"/>
+                <Image Source="PopupAdmin.png" Margin="0,0,0,6" HorizontalOptions="Center" Grid.Row="0" Grid.ColumnSpan="2"/>
+                   
                 <BoxView Grid.Row="1" Grid.ColumnSpan="2" HorizontalOptions="FillAndExpand" HeightRequest="1" Color="#0f2696" Margin="10,0,10,0"/>
-                
+
                 <Label Text="Username:" Margin="0,0,0,-7" Grid.Row="2" Grid.Column="0"  Style="{StaticResource lablebodystyle}"  HorizontalOptions="Start" />
                 <Label Text="Password:" Margin="0,0,0,-7" Grid.Row="3" Grid.Column="0"  Style="{StaticResource lablebodystyle}"  HorizontalOptions="Start" />
                 <Label Text="Server:" Margin="0,0,0,-7" Grid.Row="4" Grid.Column="0"  Style="{StaticResource lablebodystyle}"  HorizontalOptions="Start" />
@@ -69,6 +82,7 @@
                         </StackLayout>
                     </buttons:SfButton.Content>
                 </buttons:SfButton>
+                </Grid>
             </Grid>
         </Frame>
     </StackLayout>

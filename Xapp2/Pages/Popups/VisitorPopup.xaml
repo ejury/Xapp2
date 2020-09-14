@@ -29,45 +29,54 @@
 
         <Frame CornerRadius="10" HorizontalOptions="Center"  VerticalOptions="Start" Margin="0" BackgroundColor="#ffffff" HasShadow="True"
            IsClippedToBounds="True"  Padding="0">
-
-            <Grid RowSpacing="0" Margin="12">
+            <Grid>
                 <Grid.RowDefinitions>
-                    <RowDefinition Height="30"/>
-                    <RowDefinition Height="5"/>
-                    <RowDefinition Height="35"/>
-                    <RowDefinition Height="35"/>
-                    <RowDefinition Height="35"/>
-                    <RowDefinition Height="50"/>
+                    <RowDefinition Height="*"/>
                 </Grid.RowDefinitions>
                 <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="100" />
                     <ColumnDefinition Width="*" />
                 </Grid.ColumnDefinitions>
+                <Image Grid.Row="0" Grid.Column="0"  Source="BackgroundPopup"  Aspect="AspectFill" />
 
-                <!-- Top header of user entry -->
-                <Label Text=" &#xe723; Visitor"  Margin="0,0,0,-5" Grid.Row="0" Grid.Column="0"  Grid.ColumnSpan="2" HorizontalOptions="Center"
-                       FontSize="24" FontAttributes="bold" FontFamily="{StaticResource FontIcons}" TextColor="#0f2696"/>
-                <BoxView Grid.Row="1" Grid.ColumnSpan="2" HorizontalOptions="FillAndExpand" HeightRequest="1" Color="#0f2696" Margin="10,0,10,0"/>
+                <Grid Grid.Row="0" Grid.Column="0" RowSpacing="0" Margin="12">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="100"/>
+                        <RowDefinition Height="5"/>
+                        <RowDefinition Height="35"/>
+                        <RowDefinition Height="35"/>
+                        <RowDefinition Height="35"/>
+                        <RowDefinition Height="70"/>
+                    </Grid.RowDefinitions>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="100" />
+                        <ColumnDefinition Width="*" />
+                    </Grid.ColumnDefinitions>
 
-                <!-- User Entry Data Section -->
-                <Label Text="First Name:" Margin="0,0,0,-7" Grid.Row="2" Grid.Column="0"  Style="{StaticResource lablebodystyle}"  HorizontalOptions="Start" />
-                <Label Text="Last Name:" Margin="0,0,0,-7" Grid.Row="3" Grid.Column="0"  Style="{StaticResource lablebodystyle}"  HorizontalOptions="Start" />
-                <Label Text="Company:" Margin="0,0,0,-7" Grid.Row="4" Grid.Column="0"  Style="{StaticResource lablebodystyle}"  HorizontalOptions="Start" />
+                    <!-- Top header of user entry -->
+                    <Image Source="PopupVisitorAdd.png" Margin="0,0,0,6" HorizontalOptions="Center" Grid.Row="0" Grid.ColumnSpan="2"/>
 
-                <Entry x:Name ="FirstNameText" Margin="0,0,0,-7" Grid.Row="2" Grid.Column="1" Style="{StaticResource entrystyle}" HorizontalOptions="Fill" Placeholder="First"/>
-                <Entry x:Name ="LastNameText" Margin="0,0,0,-7" Grid.Row="3" Grid.Column="1" Style="{StaticResource entrystyle}"  Placeholder="Surname"/>
-                <Entry x:Name ="CompanyNameText" Margin="0,0,0,-7" Grid.Row="4" Grid.Column="1" Style="{StaticResource entrystyle}"  Placeholder="Company Name"/>
+                    <BoxView Grid.Row="1" Grid.ColumnSpan="2" HorizontalOptions="FillAndExpand" HeightRequest="1" Color="#0f2696" Margin="10,0,10,0"/>
+
+                    <!-- User Entry Data Section -->
+                    <Label Text="First Name:" Margin="0,0,0,-7" Grid.Row="2" Grid.Column="0"  Style="{StaticResource lablebodystyle}"  HorizontalOptions="Start" />
+                    <Label Text="Last Name:" Margin="0,0,0,-7" Grid.Row="3" Grid.Column="0"  Style="{StaticResource lablebodystyle}"  HorizontalOptions="Start" />
+                    <Label Text="Company:" Margin="0,0,0,-7" Grid.Row="4" Grid.Column="0"  Style="{StaticResource lablebodystyle}"  HorizontalOptions="Start" />
+
+                    <Entry x:Name ="FirstNameText" Margin="0,0,0,-7" Grid.Row="2" Grid.Column="1" Style="{StaticResource entrystyle}" HorizontalOptions="Fill" Placeholder="First"/>
+                    <Entry x:Name ="LastNameText" Margin="0,0,0,-7" Grid.Row="3" Grid.Column="1" Style="{StaticResource entrystyle}"  Placeholder="Surname"/>
+                    <Entry x:Name ="CompanyNameText" Margin="0,0,0,-7" Grid.Row="4" Grid.Column="1" Style="{StaticResource entrystyle}"  Placeholder="Company Name"/>
 
 
-                <buttons:SfButton
-                            Grid.Row="5" Grid.ColumnSpan="2"  Margin="20,10,20,10"  BackgroundColor="{DynamicResource FacebookBlue}"  CornerRadius="20" HeightRequest="40"  Clicked = "Button_OnClicked">
-                    <buttons:SfButton.Content>
-                        <StackLayout   HorizontalOptions="CenterAndExpand"  Orientation="Horizontal"     VerticalOptions="Center">
-                            <Label  FontFamily="{StaticResource FontIcons}" FontSize="18" Text="&#xe746;" TextColor="{DynamicResource Gray-White}" VerticalTextAlignment="Center" />
-                            <Label  FontFamily="{StaticResource Montserrat-Medium}"  FontSize="16" Text="Sign In Visitor"  TextColor="{DynamicResource Gray-White}" />
-                        </StackLayout>
-                    </buttons:SfButton.Content>
-                </buttons:SfButton>
+                    <buttons:SfButton
+                                Grid.Row="5" Grid.ColumnSpan="2"  Margin="20,30,20,10"  BackgroundColor="{DynamicResource FacebookBlue}"  CornerRadius="20" HeightRequest="40"  Clicked = "Button_OnClicked">
+                        <buttons:SfButton.Content>
+                            <StackLayout   HorizontalOptions="CenterAndExpand"  Orientation="Horizontal"     VerticalOptions="Center">
+                                <Label  FontFamily="{StaticResource FontIcons}" FontSize="18" Text="&#xe746;" TextColor="{DynamicResource Gray-White}" VerticalTextAlignment="Center" />
+                                <Label  FontFamily="{StaticResource Montserrat-Medium}"  FontSize="16" Text="Sign In Visitor"  TextColor="{DynamicResource Gray-White}" />
+                            </StackLayout>
+                        </buttons:SfButton.Content>
+                    </buttons:SfButton>
+                </Grid>
             </Grid>
         </Frame>
     </StackLayout>

@@ -32,6 +32,7 @@ namespace Xapp2
             Syncfusion.Licensing.SyncfusionLicenseProvider.RegisterLicense("MjAyMDg3QDMxMzcyZTM0MmUzMGlld0cxckhyMzV1bVpjZzNyZHBoblJsTWRadTM5UWJiMlpRSFd0ZW5Ia0k9");
 
             InitializeComponent();
+            //Device.SetFlags(new[] { "Brush_Experimental" });
             MainPage = new Xapp2.Pages.NewLoginPage();
             //MainPage = new MainPage();
 

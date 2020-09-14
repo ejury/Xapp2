@@ -47,6 +47,9 @@ xmlns:chart="clr-namespace:Syncfusion.SfChart.XForms;assembly=Syncfusion.SfChart
                 <Image Grid.Column="0"   Source="SEWhite.jpg"   HorizontalOptions="Center"   VerticalOptions="Center"  Margin="3" />
                 <Label Grid.Column="1"   Style="{StaticResource labletitlestyle}"  Text="Heirarchy Dev"  TextColor="White"  />
                 <ImageButton Grid.Column="2" Source="HomeButton.png" Margin="5"  BackgroundColor="Transparent"  Clicked = "OnMainNavClicked" />
+
+                <ActivityIndicator Grid.Column="0" Grid.ColumnSpan="3" x:Name="AIndicator" IsRunning="False"></ActivityIndicator>
+
             </Grid>
             <!-- Top Header Ends -->
 
@@ -57,8 +60,7 @@ xmlns:chart="clr-namespace:Syncfusion.SfChart.XForms;assembly=Syncfusion.SfChart
                     <ColumnDefinition Width="*"/>
                     <ColumnDefinition Width="*"/>
                 </Grid.ColumnDefinitions>
-                <ActivityIndicator Grid.Column="0" Grid.ColumnSpan="2" x:Name="AIndicator" IsRunning="False"></ActivityIndicator>
-
+              
                 <!-- Vessel Entry Section -->
                 <Frame Grid.Column="0" CornerRadius="10" HorizontalOptions="StartAndExpand"  VerticalOptions="Start" Margin="16,10,8,10" BackgroundColor="#ffffff"
            HasShadow="True"   IsClippedToBounds="True"  Padding="0">

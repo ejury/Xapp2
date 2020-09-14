@@ -61,9 +61,9 @@ namespace Xapp2.Pages
             {
                 IsScanning = false;
                 ScanButton.Text = "Start Scanner";
-                ScanButtonColor.Color = Color.FromHex("#51F1F2");
+/*                ScanButtonColor.Color = Color.FromHex("#51F1F2");
                 ScanButtonColor2.Color = Color.LightGray;
-                ScanButtonColor3.Color = Color.LightGray;
+                ScanButtonColor3.Color = Color.LightGray;*/
                 PageLayout.BackgroundColor = Color.FromHex("#f0f3f6");
                 VisitorButton.IsVisible = false;
                 VisitorButton2.IsVisible = false;
@@ -72,9 +72,9 @@ namespace Xapp2.Pages
             {
                 IsScanning = true;
                 ScanButton.Text = "Swipe SE Card";
-                ScanButtonColor.Color = Color.FromHex("#5bf2df");
+/*                ScanButtonColor.Color = Color.FromHex("#5bf2df");
                 ScanButtonColor2.Color = Color.FromHex("#78e7ff");
-                ScanButtonColor3.Color = Color.FromHex("#78e7ff");
+                ScanButtonColor3.Color = Color.FromHex("#78e7ff");*/
                 //PageLayout.BackgroundColor = Color.FromHex("#6bb4b6");
                 PageLayout.BackgroundColor = Color.FromHex("#226776");
                 VisitorButton.IsVisible = true;

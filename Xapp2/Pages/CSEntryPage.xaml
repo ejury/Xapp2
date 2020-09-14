@@ -71,15 +71,15 @@
             <!-- start scanning button-->
             <buttons:SfButton x:Name="ScanButton" Margin="0,-6,0,0" CornerRadius="0" Text="Start Scanner" FontSize="25" HeightRequest="80"   Clicked="ScanClicked">
 
-                <buttons:SfButton.BackgroundGradient>
-                    <gradient:SfLinearGradientBrush> 
+                <!--buttons:SfButton.BackgroundGradient>
+                    <gradient:SfLinearGradientBrush > 
                         <gradient:SfLinearGradientBrush.GradientStops>
-                            <gradient:SfGradientStop x:Name="ScanButtonColor3"  Color="LightGray" Offset="0"/>   <!-- Color="#78e7ff" -->
-                            <gradient:SfGradientStop x:Name="ScanButtonColor"   Color="#51F1F2" Offset=".5"/>    <!--   Color="#5bf2df" -->
-                            <gradient:SfGradientStop x:Name="ScanButtonColor2" Color="LightGray"  Offset="1"/>   <!-- Color="LightGray" -->
+                            <gradient:SfGradientStop x:Name="ScanButtonColor3"  Color="LightGray" Offset="0"/>  
+                            <gradient:SfGradientStop x:Name="ScanButtonColor"   Color="#51F1F2" Offset=".5"/>   
+                            <gradient:SfGradientStop x:Name="ScanButtonColor2" Color="LightGray"  Offset="1"/>  
                         </gradient:SfLinearGradientBrush.GradientStops>
                     </gradient:SfLinearGradientBrush>
-                </buttons:SfButton.BackgroundGradient>
+                </-->
 
                 <VisualStateManager.VisualStateGroups>
                     <VisualStateGroup x:Name="CommonStates">
