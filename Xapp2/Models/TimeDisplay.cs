@@ -16,5 +16,7 @@ namespace Xapp2.Models
         public string Company { get; set; }
 
         public int EntryID { get; set; }
+
+        public string ReferenceNFC { get; set; }
     }
 }

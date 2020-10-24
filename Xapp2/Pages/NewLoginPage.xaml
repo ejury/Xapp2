@@ -53,9 +53,23 @@
                         <!--  SE Logo  -->
                         <Image Grid.Row="0" Source="SEHomePage.png"/>
 
+                        <ActivityIndicator Grid.Row="5" HeightRequest="30" x:Name="AIndicator" IsRunning="False"></ActivityIndicator>
+
                         <!--  Login through SE badge account  -->
-                        <buttons:SfButton Grid.Row="7" Margin="0,16,0,16" BackgroundColor="{DynamicResource FacebookBlue}"
-                            CornerRadius="20" HeightRequest="40" Clicked="SEClicked" >
+                        <buttons:SfButton Grid.Row="6" Margin="0,50,0,8" BackgroundColor="Black"
+                            CornerRadius="0" HeightRequest="30" Clicked="NFCClicked" >
+
+                            <buttons:SfButton.Content>
+                                <StackLayout HorizontalOptions="CenterAndExpand"  Orientation="Horizontal"  VerticalOptions="Center">
+                                    <Label FontFamily="{StaticResource Montserrat-Medium}" FontSize="16"
+                                        Text="Test NFC Scanner" TextColor="{DynamicResource Gray-White}" />
+                                </StackLayout>
+                            </buttons:SfButton.Content>
+                        </buttons:SfButton>
+
+                        <!--  Login through SE badge account  -->
+                        <buttons:SfButton Grid.Row="7" Margin="0,8" BackgroundColor="{DynamicResource FacebookBlue}"
+                            CornerRadius="0" HeightRequest="30" Clicked="SEClicked" >
                             
                             <buttons:SfButton.Content>
                                 <StackLayout HorizontalOptions="CenterAndExpand"  Orientation="Horizontal"  VerticalOptions="Center">
@@ -69,17 +83,28 @@
                         </buttons:SfButton>
 
                         <!--  Login as Admin  -->
-                        <buttons:SfButton Grid.Row="8" Margin="0,16" Command="{Binding LoginCommand}"  Style="{StaticResource SfButtonStyle}"
-                            Text="Admin Log In"   Clicked="LoginClicked"/>
+                        <buttons:SfButton Grid.Row="8" Margin="0,8" Style="{StaticResource SfButtonStyle}"
+                            CornerRadius="0" HeightRequest="30" Clicked="LoginClicked" >
 
-                        <ActivityIndicator Grid.Row="6" x:Name="AIndicator" IsRunning="False"></ActivityIndicator>
+                            <buttons:SfButton.Content>
+                                <StackLayout HorizontalOptions="CenterAndExpand"  Orientation="Horizontal"  VerticalOptions="Center">
+                                    <Label FontFamily="{StaticResource Montserrat-Medium}" FontSize="16"
+                                        Text="Admin Log In" TextColor="{DynamicResource Gray-White}" />
+                                </StackLayout>
+                            </buttons:SfButton.Content>
+                        </buttons:SfButton>
+                        
+                        <!--buttons:SfButton Grid.Row="8" Margin="0,8" Command="{Binding LoginCommand}"  Style="{StaticResource SfButtonStyle}"
+                            Text="Admin Log In" HeightRequest="30"  Clicked="LoginClicked"/-->
+
+
                     </Grid>
 
                     <!--  Temp entry for RFC tag  -->
-                    <border:SfBorder Margin="0,0,0,10" Style="{StaticResource SfBorderStyle}" VerticalOptions="End" CornerRadius="0">
+                    <!--border:SfBorder Margin="0,0,0,10" Style="{StaticResource SfBorderStyle}" VerticalOptions="End" CornerRadius="0">
                         <control:BorderlessEntry   x:Name="UserEntry"  IsPassword="False" Placeholder="Username@debug.ca"
                                 Style="{StaticResource EntryStyle}" Text="{Binding Password}" />
-                    </border:SfBorder>
+                    </-->
 
                     <StackLayout HorizontalOptions="Center" Orientation="Horizontal" Spacing="1" VerticalOptions="End">
                         <!--  Demo Option  -->

@@ -48,7 +48,7 @@ namespace Xapp2.Pages.Popups
 
                 //Check if User name already exists
                 var workerslist = await App.Database.GetWorkers();
-                var properworker = workerslist.Where(w => w.FirstName == FirstEntry & w.LastName == LastEntry);
+                var properworker = workerslist.Where(w => w.FirstName == FirstEntry & w.LastName == LastEntry & w.Company == CompanyEntry);
                 int properworker2 = properworker.Count();
                 if (properworker2 == 0)
                 {

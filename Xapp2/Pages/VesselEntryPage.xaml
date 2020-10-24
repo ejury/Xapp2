@@ -27,10 +27,7 @@ xmlns:chart="clr-namespace:Syncfusion.SfChart.XForms;assembly=Syncfusion.SfChart
 
 
     <ContentPage.Content>
-
-
-        <StackLayout VerticalOptions="Start"
-            Style="{StaticResource pageStyle}">
+        <StackLayout VerticalOptions="Start" Style="{StaticResource pageStyle}">
 
             <!-- Top Header Details -->
             <Grid
@@ -44,15 +41,14 @@ xmlns:chart="clr-namespace:Syncfusion.SfChart.XForms;assembly=Syncfusion.SfChart
                     <ColumnDefinition Width="*"/>
                     <ColumnDefinition Width="40"/>
                 </Grid.ColumnDefinitions>
-                <Image Grid.Column="0"   Source="SEWhite.jpg"   HorizontalOptions="Center"   VerticalOptions="Center"  Margin="3" />
-                <Label Grid.Column="1"   Style="{StaticResource labletitlestyle}"  Text="Heirarchy Dev"  TextColor="White"  />
+                <Image Grid.Column="0"   Source="SEWhite.jpg"   HorizontalOptions="Center"   VerticalOptions="Center"  Margin="5" />
+                <Label Grid.Column="1"   Style="{StaticResource lableheaderstyle}"  Text="Heirarchy Dev"  TextColor="White"  />
                 <ImageButton Grid.Column="2" Source="HomeButton.png" Margin="5"  BackgroundColor="Transparent"  Clicked = "OnMainNavClicked" />
 
                 <ActivityIndicator Grid.Column="0" Grid.ColumnSpan="3" x:Name="AIndicator" IsRunning="False"></ActivityIndicator>
 
             </Grid>
             <!-- Top Header Ends -->
-
 
             <!--Data Entry Section   -->
             <Grid VerticalOptions="StartAndExpand" MinimumHeightRequest="197">
@@ -62,25 +58,25 @@ xmlns:chart="clr-namespace:Syncfusion.SfChart.XForms;assembly=Syncfusion.SfChart
                 </Grid.ColumnDefinitions>
               
                 <!-- Vessel Entry Section -->
-                <Frame Grid.Column="0" CornerRadius="10" HorizontalOptions="StartAndExpand"  VerticalOptions="Start" Margin="16,10,8,10" BackgroundColor="#ffffff"
-           HasShadow="True"   IsClippedToBounds="True"  Padding="0">
+                <Frame Grid.Column="0" CornerRadius="10" HorizontalOptions="StartAndExpand"  VerticalOptions="Start" Margin="10,5,5,5" BackgroundColor="#ffffff"
+           HasShadow="True"   IsClippedToBounds="True"  Padding="0" BorderColor="LightGray">
 
                     <Grid RowSpacing="0">
                         <Grid.RowDefinitions>
                             <RowDefinition Height="30"/>
                             <RowDefinition Height="5"/>
-                            <RowDefinition Height="35" />
-                            <RowDefinition Height="35" />
-                            <RowDefinition Height="50"/>
+                            <RowDefinition Height="30" />
+                            <RowDefinition Height="30" />
+                            <RowDefinition Height="45"/>
                         </Grid.RowDefinitions>
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="*"/>
                         </Grid.ColumnDefinitions>
 
                         <Label Text=" &#xe729;"  Margin="3,0,0,0" Grid.Row="0" Grid.Column="0"  HorizontalOptions="Start"
-                       Style="{StaticResource lablebodystyle}" FontAttributes="bold" FontFamily="{StaticResource FontIcons}" TextColor="#3cc6ee"/>
+                       Style="{StaticResource labletitlestyle}" FontAttributes="bold" FontFamily="{StaticResource FontIcons}" TextColor="#3cc6ee"/>
                         <Label Text=" +Location"  Margin="25,0,0,0" Grid.Row="0" Grid.Column="0"  HorizontalOptions="Start"
-                       Style="{StaticResource lablebodystyle}" FontAttributes="bold" FontFamily="{StaticResource FontIcons}" TextColor="#000000"/>
+                       Style="{StaticResource labletitlestyle}" FontAttributes="bold" FontFamily="{StaticResource FontIcons}" TextColor="#000000"/>
 
                         <BoxView Grid.Row="1" HorizontalOptions="FillAndExpand" HeightRequest="1" Color="#67ceec" Margin="10,0,10,0"/>
 
@@ -97,7 +93,7 @@ xmlns:chart="clr-namespace:Syncfusion.SfChart.XForms;assembly=Syncfusion.SfChart
                         
                         <Picker Grid.Row="3"   x:Name="picker" Margin="40,0,10,-7"
                         Style="{StaticResource pickerstyle}"  Title="Select Area"    ItemsSource="{Binding unitspicker}"  HorizontalOptions="FillAndExpand"
-                        ItemDisplayBinding="{Binding Name}"     SelectedItem="{Binding SelectedUnit}"   SelectedIndexChanged="OnPickerSelectedIndexChanged"/>
+                             SelectedItem="{Binding SelectedUnit}"   SelectedIndexChanged="OnPickerSelectedIndexChanged"/>
                    
                         <buttons:SfButton
                             Grid.Row="4"  Margin="20,10,20,10"  BackgroundColor="{DynamicResource FacebookBlue}"
@@ -106,12 +102,12 @@ xmlns:chart="clr-namespace:Syncfusion.SfChart.XForms;assembly=Syncfusion.SfChart
                                 <StackLayout
                                     HorizontalOptions="CenterAndExpand"  Orientation="Horizontal"     VerticalOptions="Center">
                                     <Label
-                                        FontFamily="{StaticResource FontIcons}" FontSize="18" 
+                                        FontFamily="{StaticResource FontIcons}" Style="{StaticResource labletitlestyle}" 
                                         Text="&#xe729;"
                                         TextColor="{DynamicResource Gray-White}"
                                         VerticalTextAlignment="Center" />
                                     <Label
-                                        FontFamily="{StaticResource Montserrat-Medium}"  FontSize="16"
+                                        FontFamily="{StaticResource Montserrat-Medium}"  Style="{StaticResource labletitlestyle}"
                                         Text=" Add"
                                         TextColor="{DynamicResource Gray-White}" />
                                 </StackLayout>
@@ -121,26 +117,26 @@ xmlns:chart="clr-namespace:Syncfusion.SfChart.XForms;assembly=Syncfusion.SfChart
                 </Frame>
 
                 <!-- Unit Entry Section -->
-                <Frame Grid.Column="1" CornerRadius="10" HorizontalOptions="Center"   Margin="8,10,16,10" BackgroundColor="#ffffff"
-           HasShadow="True"   IsClippedToBounds="True"  Padding="0" VerticalOptions="Fill">
+                <Frame Grid.Column="1" CornerRadius="10" HorizontalOptions="Center"   Margin="5,5,10,5" BackgroundColor="#ffffff"
+           HasShadow="True"   IsClippedToBounds="True"  Padding="0" VerticalOptions="Fill" BorderColor="LightGray">
 
                     <Grid RowSpacing="0">
                         <Grid.RowDefinitions>
                             <RowDefinition Height="30"/>
                             <RowDefinition Height="5"/>
-                            <RowDefinition Height="35" />
-                            <RowDefinition Height="35" />
-                            <RowDefinition Height="50"/>
+                            <RowDefinition Height="30" />
+                            <RowDefinition Height="30" />
+                            <RowDefinition Height="45"/>
                         </Grid.RowDefinitions>
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="*"/>
                         </Grid.ColumnDefinitions>
 
                         <Label Text="  &#xe733;"  Margin="0,0,0,0" Grid.Row="0" HorizontalOptions="Start"
-                       Style="{StaticResource lablebodystyle}" FontAttributes="bold" FontFamily="{StaticResource FontIcons}" TextColor="#23dfb4"/>
+                       Style="{StaticResource labletitlestyle}" FontAttributes="bold" FontFamily="{StaticResource FontIcons}" TextColor="#23dfb4"/>
 
                         <Label Text=" +Area"  Margin="25,0,0,0" Grid.Row="0"  HorizontalOptions="Start"
-                       Style="{StaticResource lablebodystyle}" FontAttributes="bold" FontFamily="{StaticResource FontIcons}" TextColor="#000000"/>
+                       Style="{StaticResource labletitlestyle}" FontAttributes="bold" FontFamily="{StaticResource FontIcons}" TextColor="#000000"/>
 
                         <BoxView Grid.Row="1"  HorizontalOptions="FillAndExpand" HeightRequest="1" Color="#69ecce" Margin="10,0,10,0"/>
 
@@ -160,13 +156,13 @@ xmlns:chart="clr-namespace:Syncfusion.SfChart.XForms;assembly=Syncfusion.SfChart
                                 <StackLayout
                                     HorizontalOptions="CenterAndExpand"  Orientation="Horizontal"     VerticalOptions="Center">
                                     <Label
-                                        FontFamily="{StaticResource FontIcons}" FontSize="18"
+                                        FontFamily="{StaticResource FontIcons}" Style="{StaticResource labletitlestyle}"
                                         Text="&#xe733;"
                                         TextColor="{DynamicResource Gray-White}"
                                         VerticalTextAlignment="Center" />
                                     <Label
-                                        FontFamily="{StaticResource Montserrat-Medium}"  FontSize="16"
-                                        Text=" Add"
+                                        FontFamily="{StaticResource Montserrat-Medium}" Style="{StaticResource labletitlestyle}"
+                                        Text="Add"
                                         TextColor="{DynamicResource Gray-White}" />
                                 </StackLayout>
                             </buttons:SfButton.Content>
@@ -192,7 +188,7 @@ xmlns:chart="clr-namespace:Syncfusion.SfChart.XForms;assembly=Syncfusion.SfChart
                 <Label x:Name="RView2" Grid.Row="0" Text=" &#xe729;"  Margin="10,-10,13,5" HorizontalOptions="End" FontSize="20"
                        Style="{StaticResource lablebodystyle}" FontAttributes="bold" FontFamily="{StaticResource FontIcons}" TextColor="White"/>
                 <!-- Main Label -->
-                <Label Grid.Row="0" Text="Location Summary" TextColor="White"  Style="{StaticResource labletitlestyle}"  FontSize="Large" VerticalTextAlignment="Center"/>
+                <Label Grid.Row="0" Text="Location Summary" TextColor="White"  Style="{StaticResource lableheaderstyle}"  VerticalTextAlignment="Center"/>
                 <Button x:Name="LButton" Grid.Row="0" BorderColor="Aqua" BorderWidth="0" HeightRequest="40" WidthRequest="60" BackgroundColor="Transparent" Clicked="ListViewChange"/>
             </Grid>
 
@@ -206,8 +202,8 @@ xmlns:chart="clr-namespace:Syncfusion.SfChart.XForms;assembly=Syncfusion.SfChart
                 </Grid.ColumnDefinitions>
 
                 <!-- Adding Vessel List Display Frame-->
-                <Frame x:Name="ListFrame" Grid.Column="1" CornerRadius="10" HorizontalOptions="Center"  VerticalOptions="FillAndExpand" Margin="8,16,16,16" BackgroundColor="#ffffff"
-                   HasShadow="True" IsClippedToBounds="True" Padding="0">
+                <Frame x:Name="ListFrame" Grid.Column="1" CornerRadius="10" HorizontalOptions="Center"  VerticalOptions="FillAndExpand" Margin="5,5,10,5" BackgroundColor="#ffffff"
+                   HasShadow="True" IsClippedToBounds="True" Padding="0" BorderColor="LightGray">
 
                     <Grid x:Name="GridDisplay" RowSpacing="5" >
                         
@@ -224,7 +220,7 @@ xmlns:chart="clr-namespace:Syncfusion.SfChart.XForms;assembly=Syncfusion.SfChart
                        Style="{StaticResource lablebodystyle}" FontAttributes="bold" FontFamily="{StaticResource FontIcons}" TextColor="Black"/-->
 
                         <Button x:Name="unitlabelname" Grid.Row="0" Text="temp" HorizontalOptions="Fill"   FontAttributes="Bold"
-                                BorderWidth="0" Padding="0" FontSize="16" TextColor="Black" BackgroundColor="#FFFFFF" Margin="0,3,0,-3">
+                                BorderWidth="0" Padding="0" FontSize="16" TextColor="Black" BackgroundColor="Transparent" Margin="0,3,0,-3">
                         </Button>
 
                         <BoxView Grid.Row="1" HorizontalOptions="FillAndExpand" HeightRequest="1" Color="#69ecce" Margin="10,0,10,0"/>
@@ -241,7 +237,7 @@ xmlns:chart="clr-namespace:Syncfusion.SfChart.XForms;assembly=Syncfusion.SfChart
                                                 </Grid.ColumnDefinitions>
 
                                                 <!-- Left column - First Name of Vessel  -->
-                                                <Label Grid.Column="0" TextColor="Black"  FontSize="Body" HorizontalTextAlignment="start"  Text="{Binding Name}"/>
+                                                <Label Grid.Column="0"  Style="{StaticResource lablebodystyle}" HorizontalTextAlignment="start"  Text="{Binding Name}"/>
                                             </Grid>
                                         </ViewCell>
                                 </DataTemplate>
@@ -258,8 +254,8 @@ xmlns:chart="clr-namespace:Syncfusion.SfChart.XForms;assembly=Syncfusion.SfChart
 
 
                 <!-- Adding Pie Chart Display-->
-                <Frame x:Name="PieFrame" Grid.Column="0" CornerRadius="10" HorizontalOptions="Center"  VerticalOptions="FillAndExpand" Margin="16,16,8,16" BackgroundColor="#ffffff"
-                   HasShadow="True" IsClippedToBounds="True" Padding="0">
+                <Frame x:Name="PieFrame" Grid.Column="0" CornerRadius="10" HorizontalOptions="Center"  VerticalOptions="FillAndExpand" Margin="10,5,5,5" BackgroundColor="#ffffff"
+                   HasShadow="True" IsClippedToBounds="True" Padding="0" BorderColor="LightGray">
 
                     <Grid RowSpacing="5">
                         <Grid.RowDefinitions>
@@ -269,7 +265,7 @@ xmlns:chart="clr-namespace:Syncfusion.SfChart.XForms;assembly=Syncfusion.SfChart
                         </Grid.RowDefinitions>
 
                         <Label  Grid.Row="0" Text="Areas" HorizontalOptions="Fill" FontAttributes="Bold"   HorizontalTextAlignment="center"
-                                 Margin="0,5,0,-5" Padding="0" FontSize="16" TextColor="Black" BackgroundColor="#ffffff" >
+                                 Margin="0,5,0,-5" Padding="0" FontSize="16" TextColor="Black" BackgroundColor="Transparent" >
                         </Label>
                         <Label Grid.Row="0" Text=" &#xe733;"  Margin="5,5,0,-5" HorizontalOptions="Start" FontSize="15"
                        Style="{StaticResource lablebodystyle}" FontAttributes="bold" FontFamily="{StaticResource FontIcons}" TextColor="Black"/>
@@ -277,18 +273,18 @@ xmlns:chart="clr-namespace:Syncfusion.SfChart.XForms;assembly=Syncfusion.SfChart
                         <BoxView Grid.Row="1" HorizontalOptions="FillAndExpand" HeightRequest="1" Color="#67ceec" Margin="10,0,10,0"/>
 
                         <!--Adding Pie Chart Display   -->
-                        <chart:SfChart  Grid.Column="0" Grid.Row="2" BackgroundColor="Transparent" Margin="5,0,5,0" VerticalOptions="CenterAndExpand">
+                        <chart:SfChart  Grid.Column="0" Grid.Row="2" BackgroundColor="Transparent" VerticalOptions="CenterAndExpand" Margin="-8,0">
 
                             <chart:SfChart.Legend>
-                                <chart:ChartLegend OverflowMode="Wrap">
+                                <chart:ChartLegend OverflowMode="Wrap" x:Name="PieFrameLegend" >
                                     <chart:ChartLegend.LabelStyle>
-                                        <chart:ChartLegendLabelStyle TextColor="#020a45" Font="Bold"/>
+                                        <chart:ChartLegendLabelStyle TextColor="#020a45" Font="Bold,12" />
                                     </chart:ChartLegend.LabelStyle>
                                 </chart:ChartLegend>
                             </chart:SfChart.Legend>
 
                             <chart:PieSeries  x:Name="pie" ExplodeIndex="{Binding pieselect, Mode=TwoWay}" ItemsSource="{Binding piemodel}" YBindingPath="Vesselcount" XBindingPath="Unitname" 
-                                  ExplodeOnTouch="True"  PropertyChanged="PieChanged"  DataMarkerPosition="Inside" >
+                                  ExplodeOnTouch="True"  PropertyChanged="PieChanged"  DataMarkerPosition="Inside" GroupMode="Percentage" GroupTo="15" >
 
                                 <chart:PieSeries.ColorModel>
                                     <chart:ChartColorModel Palette="Custom" CustomBrushes="{StaticResource Colors}"/>
@@ -298,7 +294,7 @@ xmlns:chart="clr-namespace:Syncfusion.SfChart.XForms;assembly=Syncfusion.SfChart
                                     <chart:ChartDataMarker>
                                         <chart:ChartDataMarker.LabelStyle>
 
-                                            <chart:DataMarkerLabelStyle TextColor="#020a45"	BorderColor="Black"	BorderThickness="2" BackgroundColor="#ffffff" Font="Bold,16"/>
+                                            <chart:DataMarkerLabelStyle TextColor="#020a45"	BorderColor="Black"	BorderThickness="2" BackgroundColor="#ffffff" Font="Bold,12"/>
 
                                         </chart:ChartDataMarker.LabelStyle>
                                     </chart:ChartDataMarker>
@@ -325,15 +321,15 @@ xmlns:chart="clr-namespace:Syncfusion.SfChart.XForms;assembly=Syncfusion.SfChart
                 </Grid.ColumnDefinitions>
 
                 <!-- Nav Bar Selections-->
-                <ImageButton x:Name="CSEButton" Grid.Row="0"  Grid.Column="0"   Style="{StaticResource NavImageCSE}"
+                <ImageButton x:Name="CSEButton" Grid.Row="0"  Grid.Column="0"   Style="{StaticResource NavImageCSE}" Margin="3"
                         Clicked = "OnCSEManagerClicked"/>
-                <ImageButton x:Name="StatusButton" Grid.Row="0"  Grid.Column="1"   Style="{StaticResource NavImageStatus}"
+                <ImageButton x:Name="StatusButton" Grid.Row="0"  Grid.Column="1"   Style="{StaticResource NavImageStatus}" Margin="3"
                         Clicked = "OnSiteStatusButtonClicked" />
-                <ImageButton x:Name="HeirarchyButton" Grid.Row="0"  Grid.Column="2"   Style="{StaticResource NavImageHeirarchy}"
+                <ImageButton x:Name="HeirarchyButton" Grid.Row="0"  Grid.Column="2"   Style="{StaticResource NavImageHeirarchy}" Margin="3"
                         Clicked = "OnVesselButtonClicked" />
-                <ImageButton x:Name="WorkerButton" Grid.Row="0"  Grid.Column="3"   Style="{StaticResource NavImageWorker}"
+                <ImageButton x:Name="WorkerButton" Grid.Row="0"  Grid.Column="3"   Style="{StaticResource NavImageWorker}" Margin="3"
                         Clicked = "OnWorkerButtonClicked" />
-                <ImageButton x:Name="AnalyticsButton" Grid.Row="0"  Grid.Column="4"   Style="{StaticResource NavImageAnalytics}"
+                <ImageButton x:Name="AnalyticsButton" Grid.Row="0"  Grid.Column="4"   Style="{StaticResource NavImageAnalytics}" Margin="3"
                         Clicked = "OnAnalyticsButtonClicked" />
             </Grid>
 

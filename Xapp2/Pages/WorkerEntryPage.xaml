@@ -26,7 +26,7 @@
     </ContentPage.Resources>
 
     <ContentPage.Content>
-        <StackLayout  Style="{StaticResource pageStyle}" BackgroundColor="#e0e9f2">
+        <StackLayout  Style="{StaticResource pageStyle}" >
             <!-- Top Header Details -->
             <Grid
                 BackgroundColor="#000000" >
@@ -36,25 +36,28 @@
                 </Grid.RowDefinitions>
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="40"/>
+                    <ColumnDefinition Width="2"/>
                     <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="2"/>
                     <ColumnDefinition Width="40"/>
                 </Grid.ColumnDefinitions>
-                <Image Grid.Column="0"   Source="SEWhite.jpg"   HorizontalOptions="Center"   VerticalOptions="Center"  Margin="3" />
-                <Label Grid.Column="1"   Style="{StaticResource labletitlestyle}"  Text="Worker Entry"  TextColor="White"  />
-                <ImageButton Grid.Column="2" Source="HomeButton.png" Margin="5"  BackgroundColor="Transparent"  Clicked = "OnMainNavClicked" />
+                <Image Grid.Column="0"   Source="SEWhite.jpg"   HorizontalOptions="Center"   VerticalOptions="Center"  Margin="10,5,0,5" />
+                <Label Grid.Column="2"   Style="{StaticResource lableheaderstyle}"  Text="Worker Entry"  TextColor="White"  />
+                <BoxView Grid.Column="3" VerticalOptions="FillAndExpand" WidthRequest="1" Color="Gray" Margin="0,5"/>
+                <ImageButton Grid.Column="4" Source="HomeButton.png" Margin="0,5,10,5"  BackgroundColor="Transparent"  Clicked = "OnMainNavClicked" />
             </Grid>
             <!-- Top Header Ends -->
 
             <!-- User Entry Section -->
-            <Frame CornerRadius="10" HorizontalOptions="Center"  VerticalOptions="Start" Margin="16,8" BackgroundColor="#ffffff" HasShadow="True"
-           IsClippedToBounds="True"  Padding="0">
+            <Frame CornerRadius="10" HorizontalOptions="Center"  VerticalOptions="Start" Margin="10,5" BackgroundColor="#ffffff" HasShadow="True"
+           IsClippedToBounds="True"  Padding="0" BorderColor="LightGray">
                 <Grid RowSpacing="0" Margin="5,0,5,0">
                     <Grid.RowDefinitions>
                         <RowDefinition Height="30"/>
                         <RowDefinition Height="5"/>
-                        <RowDefinition Height="35"/>
-                        <RowDefinition Height="35"/>
-                        <RowDefinition Height="50"/>
+                        <RowDefinition Height="30"/>
+                        <RowDefinition Height="30"/>
+                        <RowDefinition Height="45"/>
                     </Grid.RowDefinitions>
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="100" />
@@ -64,11 +67,12 @@
 
                     <!-- Top header of user entry -->
                     <Label Text=" &#xe723; Add"  Margin="0,0,0,-5" Grid.Row="0" Grid.Column="0"  Grid.ColumnSpan="3" HorizontalOptions="Start"
-                       Style="{StaticResource lablebodystyle}" FontAttributes="bold" FontFamily="{StaticResource FontIcons}" TextColor="#0f2696"/>
+                       Style="{StaticResource labletitlestyle}" FontAttributes="bold" FontFamily="{StaticResource FontIcons}" TextColor="#0f2696"/>
                     <BoxView Grid.Row="1" Grid.ColumnSpan="3" HorizontalOptions="FillAndExpand" HeightRequest="1" Color="#0f2696" Margin="10,0,10,0"/>
                     
                     <!-- temp entry for SEcard Number -->
-                    <Entry x:Name="TempSECardEntry" Grid.Row="0" Grid.Column="0"  Grid.ColumnSpan="3" HorizontalOptions="End" WidthRequest="50" Margin="0,0,0,-7" FontSize="10"/>
+                    <Entry x:Name="TempSECardEntry" Completed="tempNFCcompleted" Grid.Row="0" Grid.Column="0"  Grid.ColumnSpan="3" HorizontalOptions="End" WidthRequest="50" Margin="0,0,0,-7" FontSize="10"/>
+                    <ActivityIndicator x:Name="AIndicator" Grid.Row="0" Grid.ColumnSpan="3"/>
 
                     <!-- User Entry Data Section -->
                     <Label Text="Name:" Margin="0,0,0,-7" Grid.Row="2" Grid.Column="0"  Style="{StaticResource lablebodystyle}"  HorizontalOptions="Start" />
@@ -82,8 +86,8 @@
                             Grid.Row="4" Grid.ColumnSpan="3"  Margin="20,10,20,10"  BackgroundColor="{DynamicResource FacebookBlue}"  CornerRadius="20" HeightRequest="40"  Clicked = "NewWorkerClicked">
                         <buttons:SfButton.Content>
                             <StackLayout   HorizontalOptions="CenterAndExpand"  Orientation="Horizontal"     VerticalOptions="Center">
-                                <Label  FontFamily="{StaticResource FontIcons}" FontSize="18" Text="&#xe746;" TextColor="{DynamicResource Gray-White}" VerticalTextAlignment="Center" />
-                                <Label  FontFamily="{StaticResource Montserrat-Medium}"  FontSize="16" Text="Add With SE Badge"  TextColor="{DynamicResource Gray-White}" />
+                                <Label  FontFamily="{StaticResource FontIcons}" Text="&#xe746;" Style="{StaticResource labletitlestyle}" TextColor="{DynamicResource Gray-White}" VerticalTextAlignment="Center" />
+                                <Label  FontFamily="{StaticResource Montserrat-Medium}"  Style="{StaticResource labletitlestyle}" Text="Add With SE Badge"  TextColor="{DynamicResource Gray-White}" />
                             </StackLayout>
                         </buttons:SfButton.Content>
                     </buttons:SfButton>
@@ -107,7 +111,7 @@
                 <Label x:Name="RView2" Grid.Row="0" Text=" &#xe723;"  Margin="10,0,10,5" HorizontalOptions="End"
                        Style="{StaticResource lablebodystyle}" FontAttributes="bold" FontFamily="{StaticResource FontIcons}" TextColor="#ffffff"/>
                 <!-- Main Label -->
-                <Label Grid.Row="0" Text="Users Summary" TextColor="White"  Style="{StaticResource labletitlestyle}"  FontSize="Large" VerticalTextAlignment="Center"/>
+                <Label Grid.Row="0" Text="Users Summary" TextColor="White"  Style="{StaticResource lableheaderstyle}"  VerticalTextAlignment="Center"/>
                 <Button x:Name="LButton" Grid.Row="0" BorderColor="Aqua" BorderWidth="0" HeightRequest="40" WidthRequest="60" BackgroundColor="Transparent" Clicked="ListViewChange"/>
             </Grid>
 
@@ -122,8 +126,8 @@
                 </Grid.ColumnDefinitions>
 
                 <!-- Adding Worklist List Display-->
-                <Frame Grid.Column="1" CornerRadius="10" HorizontalOptions="Fill"  VerticalOptions="Fill" Margin="8,8,16,8" BackgroundColor="#ffffff"
-                   HasShadow="True" IsClippedToBounds="True" Padding="0">
+                <Frame Grid.Column="1" CornerRadius="10" HorizontalOptions="Fill"  VerticalOptions="Fill" Margin="5,5,10,5" BackgroundColor="#ffffff"
+                   HasShadow="True" IsClippedToBounds="True" Padding="0" BorderColor="LightGray">
 
                     <Grid RowSpacing="5">
                         <Grid.RowDefinitions>
@@ -135,7 +139,7 @@
 
                         <!--Adding Worker List Display   -->
                         <Button x:Name="companylabelname" Grid.Row="0" Text="temp" HorizontalOptions="Fill"   FontAttributes="Bold"
-                                BorderWidth="0" Padding="0" FontSize="20" TextColor="Black" BackgroundColor="#FFFFFF" Margin="0,0,0,0"/>
+                                BorderWidth="0" Padding="0" FontSize="20" TextColor="Black" BackgroundColor="Transparent" Margin="0,0,0,0"/>
 
                         <BoxView Grid.Row="1" HorizontalOptions="FillAndExpand" HeightRequest="1" Color="#0f2696" Margin="10,0,10,0"/>
 
@@ -145,9 +149,9 @@
                                 <ColumnDefinition Width="1.5*" />
                                 <ColumnDefinition x:Name="XAMLdatelist" Width="*" />
                             </Grid.ColumnDefinitions>
-                            <Label Grid.Column="0" Text="First:" TextColor="Black"  FontSize="Body" FontAttributes="Bold" HorizontalTextAlignment="start"/>
-                            <Label Grid.Column="1" Text="Last:" TextColor="Black"  FontSize="Body" FontAttributes="Bold" HorizontalTextAlignment="start"/>
-                            <Label Grid.Column="2" Text="Created:" TextColor="Black"  FontSize="Body" FontAttributes="Bold" HorizontalTextAlignment="start"/>
+                            <Label Grid.Column="0" Text="First:" Style="{StaticResource labletitlestyle}"  FontAttributes="Bold" HorizontalTextAlignment="start"/>
+                            <Label Grid.Column="1" Text="Last:" Style="{StaticResource labletitlestyle}"   FontAttributes="Bold" HorizontalTextAlignment="start"/>
+                            <Label Grid.Column="2" Text="Created:" Style="{StaticResource labletitlestyle}" FontAttributes="Bold" HorizontalTextAlignment="start"/>
                         </Grid>
                         <!-- View with no date -->
                         <ListView Grid.Row="3" x:Name="workersview" SeparatorVisibility="Default" RowHeight="22" Margin="5,0,5,0" IsVisible="true"
@@ -164,13 +168,13 @@
                                             </Grid.ColumnDefinitions>
 
                                             <!-- Left column - First Name of Worker  -->
-                                            <Label Grid.Column="0" TextColor="Black"  FontSize="Body" HorizontalTextAlignment="start" Text="{Binding FirstName}"/>
+                                            <Label Grid.Column="0" Style="{StaticResource lablebodystyle}" HorizontalTextAlignment="start" Text="{Binding FirstName}"/>
 
                                             <!-- Middle column - Last Name of Worker -->
-                                            <Label Grid.Column="1"   TextColor="Black"  FontSize="Body" HorizontalTextAlignment="start"  Text="{Binding LastName}"/>
+                                            <Label Grid.Column="1"   Style="{StaticResource lablebodystyle}" HorizontalTextAlignment="start"  Text="{Binding LastName}"/>
 
                                             <!-- Middle column - Last Name of Worker -->
-                                            <Label x:Name="datelist" Grid.Column="2"   TextColor="Black"  FontSize="Body" HorizontalTextAlignment="center"  Text="{Binding CreatedTime}"/>
+                                            <Label x:Name="datelist" Grid.Column="2"  Style="{StaticResource lablebodystyle}" HorizontalTextAlignment="center"  Text="{Binding CreatedTime, StringFormat='{0:MMM. dd, yyyy}'}"/>
 
                                         </Grid>
                                     </ViewCell>
@@ -191,10 +195,10 @@
                                             </Grid.ColumnDefinitions>
 
                                             <!-- Left column - First Name of Worker  -->
-                                            <Label Grid.Column="0" TextColor="Black"  FontSize="Body" HorizontalTextAlignment="start" Text="{Binding FirstName}"/>
+                                            <Label Grid.Column="0" Style="{StaticResource lablebodystyle}" HorizontalTextAlignment="start" Text="{Binding FirstName}"/>
 
                                             <!-- Middle column - Last Name of Worker -->
-                                            <Label Grid.Column="1"   TextColor="Black"  FontSize="Body" HorizontalTextAlignment="start"  Text="{Binding LastName}"/>
+                                            <Label Grid.Column="1" Style="{StaticResource lablebodystyle}" HorizontalTextAlignment="start"  Text="{Binding LastName}"/>
                                         </Grid>
                                     </ViewCell>
                                 </DataTemplate>
@@ -204,8 +208,8 @@
                 </Frame>
 
                 <!-- Adding Doughnut Chart Display-->
-                <Frame Grid.Column="0" CornerRadius="10" HorizontalOptions="Center"  VerticalOptions="FillAndExpand" Margin="16,8,8,8" BackgroundColor="#ffffff"
-                   HasShadow="True" IsClippedToBounds="True" Padding="0">
+                <Frame Grid.Column="0" CornerRadius="10" HorizontalOptions="Center"  VerticalOptions="FillAndExpand" Margin="10,5,5,5" BackgroundColor="#ffffff"
+                   HasShadow="True" IsClippedToBounds="True" Padding="0" BorderColor="LightGray">
 
                     <Grid RowSpacing="5">
                         <Grid.RowDefinitions>
@@ -216,21 +220,21 @@
 
                         <!-- Pieview chart Header -->
                         <Label  Grid.Row="0" Text="User Group(s)" HorizontalOptions="Fill" FontAttributes="Bold"   HorizontalTextAlignment="center"
-                                 Margin="0" Padding="0" FontSize="20" TextColor="Black" BackgroundColor="#ffffff" />
+                                 Margin="0" Padding="0" FontSize="20" TextColor="Black" BackgroundColor="Transparent" />
                         <BoxView Grid.Row="1" HorizontalOptions="FillAndExpand" HeightRequest="1" Color="#0f2696" Margin="10,0,10,0"/>
 
                         <!--Adding Pie Chart Display   -->
                         <chart:SfChart   Grid.Row="2" BackgroundColor="Transparent" Margin="0,0,0,0" VerticalOptions="Fill">
                             <chart:SfChart.Legend>
-                                <chart:ChartLegend OverflowMode="Wrap">
+                                <chart:ChartLegend OverflowMode="Wrap" x:Name="PieFrameLegend">
                                     <chart:ChartLegend.LabelStyle>
-                                        <chart:ChartLegendLabelStyle TextColor="#020a45" Font="Bold" />
+                                        <chart:ChartLegendLabelStyle TextColor="#020a45" Font="Bold,12" />
                                     </chart:ChartLegend.LabelStyle>
                                 </chart:ChartLegend>
                             </chart:SfChart.Legend>
 
                             <chart:DoughnutSeries  x:Name="doughnut" ExplodeIndex="{Binding doughnutselect, Mode=OneWay}" ItemsSource="{Binding doughnutmodel}" YBindingPath="Workercount" XBindingPath="Companyname" 
-                                          ExplodeOnTouch="True" PropertyChanged="PieChanged"  DataMarkerPosition="Inside" CircularCoefficient="0.9" DoughnutCoefficient="0.4">
+                                          ExplodeOnTouch="True" PropertyChanged="PieChanged"  DataMarkerPosition="Inside" CircularCoefficient="0.9" DoughnutCoefficient="0.4" GroupMode="Percentage" GroupTo="15">
 
                                 <chart:DoughnutSeries.ColorModel>
                                     <chart:ChartColorModel Palette="Custom" CustomBrushes="{StaticResource Colors}" />
@@ -238,7 +242,7 @@
                                 <chart:DoughnutSeries.DataMarker>
                                     <chart:ChartDataMarker>
                                         <chart:ChartDataMarker.LabelStyle>
-                                            <chart:DataMarkerLabelStyle TextColor="#020a45" BorderColor="Black"  BorderThickness="2" BackgroundColor="#ffffff" Font="Bold,16"/>
+                                            <chart:DataMarkerLabelStyle TextColor="#020a45" BorderColor="Black"  BorderThickness="2" BackgroundColor="#ffffff" Font="Bold,12"/>
                                         </chart:ChartDataMarker.LabelStyle>
                                     </chart:ChartDataMarker>
                                 </chart:DoughnutSeries.DataMarker>
@@ -262,16 +266,16 @@
                 </Grid.ColumnDefinitions>
 
                 <!-- Nav Bar Selections-->
-                <ImageButton x:Name="CSEButton" Grid.Row="0"  Grid.Column="0"   Style="{StaticResource NavImageCSE}"
-                    Clicked = "OnCSEManagerClicked"/>
-                <ImageButton x:Name="StatusButton" Grid.Row="0"  Grid.Column="1"   Style="{StaticResource NavImageStatus}"
-                    Clicked = "OnSiteStatusButtonClicked" />
-                <ImageButton x:Name="HeirarchyButton" Grid.Row="0"  Grid.Column="2"   Style="{StaticResource NavImageHeirarchy}"
-                    Clicked = "OnVesselButtonClicked" />
-                <ImageButton x:Name="WorkerButton" Grid.Row="0"  Grid.Column="3"   Style="{StaticResource NavImageWorker}"
-                    Clicked = "OnWorkerButtonClicked" />
-                <ImageButton x:Name="AnalyticsButton" Grid.Row="0"  Grid.Column="4"   Style="{StaticResource NavImageAnalytics}"
-                    Clicked = "OnAnalyticsButtonClicked" />
+                <ImageButton x:Name="CSEButton" Grid.Row="0"  Grid.Column="0"   Style="{StaticResource NavImageCSE}" Margin="3"
+                        Clicked = "OnCSEManagerClicked"/>
+                <ImageButton x:Name="StatusButton" Grid.Row="0"  Grid.Column="1"   Style="{StaticResource NavImageStatus}" Margin="3"
+                        Clicked = "OnSiteStatusButtonClicked" />
+                <ImageButton x:Name="HeirarchyButton" Grid.Row="0"  Grid.Column="2"   Style="{StaticResource NavImageHeirarchy}" Margin="3"
+                        Clicked = "OnVesselButtonClicked" />
+                <ImageButton x:Name="WorkerButton" Grid.Row="0"  Grid.Column="3"   Style="{StaticResource NavImageWorker}" Margin="3"
+                        Clicked = "OnWorkerButtonClicked" />
+                <ImageButton x:Name="AnalyticsButton" Grid.Row="0"  Grid.Column="4"   Style="{StaticResource NavImageAnalytics}" Margin="3"
+                        Clicked = "OnAnalyticsButtonClicked" />
             </Grid>
             
         </StackLayout>

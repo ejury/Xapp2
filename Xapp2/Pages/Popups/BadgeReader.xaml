@@ -1,0 +1,86 @@
+﻿<?xml version="1.0" encoding="UTF-8" ?>
+<pages:PopupPage
+    x:Class="Xapp2.Pages.Popups.BadgeReader"
+    xmlns="http://xamarin.com/schemas/2014/forms"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:d="http://xamarin.com/schemas/2014/forms/design"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             mc:Ignorable="d"
+    xmlns:animations="clr-namespace:Rg.Plugins.Popup.Animations;assembly=Rg.Plugins.Popup"
+    xmlns:pages="clr-namespace:Rg.Plugins.Popup.Pages;assembly=Rg.Plugins.Popup" 
+    xmlns:buttons="clr-namespace:Syncfusion.XForms.Buttons;assembly=Syncfusion.Buttons.XForms" xmlns:gradient="clr-namespace:Syncfusion.XForms.Graphics;assembly=Syncfusion.Core.XForms">
+   
+    <pages:PopupPage.Animation>
+        <animations:ScaleAnimation
+            DurationIn="400"
+            DurationOut="300"
+            EasingIn="SinOut"
+            EasingOut="SinIn"
+            HasBackgroundAnimation="True"
+            PositionOut="Center"
+            ScaleIn="1.2"
+            PositionIn="Center"
+            ScaleOut="0.8" />
+    </pages:PopupPage.Animation>
+    <StackLayout
+        Margin="12"
+        Padding="24"
+        BackgroundColor="Transparent"
+        HorizontalOptions="Center"
+        VerticalOptions="Center" >
+
+        <Frame CornerRadius="10" HorizontalOptions="Center"  VerticalOptions="Start" Margin="0" BackgroundColor="#CACBD3" HasShadow="True"
+           IsClippedToBounds="True"  Padding="0">
+
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="170"/>
+                    </Grid.RowDefinitions>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="200" />
+                    </Grid.ColumnDefinitions>
+
+                <Image Grid.Row="0" Grid.Column="0" Source="PopupReaderBG.png" Aspect="Fill"/>
+                <!--gradient:SfGradientView>
+                        <gradient:SfGradientView.BackgroundBrush>
+                            <gradient:SfLinearGradientBrush>
+                                <gradient:SfLinearGradientBrush.GradientStops>
+                                <gradient:SfGradientStop Color="#67ceec" Offset="0.0" />
+                                    <gradient:SfGradientStop Color="#ffffff" Offset="1.0" />
+                                </gradient:SfLinearGradientBrush.GradientStops>
+                            </gradient:SfLinearGradientBrush>
+                        </gradient:SfGradientView.BackgroundBrush>
+                    </-->
+
+                    <Grid Grid.Row="0" Grid.Column="0" RowSpacing="0" Margin="12" HorizontalOptions="Fill" VerticalOptions="Fill">
+                        <Grid.RowDefinitions>
+                        <RowDefinition Height="100"/>
+                        <RowDefinition Height="40"/>
+                        </Grid.RowDefinitions>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="176" />
+                        </Grid.ColumnDefinitions>
+
+                        <!-- Top header of user entry -->
+                        <Image Source="PopupNFCScan.png" Margin="15" HorizontalOptions="Center" Grid.Row="0"/>
+                   
+
+                        <Entry x:Name="TempNFC" Margin="0,-20,0,0" Grid.Row="0"  Completed="TempNFCcomplete" Placeholder="Scan SE Bade" FontSize="11" HorizontalOptions="End" VerticalOptions="Start"/>
+
+                        <ActivityIndicator x:Name="AIndicator" Grid.Row="0" Margin="-10,0,0,0" IsRunning="False" HeightRequest="30" HorizontalOptions="Start"  VerticalOptions="Start"/>
+
+                        <buttons:SfButton
+                                Grid.Row="1"  Margin="0,10,0,0"  BackgroundColor="{DynamicResource FacebookBlue}"  CornerRadius="20" HeightRequest="40"  Clicked = "Button_OnClicked">
+                            <buttons:SfButton.Content>
+                                <StackLayout   HorizontalOptions="CenterAndExpand"  Orientation="Horizontal"     VerticalOptions="Center">
+                                    <Label  FontFamily="{StaticResource FontIcons}" FontSize="18" Text="&#xe746;" TextColor="{DynamicResource Gray-White}" VerticalTextAlignment="Center" />
+                                    <Label  FontFamily="{StaticResource Montserrat-Medium}"  FontSize="16" Text="Close Login"  TextColor="{DynamicResource Gray-White}" />
+                                </StackLayout>
+                            </buttons:SfButton.Content>
+                        </buttons:SfButton>
+                    </Grid>
+                </Grid>
+
+        </Frame>
+    </StackLayout>
+</pages:PopupPage>

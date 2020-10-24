@@ -31,21 +31,21 @@
                     <ColumnDefinition Width="*"/>
                     <ColumnDefinition Width="40"/>
                 </Grid.ColumnDefinitions>
-                <Image Grid.Column="0"   Source="SEWhite.jpg"   HorizontalOptions="Center"   VerticalOptions="Center"  Margin="3" />
-                <Label Grid.Column="1"   Style="{StaticResource labletitlestyle}"  Text="Activity"  TextColor="White"  />
+                <Image Grid.Column="0"   Source="SEWhite.jpg"   HorizontalOptions="Center"   VerticalOptions="Center"  Margin="5" />
+                <Label Grid.Column="1"   Style="{StaticResource lableheaderstyle}"  Text="Activity"  TextColor="White"  />
                 <ImageButton Grid.Column="2" Source="HomeButton.png" Margin="5"  BackgroundColor="Transparent"  Clicked = "OnMainNavClicked" />
             </Grid>
             <!-- Top Header Ends -->
 
             <!--Data Entry Section   -->
-            <Frame Grid.Column="0" CornerRadius="10" HorizontalOptions="StartAndExpand"  VerticalOptions="Start" Margin="16,16,16,16" BackgroundColor="#ffffff"
-           HasShadow="True"   IsClippedToBounds="True"  Padding="0">
+            <Frame Grid.Column="0" CornerRadius="10" HorizontalOptions="StartAndExpand"  VerticalOptions="Start" Margin="10,5,10,5" BackgroundColor="#ffffff"
+           HasShadow="True"   IsClippedToBounds="True"  Padding="0" BorderColor="LightGray">
                 <Grid RowSpacing="0" Margin="5,0,5,7">
                     <Grid.RowDefinitions>
-                        <RowDefinition Height="30"/>
+                        <RowDefinition Height="32"/>
                         <RowDefinition Height="5"/>
-                        <RowDefinition Height="40" />
-                        <RowDefinition Height="40" />
+                        <RowDefinition Height="35" />
+                        <RowDefinition Height="35" />
                     </Grid.RowDefinitions>
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="100"/>
@@ -55,7 +55,7 @@
 
                     <!-- Top header of user entry multiuser&#xe714 hierarchy&#xe704-->
                     <Label Text=" &#xe727; Select"  Margin="0,0,0,-5" Grid.Row="0" Grid.Column="0"  Grid.ColumnSpan="3" HorizontalOptions="Start"
-                       Style="{StaticResource lablebodystyle}" FontAttributes="bold" FontFamily="{StaticResource FontIcons}" TextColor="#0f2696"/>
+                       Style="{StaticResource labletitlestyle}" FontAttributes="bold" FontFamily="{StaticResource FontIcons}" TextColor="#0f2696"/>
                     <BoxView Grid.Row="1" Grid.ColumnSpan="3" HorizontalOptions="FillAndExpand" HeightRequest="1" Color="#0f2696" Margin="10,0,10,0"/>
 
                     <!-- Data Section -->
@@ -92,8 +92,10 @@
             <!--BoxView HorizontalOptions="FillAndExpand" HeightRequest="1" Color="DarkBlue" Margin="10,0,10,0"/-->
             
             <!-- Analytics Graph Area   -->
+            <Frame Padding="0,10,10,0">
+                
 
-                <Grid VerticalOptions="FillAndExpand" HeightRequest="10000" Margin="5,0">
+                <Grid VerticalOptions="FillAndExpand" HeightRequest="10000">
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="*"/>
                     </Grid.ColumnDefinitions>
@@ -116,7 +118,7 @@
                             </chart:NumericalAxis>
                         </chart:SfChart.SecondaryAxis>
 
-                        <chart:SfChart.Series>
+                    <chart:SfChart.Series>
                             <chart:StepAreaSeries x:Name = "sfchart" ItemsSource ="{Binding DatetimeData}"  XBindingPath="Date"
                             YBindingPath="Value" Color="#2783d6" >
                             </chart:StepAreaSeries>
@@ -127,24 +129,19 @@
 
                     </chart:SfChart>
                 </Grid>
-
+            </Frame>
 
             <!--  Range and Series Selection Tools   -->
-            <!--Grid BackgroundColor="#d0e8ff">
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="2*"/>
-                    <ColumnDefinition Width="*"/>
-                </Grid.ColumnDefinitions-->
-
-            <Frame Grid.Column="0" CornerRadius="10" HorizontalOptions="StartAndExpand"  VerticalOptions="Start" Margin="16,16,16,16" BackgroundColor="#ffffff"
-           HasShadow="True"   IsClippedToBounds="True"  Padding="0">
+            <Frame Grid.Column="0" CornerRadius="10" HorizontalOptions="StartAndExpand"  VerticalOptions="Start" Margin="10,5,10,10" BackgroundColor="#ffffff"
+           HasShadow="True"   IsClippedToBounds="True"  Padding="0" BorderColor="LightGray">
 
                 <Grid Grid.Column="0" RowSpacing="0" Margin="0,-6,0,0">
                     <Grid.RowDefinitions>
-                        <RowDefinition Height="25"/>
                         <RowDefinition Height="30"/>
-                        <RowDefinition Height="30"/>
-                        <RowDefinition Height="30"/>
+                        <RowDefinition Height="3"/>
+                        <RowDefinition Height="26"/>
+                        <RowDefinition Height="26"/>
+                        <RowDefinition Height="26"/>
                     </Grid.RowDefinitions>
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="60"/>
@@ -156,32 +153,35 @@
                         <ColumnDefinition Width="60"/>
                     </Grid.ColumnDefinitions>
 
-                    <Label Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="3" Text="Range Start:"  Style="{StaticResource lablebodystyle}" />
-                    <Label Grid.Row="0" Grid.Column="4" Grid.ColumnSpan="3" Text="Range End:" Style="{StaticResource lablebodystyle}"/>
+                    <Label Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="3" Margin="0,0,0,-5" Text="Range Start:" FontAttributes="Bold" Style="{StaticResource labletitlestyle}" />
+                    <Label Grid.Row="0" Grid.Column="4" Grid.ColumnSpan="3" Margin="0,0,0,-5" Text="Range End:" FontAttributes="Bold" Style="{StaticResource labletitlestyle}"/>
 
-                    <Label Grid.Row="1" Grid.Column="0" Text="Hour" Style="{StaticResource lablebodystyle}"  />
-                    <Label Grid.Row="2" Grid.Column="0" Text="Day" Style="{StaticResource lablebodystyle}"  />
-                    <Label Grid.Row="3" Grid.Column="0" Text="Month" Style="{StaticResource lablebodystyle}"  />
-                    <Label Grid.Row="1" Grid.Column="6" Text="Hour" Style="{StaticResource lablebodystyle}"  />
-                    <Label Grid.Row="2" Grid.Column="6" Text="Day" Style="{StaticResource lablebodystyle}"  />
-                    <Label Grid.Row="3" Grid.Column="6" Text="Month" Style="{StaticResource lablebodystyle}"  />
+                    <BoxView Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="3" HorizontalOptions="FillAndExpand" HeightRequest="1" Color="#0f2696" Margin="10,0,10,0"/>
+                    <BoxView Grid.Row="1" Grid.Column="4" Grid.ColumnSpan="3" HorizontalOptions="FillAndExpand" HeightRequest="1" Color="#0f2696" Margin="10,0,10,0"/>
 
-                    <Button Grid.Row="1" Grid.Column="1" StyleId="1" AutomationId="1" Text="-" Style="{StaticResource ButtonAnalytics}" Clicked="RangeChangeClicked"/>
-                    <Button Grid.Row="2" Grid.Column="1" StyleId="1" AutomationId="2" Text="-" Style="{StaticResource ButtonAnalytics}" Clicked="RangeChangeClicked"/>
-                    <Button Grid.Row="3" Grid.Column="1" StyleId="1" AutomationId="3" Text="-" Style="{StaticResource ButtonAnalytics}" Clicked="RangeChangeClicked"/>
-                    <Button Grid.Row="1" Grid.Column="2" StyleId="1" AutomationId="4" Text="+" Style="{StaticResource ButtonAnalytics}" Clicked="RangeChangeClicked"/>
-                    <Button Grid.Row="2" Grid.Column="2" StyleId="1" AutomationId="5" Text="+" Style="{StaticResource ButtonAnalytics}" Clicked="RangeChangeClicked"/>
-                    <Button Grid.Row="3" Grid.Column="2" StyleId="1" AutomationId="6" Text="+" Style="{StaticResource ButtonAnalytics}" Clicked="RangeChangeClicked"/>
+                    <Label Grid.Row="2" Grid.Column="0" Text="Hour" Style="{StaticResource lablebodystyle}"  />
+                    <Label Grid.Row="3" Grid.Column="0" Text="Day" Style="{StaticResource lablebodystyle}"  />
+                    <Label Grid.Row="4" Grid.Column="0" Text="Month" Style="{StaticResource lablebodystyle}"  />
+                    <Label Grid.Row="2" Grid.Column="6" Text="Hour" Style="{StaticResource lablebodystyle}"  />
+                    <Label Grid.Row="3" Grid.Column="6" Text="Day" Style="{StaticResource lablebodystyle}"  />
+                    <Label Grid.Row="4" Grid.Column="6" Text="Month" Style="{StaticResource lablebodystyle}"  />
 
-                    <Button Grid.Row="1" Grid.Column="4" StyleId="2" AutomationId="1" Text="-" Style="{StaticResource ButtonAnalytics}" Clicked="RangeChangeClicked"/>
-                    <Button Grid.Row="2" Grid.Column="4" StyleId="2" AutomationId="2" Text="-" Style="{StaticResource ButtonAnalytics}" Clicked="RangeChangeClicked"/>
-                    <Button Grid.Row="3" Grid.Column="4" StyleId="2" AutomationId="3" Text="-" Style="{StaticResource ButtonAnalytics}" Clicked="RangeChangeClicked"/>
-                    <Button Grid.Row="1" Grid.Column="5" StyleId="2" AutomationId="4" Text="+" Style="{StaticResource ButtonAnalytics}" Clicked="RangeChangeClicked"/>
-                    <Button Grid.Row="2" Grid.Column="5" StyleId="2" AutomationId="5" Text="+" Style="{StaticResource ButtonAnalytics}" Clicked="RangeChangeClicked"/>
-                    <Button Grid.Row="3" Grid.Column="5" StyleId="2" AutomationId="6" Text="+" Style="{StaticResource ButtonAnalytics}" Clicked="RangeChangeClicked"/>
+                    <Button Grid.Row="2" Grid.Column="1" StyleId="1" AutomationId="1" Text="-" Style="{StaticResource ButtonAnalytics}" Clicked="RangeChangeClicked"/>
+                    <Button Grid.Row="3" Grid.Column="1" StyleId="1" AutomationId="2" Text="-" Style="{StaticResource ButtonAnalytics}" Clicked="RangeChangeClicked"/>
+                    <Button Grid.Row="4" Grid.Column="1" StyleId="1" AutomationId="3" Text="-" Style="{StaticResource ButtonAnalytics}" Clicked="RangeChangeClicked"/>
+                    <Button Grid.Row="2" Grid.Column="2" StyleId="1" AutomationId="4" Text="+" Style="{StaticResource ButtonAnalytics}" Clicked="RangeChangeClicked"/>
+                    <Button Grid.Row="3" Grid.Column="2" StyleId="1" AutomationId="5" Text="+" Style="{StaticResource ButtonAnalytics}" Clicked="RangeChangeClicked"/>
+                    <Button Grid.Row="4" Grid.Column="2" StyleId="1" AutomationId="6" Text="+" Style="{StaticResource ButtonAnalytics}" Clicked="RangeChangeClicked"/>
+
+                    <Button Grid.Row="2" Grid.Column="4" StyleId="2" AutomationId="1" Text="-" Style="{StaticResource ButtonAnalytics}" Clicked="RangeChangeClicked"/>
+                    <Button Grid.Row="3" Grid.Column="4" StyleId="2" AutomationId="2" Text="-" Style="{StaticResource ButtonAnalytics}" Clicked="RangeChangeClicked"/>
+                    <Button Grid.Row="4" Grid.Column="4" StyleId="2" AutomationId="3" Text="-" Style="{StaticResource ButtonAnalytics}" Clicked="RangeChangeClicked"/>
+                    <Button Grid.Row="2" Grid.Column="5" StyleId="2" AutomationId="4" Text="+" Style="{StaticResource ButtonAnalytics}" Clicked="RangeChangeClicked"/>
+                    <Button Grid.Row="3" Grid.Column="5" StyleId="2" AutomationId="5" Text="+" Style="{StaticResource ButtonAnalytics}" Clicked="RangeChangeClicked"/>
+                    <Button Grid.Row="4" Grid.Column="5" StyleId="2" AutomationId="6" Text="+" Style="{StaticResource ButtonAnalytics}" Clicked="RangeChangeClicked"/>
 
 
-                    <combobox:SfComboBox x:Name="comboBox1" Grid.Row="1" Grid.Column="3" Margin="10,-8,2,-2" ShowBorder="False" SelectedValue="1">
+                    <combobox:SfComboBox x:Name="comboBox1" Grid.Row="2" Grid.Column="3" Margin="10,-8,2,-2" ShowBorder="False" SelectedValue="1" TextSize="11">
                         <combobox:SfComboBox.ComboBoxSource>
                             <ListCollection:List x:TypeArguments="x:String">
                                 <x:String>1</x:String>
@@ -197,7 +197,7 @@
                         </combobox:SfComboBox.ComboBoxSource>
                     </combobox:SfComboBox>
 
-                    <combobox:SfComboBox x:Name="comboBox2" Grid.Row="2" Grid.Column="3" Margin="10,-8,2,-2" ShowBorder="False" SelectedValue="1">
+                    <combobox:SfComboBox x:Name="comboBox2" Grid.Row="3" Grid.Column="3" Margin="10,-8,2,-2" ShowBorder="False" SelectedValue="1" TextSize="11">
                         <combobox:SfComboBox.ComboBoxSource>
                             <ListCollection:List x:TypeArguments="x:String">
                                 <x:String>1</x:String>
@@ -213,7 +213,7 @@
                         </combobox:SfComboBox.ComboBoxSource>
                     </combobox:SfComboBox>
 
-                    <combobox:SfComboBox x:Name="comboBox3" Grid.Row="3" Grid.Column="3" Margin="10,-8,2,-2" ShowBorder="False" SelectedValue="1">
+                    <combobox:SfComboBox x:Name="comboBox3" Grid.Row="4" Grid.Column="3" Margin="10,-8,2,-2" ShowBorder="False" SelectedValue="1" TextSize="11">
                         <combobox:SfComboBox.ComboBoxSource>
                             <ListCollection:List x:TypeArguments="x:String">
                                 <x:String>1</x:String>
@@ -260,15 +260,15 @@
                     </Grid.ColumnDefinitions>
 
                     <!-- Nav Bar Selections-->
-                    <ImageButton x:Name="CSEButton" Grid.Row="0"  Grid.Column="0"   Style="{StaticResource NavImageCSE}"
+                    <ImageButton x:Name="CSEButton" Grid.Row="0"  Grid.Column="0"   Style="{StaticResource NavImageCSE}" Margin="3"
                         Clicked = "OnCSEManagerClicked"/>
-                    <ImageButton x:Name="StatusButton" Grid.Row="0"  Grid.Column="1"   Style="{StaticResource NavImageStatus}"
+                    <ImageButton x:Name="StatusButton" Grid.Row="0"  Grid.Column="1"   Style="{StaticResource NavImageStatus}" Margin="3"
                         Clicked = "OnSiteStatusButtonClicked" />
-                    <ImageButton x:Name="HeirarchyButton" Grid.Row="0"  Grid.Column="2"   Style="{StaticResource NavImageHeirarchy}"
+                    <ImageButton x:Name="HeirarchyButton" Grid.Row="0"  Grid.Column="2"   Style="{StaticResource NavImageHeirarchy}" Margin="3"
                         Clicked = "OnVesselButtonClicked" />
-                    <ImageButton x:Name="WorkerButton" Grid.Row="0"  Grid.Column="3"   Style="{StaticResource NavImageWorker}"
+                    <ImageButton x:Name="WorkerButton" Grid.Row="0"  Grid.Column="3"   Style="{StaticResource NavImageWorker}" Margin="3"
                         Clicked = "OnWorkerButtonClicked" />
-                    <ImageButton x:Name="AnalyticsButton" Grid.Row="0"  Grid.Column="4"   Style="{StaticResource NavImageAnalytics}"
+                    <ImageButton x:Name="AnalyticsButton" Grid.Row="0"  Grid.Column="4"   Style="{StaticResource NavImageAnalytics}" Margin="3"
                         Clicked = "OnAnalyticsButtonClicked" />
                 </Grid>
             </Grid>

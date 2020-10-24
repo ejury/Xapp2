@@ -11,7 +11,7 @@ namespace Xapp2.Models
         public string UnitName { get; set; }
         public string ReferenceNFC { get; set; }
 
-        // 1=enter, 0=exit
+        // 1=enter, -1=exit
         public int InOut { get; set; }
         public DateTime TimeLog { get; set; }
 

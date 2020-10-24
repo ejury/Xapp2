@@ -21,10 +21,11 @@
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
     <PackageReference Include="Newtonsoft.Json" Version="12.0.3" />
+    <PackageReference Include="Plugin.NFC" Version="0.1.17" />
     <PackageReference Include="Rg.Plugins.Popup" Version="2.0.0.4" />
     <PackageReference Include="sqlite-net-pcl" Version="1.6.292" />
-    <PackageReference Include="Syncfusion.Xamarin.Buttons" Version="17.4.0.44" />
-    <PackageReference Include="Syncfusion.Xamarin.Core" Version="18.2.0.56" />
+    <PackageReference Include="Syncfusion.Xamarin.Buttons" Version="18.2.0.59" />
+    <PackageReference Include="Syncfusion.Xamarin.Core" Version="18.2.0.59" />
     <PackageReference Include="Syncfusion.Xamarin.SfChart" Version="17.4.0.44" />
     <PackageReference Include="Syncfusion.Xamarin.SfComboBox" Version="17.4.0.44" />
     <PackageReference Include="System.Data.SqlClient" Version="4.8.1" />
@@ -68,6 +69,12 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Compile Update="Pages\Popups\BadgeReader.xaml.cs">
+      <DependentUpon>BadgeReader.xaml</DependentUpon>
+    </Compile>
+    <Compile Update="Pages\Popups\SwipePopup.xaml.cs">
+      <DependentUpon>SwipePopup.xaml</DependentUpon>
+    </Compile>
     <Compile Update="Pages\Popups\AdminPopup.xaml.cs">
       <DependentUpon>AdminPopup.xaml</DependentUpon>
     </Compile>

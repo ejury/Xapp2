@@ -278,66 +278,41 @@ namespace Xapp2.Pages
             await Navigation.PushModalAsync(new MainPage(), false).ConfigureAwait(false);
         }
 
-        //Nav Bar Show/Hide
-        private async void ShowNavClicked(object sender, EventArgs e)
-        {
-            if (Nav)
-            {
-                Nav = false;
-                NavBarGrid.RowDefinitions[1].Height = 0;
-                NavBarGrid.RowDefinitions[1].Height = 0;
-            }
-            else
-            {
-                Nav = true;
-                NavBarGrid.RowDefinitions[1].Height = 15;
-                NavBarGrid.RowDefinitions[1].Height = 60;
-            }
-        }
-        private async void NavSwipedUp(object sender, EventArgs e)
-        {
-            if (!Nav)
-            {
-                Nav = true;
-                NavBarGrid.RowDefinitions[1].Height = 15;
-                NavBarGrid.RowDefinitions[1].Height = 60;
-            }
-        }
-        private async void NavSwipedDown(object sender, EventArgs e)
-        {
-            if (!Nav)
-            {
-                Nav = false;
-                NavBarGrid.RowDefinitions[1].Height = 0;
-                NavBarGrid.RowDefinitions[1].Height = 0;
-            }
-        }
-
         //Nav Bar Navigations
         private async void OnCSEManagerClicked(object sender, EventArgs e)
         {
+            await Task.WhenAll(
+                CSEButton.FadeTo(1.0, 500), StatusButton.FadeTo(0.5, 500), HeirarchyButton.FadeTo(0.5, 500), WorkerButton.FadeTo(0.5, 500), AnalyticsButton.FadeTo(0.5, 500),
+                CSEButton.ScaleTo(1.15, 500));
             await Navigation.PushModalAsync(new CSEntryPage(), false);
-
         }
         private async void OnSiteStatusButtonClicked(object sender, EventArgs e)
         {
+            await Task.WhenAll(
+                CSEButton.FadeTo(0.5, 500), StatusButton.FadeTo(1.0, 500), HeirarchyButton.FadeTo(0.5, 500), WorkerButton.FadeTo(0.5, 500), AnalyticsButton.FadeTo(0.5, 500),
+                StatusButton.ScaleTo(1.15, 500));
             await Navigation.PushModalAsync(new SiteStatusPage(), false);
-
         }
         private async void OnVesselButtonClicked(object sender, EventArgs e)
         {
+            await Task.WhenAll(
+                CSEButton.FadeTo(0.5, 500), StatusButton.FadeTo(0.5, 500), HeirarchyButton.FadeTo(1.0, 500), WorkerButton.FadeTo(0.5, 500), AnalyticsButton.FadeTo(0.5, 500),
+                HeirarchyButton.ScaleTo(1.15, 500));
             await Navigation.PushModalAsync(new VesselEntryPage(), false).ConfigureAwait(false);
-
         }
         private async void OnWorkerButtonClicked(object sender, EventArgs e)
         {
+            await Task.WhenAll(
+                CSEButton.FadeTo(0.5, 500), StatusButton.FadeTo(0.5, 500), HeirarchyButton.FadeTo(0.5, 500), WorkerButton.FadeTo(1.0, 500), AnalyticsButton.FadeTo(0.5, 500),
+                WorkerButton.ScaleTo(1.15, 500));
             await Navigation.PushModalAsync(new WorkerEntryPage(), false).ConfigureAwait(false);
-
         }
         private async void OnAnalyticsButtonClicked(object sender, EventArgs e)
         {
+            await Task.WhenAll(
+                CSEButton.FadeTo(0.5, 500), StatusButton.FadeTo(0.5, 500), HeirarchyButton.FadeTo(0.5, 500), WorkerButton.FadeTo(0.5, 500), AnalyticsButton.FadeTo(1.0, 500),
+                AnalyticsButton.ScaleTo(1.15, 500));
             await Navigation.PushModalAsync(new AnalyticsPage(), false).ConfigureAwait(false);
-
         }
     }
 }

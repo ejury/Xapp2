@@ -16,6 +16,8 @@ namespace Xapp2.Models
         public static int SELevel = 0;
         public static string UserDisplay = null;
         public static string ServerName = null;
+        public static bool OfflineMode = false;
+        public static string NFCsignin = null;
 
         // WebAPI Variables
         public static HttpClient client = new HttpClient();

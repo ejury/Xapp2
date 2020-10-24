@@ -21,9 +21,6 @@ namespace Xapp2.Models
         public string Company { get; set; }
         public string FirstName { get; set; }
         public string LastName { get; set; }*/
-        // 1=enter, 0=exit
-
-        //public int InOut { get; set; } phased out
         public DateTime TimeLog { get; set; }
 
     }

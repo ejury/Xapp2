@@ -15,15 +15,15 @@
 
         
         <StackLayout>
-            <Grid BackgroundColor="Black">
+            <Grid BackgroundColor="Black" HeightRequest="30">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="*"/>
                     <ColumnDefinition Width="*"/>
                 </Grid.ColumnDefinitions>
 
                 <Label x:Name="HeaderServer" Grid.Row="0" Grid.Column="0" Text="(Server) LocalDB"  Style="{StaticResource lablebodystyle}" VerticalOptions="Center" HorizontalOptions="Start" TextColor="white" />
-                <Button x:Name="HeaderName" Grid.Row="0" Grid.Column="1" Text="&#xe723; TempUser" FontFamily="{StaticResource FontIcons}" BackgroundColor="Transparent" FontAttributes="Bold" TextColor="White" VerticalOptions="Center" HorizontalOptions="End" 
-                             Clicked="OnLogout"/>
+                <Button x:Name="HeaderName" Grid.Row="0" Grid.Column="1" Text="&#xe723; TempUser" FontSize="11" FontFamily="{StaticResource FontIcons}" BackgroundColor="Transparent" FontAttributes="Bold" TextColor="White" VerticalOptions="Center" HorizontalOptions="End" 
+                             Clicked="OnLogout" Margin="0,-5"/>
             </Grid>
             
             <Grid Margin="0,-6,0,0">  <!-- Top MainPage Header -->
@@ -54,15 +54,13 @@
             </Grid>
             
             <!-- Add current Data Overview (Users, #Active, Areas, #Active, Locations, #Active)   -->
-            <Grid Margin="16,16,10,0" >
+            <Grid Margin="8,0,8,0" >
                 <Grid.RowDefinitions>
                     <RowDefinition Height="120" />
                 </Grid.RowDefinitions>
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="*"/>
-                    <ColumnDefinition Width=".05*"/>
                     <ColumnDefinition Width="*"/>
-                    <ColumnDefinition Width=".05*"/>
                     <ColumnDefinition Width="*"/>
                 </Grid.ColumnDefinitions>
 
@@ -86,7 +84,7 @@
                 </Grid>
                 
                 <!-- Active Areas -->
-                <Grid Grid.Row="0" Grid.Column="2" >
+                <Grid Grid.Row="0" Grid.Column="1" >
                     <Grid.RowDefinitions>
                         <RowDefinition Height=".4*" />
                         <RowDefinition Height=".3*"/>
@@ -105,7 +103,7 @@
                 </Grid>
 
                 <!-- Active Locations -->
-                <Grid Grid.Row="0" Grid.Column="4" >
+                <Grid Grid.Row="0" Grid.Column="2" >
                     <Grid.RowDefinitions>
                         <RowDefinition Height=".4*" />
                         <RowDefinition Height=".3*"/>
@@ -125,7 +123,7 @@
             </Grid>
 
             <!-- Database 24hr plot   -->
-            <Grid VerticalOptions="FillAndExpand" BackgroundColor="#ffffff" Margin="16">
+            <Grid VerticalOptions="FillAndExpand" BackgroundColor="#ffffff" Margin="8,0">
                 <Grid.RowDefinitions>
                     <RowDefinition Height="5"/>
                     <RowDefinition Height="Auto"/>
@@ -135,7 +133,7 @@
                     <ColumnDefinition Width="*"/>
                 </Grid.ColumnDefinitions>
 
-                <chart:SfChart  Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2" VerticalOptions="FillAndExpand" Margin="0,0,10,0">
+                <chart:SfChart  Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2" VerticalOptions="FillAndExpand" >
 
                     <chart:SfChart.PrimaryAxis>
                         <chart:DateTimeAxis x:Name="xaxis" IntervalType="Days"  LabelsIntersectAction="MultipleRows">
@@ -167,7 +165,7 @@
             <!-- Nav Bar Display-->
             <Grid x:Name="NavBarGrid"  BackgroundColor="#ffffff">
                 <Grid.RowDefinitions>
-                    <RowDefinition Height="50"/>
+                    <RowDefinition Height="50"/>    
                 </Grid.RowDefinitions>
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="*"/>
@@ -178,15 +176,15 @@
                 </Grid.ColumnDefinitions>
 
                 <!-- Nav Bar Selections-->
-                <ImageButton x:Name="CSEButton" Grid.Row="0"  Grid.Column="0"   Style="{StaticResource NavImageCSE}"
+                <ImageButton x:Name="CSEButton" Grid.Row="0"  Grid.Column="0"   Style="{StaticResource NavImageCSE}" Margin="3"
                         Clicked = "OnCSEManagerClicked"/>
-                <ImageButton x:Name="StatusButton" Grid.Row="0"  Grid.Column="1"   Style="{StaticResource NavImageStatus}"
+                <ImageButton x:Name="StatusButton" Grid.Row="0"  Grid.Column="1"   Style="{StaticResource NavImageStatus}" Margin="3"
                         Clicked = "OnSiteStatusButtonClicked" />
-                <ImageButton x:Name="HeirarchyButton" Grid.Row="0"  Grid.Column="2"   Style="{StaticResource NavImageHeirarchy}"
+                <ImageButton x:Name="HeirarchyButton" Grid.Row="0"  Grid.Column="2"   Style="{StaticResource NavImageHeirarchy}" Margin="3"
                         Clicked = "OnVesselButtonClicked" />
-                <ImageButton x:Name="WorkerButton" Grid.Row="0"  Grid.Column="3"   Style="{StaticResource NavImageWorker}"
+                <ImageButton x:Name="WorkerButton" Grid.Row="0"  Grid.Column="3"   Style="{StaticResource NavImageWorker}" Margin="3"
                         Clicked = "OnWorkerButtonClicked" />
-                <ImageButton x:Name="AnalyticsButton" Grid.Row="0"  Grid.Column="4"   Style="{StaticResource NavImageAnalytics}"
+                <ImageButton x:Name="AnalyticsButton" Grid.Row="0"  Grid.Column="4"   Style="{StaticResource NavImageAnalytics}" Margin="3"
                         Clicked = "OnAnalyticsButtonClicked" />
             </Grid>
 

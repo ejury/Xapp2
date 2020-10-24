@@ -28,6 +28,8 @@
         <string>Montserrat-Regular.ttf</string>
         <string>Montserrat-SemiBold.ttf</string>
     </array>
+  <key>NFCReaderUsageDescription</key>
+  <string>NFC tag to read NDEF messages into the application</string>
 
     <key>MinimumOSVersion</key>
     <string>8.0</string>

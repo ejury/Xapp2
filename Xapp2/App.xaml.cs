@@ -4,6 +4,8 @@ using Xapp2.Data;
 using Xamarin.Forms.Xaml;
 using System.IO;
 using Xapp2.Models;
+using Plugin.NFC;
+using Xapp2.Pages.Popups;
 
 namespace Xapp2
 {
@@ -36,20 +38,36 @@ namespace Xapp2
             MainPage = new Xapp2.Pages.NewLoginPage();
             //MainPage = new MainPage();
 
-
-
         }
 
         protected override void OnStart()
         {
+
         }
 
-        protected override void OnSleep()
+        async protected override void OnSleep()
         {
+            var nav = new Xapp2.MainPage().Navigation;
+
+/*            // Clear the stack (history)
+            await nav.PopToRootAsync(true);
+
+            // open the Main Page 
+            await nav.PushAsync(new MainPage());*/
         }
 
-        protected override void OnResume()
+        async protected override void OnResume()
         {
+            var nav = new Xapp2.MainPage().Navigation;
+            /*            var nav = MainPage.Navigation;
+
+                        // Clear the stack (history)
+                        await nav.PopToRootAsync(true);
+
+                        // open the Main Page 
+                        await nav.PushAsync(new MainPage());*/
         }
+
+
     }
 }

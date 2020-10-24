@@ -7,6 +7,7 @@ namespace Xapp2.Models
 {
    public  class Worker
     {
+        [PrimaryKey]
         public int WorkerID { get; set; }
         public string ReferenceNFC { get; set; }
         public string LastName { get; set; }

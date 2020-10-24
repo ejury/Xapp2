@@ -19,7 +19,7 @@
 
             <Style x:Key="pageStyle" TargetType="StackLayout">
 
-                <Setter Property="BackgroundColor" Value="#f0f3f6" />
+                <Setter Property="BackgroundColor" Value="#e0e9f2" />
             </Style>
             
             
@@ -95,7 +95,7 @@
                 <Setter Property="HorizontalOptions" Value="Center"/>
                 <Setter Property="VerticalOptions" Value="CenterAndExpand" />
 
-                <Setter Property="FontSize" Value="Title" />
+                <Setter Property="FontSize" Value="14" />
                 <Setter Property="TextColor" Value="White" />
             </Style>
 
@@ -106,7 +106,7 @@
                 <Setter Property="BorderRadius" Value="10" />
                 <Setter Property="BorderWidth" Value="2" />
                 <Setter Property="BackgroundColor" Value="#23dfb4" />
-                <Setter Property="FontSize" Value="16" />
+                <Setter Property="FontSize" Value="14" />
                 <Setter Property="FontAttributes" Value="Bold" />
                 <Setter Property="TextColor" Value="Black" />
                 <Setter Property="Padding" Value="0,0,0,0" />
@@ -119,7 +119,7 @@
                 <Setter Property="VerticalOptions" Value="CenterAndExpand" />
                 <Setter Property="BorderRadius" Value="7" />
                 <Setter Property="BorderWidth" Value="0" />
-                <Setter Property="BackgroundColor" Value="#e3f1ff" />
+                <Setter Property="BackgroundColor" Value="#fbfcfd" />
                 <Setter Property="FontSize" Value="12" />
                 <Setter Property="FontAttributes" Value="Bold" />
                 <Setter Property="TextColor" Value="#020a45" />
@@ -127,11 +127,19 @@
                 <Setter Property="Margin" Value="0,0,0,0" />
             </Style>
 
+            <Style x:Key="lableheaderstyle" TargetType="Label">
+                <Setter Property="HorizontalOptions" Value="Center"/>
+                <Setter Property="VerticalOptions" Value="CenterAndExpand" />
+                <Setter Property="Padding" Value="5,0,5,0" />
+                <Setter Property="FontSize" Value="18" />
+                <Setter Property="TextColor" Value="#020a45" />
+            </Style>
+
             <Style x:Key="labletitlestyle" TargetType="Label">
                 <Setter Property="HorizontalOptions" Value="Center"/>
                 <Setter Property="VerticalOptions" Value="CenterAndExpand" />
                 <Setter Property="Padding" Value="5,0,5,0" />
-                <Setter Property="FontSize" Value="Title" />
+                <Setter Property="FontSize" Value="14" />
                 <Setter Property="TextColor" Value="#020a45" />
             </Style>
             
@@ -139,7 +147,7 @@
                 <Setter Property="HorizontalOptions" Value="Center"/>
                 <Setter Property="VerticalOptions" Value="Center" />
                 <Setter Property="Padding" Value="5,0,5,0" />
-                <Setter Property="FontSize" Value="Body" />
+                <Setter Property="FontSize" Value="12" />
                 <Setter Property="TextColor" Value="#020a45" />
             </Style>
 
@@ -150,7 +158,7 @@
                 <Setter Property="PlaceholderColor" Value="Gray"/>
                 <Setter Property="Opacity" Value="50"/>
                 <!--Setter Property="BackgroundColor" Value="#12141e"/-->
-                <Setter Property="FontSize" Value="Body" />
+                <Setter Property="FontSize" Value="12" />
                 <Setter Property="TextColor" Value="#020a45" />
                 
             </Style>
@@ -167,7 +175,7 @@
                 <Setter Property="TextColor" Value="#020a45" />
                 <Setter Property="Margin" Value="0,-5,0,-5" />
                 <Setter Property="VerticalOptions" Value="Center" />
-                <Setter Property="FontSize" Value="Body" />
+                <Setter Property="FontSize" Value="12" />
                 
             </Style>
 

@@ -12,6 +12,8 @@ using Syncfusion.XForms.Graphics;
 using Rg.Plugins.Popup.Services;
 using Xapp2.Pages.Popups;
 using Rg.Plugins.Popup.Contracts;
+using Plugin.NFC;
+using Xamarin.Essentials;
 
 namespace Xapp2.Pages
 {
@@ -25,6 +27,8 @@ namespace Xapp2.Pages
         bool IsScanning = false;
         List<EntryLog> currentlogs;
         EntryLog newlog = new EntryLog();
+
+
 
         protected override async void OnAppearing()
         {
@@ -55,54 +59,175 @@ namespace Xapp2.Pages
             if (Globals.init)
             { vesselpicker.SelectedItem = currentvessel; }
         }
+
+        //Main NFC Scanner button selected - modify GUI veriables
         private async void ScanClicked(object sender, EventArgs e)
         {
-            if (IsScanning)
+            //Do not allow unauthorized user to initiate scanning
+            if (Globals.SELevel > 3)
             {
+                await DisplayAlert("Unauthorized", "User does not have authorization for scanning functionality. Contact your administrator", "Return to Portal");
+                return;
+            }
+            //Provide warning prior to offline scanning 
+            if (!IsScanning & (Globals.OfflineMode == true | Connectivity.NetworkAccess != NetworkAccess.Internet))
+            {
+                bool answer = await DisplayAlert("Warning", "You are about to handle user sign-in in offline mode. All actions will not be updated in central database unless sync is completed. Continue?", "Yes","No");
+                if (answer)
+                {
+                    // Insert code here for showing sync button on GUI
+                    Globals.OfflineMode = true;
+                    SyncButton.IsVisible = true;
+                    SyncText.IsVisible = true;
+                }
+                else
+                { return; }
+            }
+            if (currentunit == null | currentvessel == null)
+            {
+                await DisplayAlert("Visitor Sign-in Error", "Location & Area not selected", "Return to Portal");
+                return;
+            }
+
+
+
+
+                //Update GUI and initiate NFC scanning tool
+                if (IsScanning)
+            {
+
+                UnsubscribeEvents();
+                AIndicator.IsRunning = false;
+                AIndicator.IsEnabled = false;
+
+                await Task.WhenAll(
+                   VisitorButton.FadeTo(0, 500), VisitorButton2.FadeTo(0, 500),
+                    NFCimage2.TranslateTo(-400, 0, 1000), NFCimage2.FadeTo(0, 750),
+                    NFCtail2.TranslateTo(-400, 0, 1000), NFCtail2.FadeTo(0, 750)
+                );
+                await Task.WhenAll(
+                    unitpicker.FadeTo(1, 500), Xunitpicker.FadeTo(1, 500), vesselpicker.FadeTo(1, 500), Xvesselpicker.FadeTo(1, 500),
+                     NFCimage.TranslateTo(0, 0, 1), NFCimage.FadeTo(1, 750),
+                     NFCtail.TranslateTo(0, 0, 1), NFCtail.FadeTo(1, 750)
+);
+                //Update GUI
                 IsScanning = false;
-                ScanButton.Text = "Start Scanner";
-/*                ScanButtonColor.Color = Color.FromHex("#51F1F2");
-                ScanButtonColor2.Color = Color.LightGray;
-                ScanButtonColor3.Color = Color.LightGray;*/
-                PageLayout.BackgroundColor = Color.FromHex("#f0f3f6");
-                VisitorButton.IsVisible = false;
-                VisitorButton2.IsVisible = false;
+                MidLabel.Text = "Occupied List";
+                ScanButton.IsVisible = true; ScanButton2.IsVisible = false;
+
+                NavBarGrid.HeightRequest = 50;
+/*                VisitorButton.IsVisible = false; 
+                VisitorButton2.IsVisible = false; */
             }
             else
             {
+#if DEBUG //Verify NFC for release code
+
+#else
+                //Verify NFC scanner is active
+                if (CrossNFC.IsSupported)
+                {
+                    if (!CrossNFC.Current.IsAvailable)
+                    {
+                        await DisplayAlert("NFC is not available", "Your device is not equiped with NFC capability for use of tool", "return to page");
+                        return;
+                    }
+                    NfcIsEnabled = CrossNFC.Current.IsEnabled;
+                    if (!NfcIsEnabled)
+                    {
+                        await DisplayAlert("NFC is not active", "Please enable NFC in your device's options to use tool", "return to page");
+                        return;
+                    }
+                    
+                    SubscribeEvents();
+                    StartListeningIfNotiOS();
+                }
+#endif
+                await Task.WhenAll(
+                unitpicker.FadeTo(0, 500), Xunitpicker.FadeTo(0, 500), vesselpicker.FadeTo(0, 500), Xvesselpicker.FadeTo(0, 500),
+
+                NFCimage.TranslateTo(400, 0, 1000),NFCimage.FadeTo(0,750),
+                NFCtail.TranslateTo(400,0,1000), NFCtail.FadeTo(0, 750)
+                );
+
+                await Task.WhenAll(
+                   VisitorButton.FadeTo(1, 500), VisitorButton2.FadeTo(1, 500),
+
+                     NFCimage2.TranslateTo(0,0, 1), NFCimage2.FadeTo(1, 750),
+                     NFCtail2.TranslateTo(0,0, 1), NFCtail2.FadeTo(1, 750)
+                );
+                AIndicator.IsRunning = true;
+                AIndicator.IsEnabled = true;
                 IsScanning = true;
-                ScanButton.Text = "Swipe SE Card";
-/*                ScanButtonColor.Color = Color.FromHex("#5bf2df");
-                ScanButtonColor2.Color = Color.FromHex("#78e7ff");
-                ScanButtonColor3.Color = Color.FromHex("#78e7ff");*/
-                //PageLayout.BackgroundColor = Color.FromHex("#6bb4b6");
-                PageLayout.BackgroundColor = Color.FromHex("#226776");
-                VisitorButton.IsVisible = true;
-                VisitorButton2.IsVisible = true;
+                MidLabel.Text = currentvessel + ":";
+
+                ScanButton.IsVisible = false; ScanButton2.IsVisible = true;
+
+                NavBarGrid.HeightRequest = 0;
+                VisitorButton.IsEnabled = true; 
+                VisitorButton2.IsEnabled = true; 
             }
         }
+
+        private async void SyncClicked(object sender, EventArgs e)
+        {
+            //Ensure user wants to continue in offline mode
+            if (Connectivity.NetworkAccess != NetworkAccess.Internet)
+            {
+                await DisplayAlert("Error", "You have lost internet connection. To sync data with server, please connect to wifi or cellular data", "Close");
+                return;
+            }
+
+            //Obtain new JWT token prior to sync
+            Worker tempWorker = new Worker(); //Create temp WorkerID for Web API
+            tempWorker.ReferenceNFC = Globals.NFCsignin;
+
+            //Request JWT from Web API
+            string IsValid = await APIServer.SEClient(tempWorker);
+
+            //Check for API Error
+            if (IsValid == "Card Not Active" | IsValid == "Unable to Sign In" | IsValid == "Invalid Card Used" | IsValid == "Server Error" | IsValid == "Server Connection Error")
+            {
+                DisplayAlert(IsValid, "Unable to sync data, please retry sign-in and repeat", "Return to login screen");
+                return;
+            }
+            
+            
+
+            //Sync will only use analytics logs and then refresh entrylogs with Db. Server side code to manage sync comparison
+            var analyticsall = await App.Database.GetAnalytics();
+            var analyticslist = analyticsall.Where(c => c.EntryID == -1).ToList();
+
+            //API Sync request
+            int isSuccess =  await App.Database.SyncLogs(analyticslist);
+
+            if (isSuccess == 1)
+            {
+                //Check if internet connection is now in place
+                SyncButton.IsVisible = false;
+                SyncText.IsVisible = false;
+                Globals.OfflineMode = false; 
+            }
+        }
+        //Add visitor selected
         private async void VisitorClicked(object sender, EventArgs e)
         {
             if (currentunit == null | currentvessel == null)
             {
                 await DisplayAlert("Visitor Sign-in Error", "Location & Area not selected", "Return to Portal");
+                return;
             }
-            else
-            {
-                var inputPopup = new VisitorPopup(currentunit, currentvessel);
-                await PopupNavigation.Instance.PushAsync(inputPopup, true);
-                var ret = await inputPopup.PopupClosedTask;
-                SetCSEList();
-            }
+
+            var inputPopup = new VisitorPopup(currentunit, currentvessel);
+            await PopupNavigation.Instance.PushAsync(inputPopup, true);
+            var ret = await inputPopup.PopupClosedTask;
+            SetCSEList();
+            
         }
+        //Remove visitor selected
         private async void VisitorOutClicked(object sender, EventArgs e)
         {
-            if (currentunit == null | currentvessel == null)
-            {
-                await DisplayAlert("Visitor Sign-in Error", "Location & Area not selected", "Return to Portal");
-            }
-            else
-            {
+
                 List<EntryLog> loglistall = await App.Database.GetLogs();
                 List<EntryLog> loglist = loglistall.Where(w => w.UnitName == currentunit & w.VesselName == currentvessel & w.ReferenceNFC.StartsWith(Globals.ServerName+"_V")).ToList();
                 //////////////////////////////// Need to create list of visitors only
@@ -122,8 +247,8 @@ namespace Xapp2.Pages
                     Worker tempworker = workerlistall.Where(w => w.ReferenceNFC == loglist[i].ReferenceNFC).FirstOrDefault();
 
                     tempdisplay.DateLog = loglist[i].TimeLog.ToString("dddd-dd", format);
-                    tempdisplay.TimeLog = loglist[i].TimeLog.ToString("h:mm tt", format);
-                    tempdisplay.FirstName = tempworker.FirstName;
+                    tempdisplay.TimeLog = loglist[i].TimeLog.ToString("MM/dd h:mm tt", format);
+                    tempdisplay.FirstName = tempworker.FirstName.FirstOrDefault() +".";
                     tempdisplay.LastName = tempworker.LastName;
                     tempdisplay.Company = tempworker.Company;
                     tempdisplay.EntryID = loglist[i].EntryID;
@@ -142,9 +267,10 @@ namespace Xapp2.Pages
                     var ret = await inputPopup.PopupClosedTask;
                     SetCSEList();
                 }
-            }
+            
         }
-            private async void SetCSEList()
+        //Set main display of active users in location
+        private async void SetCSEList()
         {
             //Setting appropriate view state
             if (ListViewMode==true)
@@ -190,10 +316,12 @@ namespace Xapp2.Pages
                 Worker tempworker = workerlistall.Where(w => w.ReferenceNFC == loglist[i].ReferenceNFC).FirstOrDefault();
 
                 tempdisplay.DateLog = loglist[i].TimeLog.ToString("dddd-dd", format);
-                tempdisplay.TimeLog = loglist[i].TimeLog.ToString("h:mm tt", format);
-                tempdisplay.FirstName = tempworker.FirstName;
+                tempdisplay.TimeLog = loglist[i].TimeLog.ToString("MM/dd h:mm tt", format);
+                tempdisplay.FirstName = tempworker.FirstName.FirstOrDefault() + ".";
                 tempdisplay.LastName = tempworker.LastName;
                 tempdisplay.Company = tempworker.Company;
+                tempdisplay.ReferenceNFC = tempworker.ReferenceNFC;
+                tempdisplay.EntryID = loglist[i].EntryID;
                 timedisplay.Add(tempdisplay);
             }
             workersview.ItemsSource = timedisplay;
@@ -240,6 +368,7 @@ namespace Xapp2.Pages
             InitializeComponent();
         }
 
+        //Update selected Area upon user selection and update location list
         async void OnUnitPickerChanged(object sender, EventArgs e)
         {
             var picker = (Picker)sender;
@@ -258,6 +387,7 @@ namespace Xapp2.Pages
                 }
             }
         }
+        //Update selected Location upon user selection and update GUI display area
         async void OnVesselPickerChanged(object sender, EventArgs e)
         {
             var picker = (Picker)sender;
@@ -273,24 +403,55 @@ namespace Xapp2.Pages
                 Globals.init = true; Globals.unit = currentunit; Globals.vessel = currentvessel; //Establishing global item selection
             }
         }
-        async void OnWorkerPickerChanged(object sender, EventArgs e)
+
+        //Temporary sign in for manual NFC entry
+        async void tempNFCcompleted(object sender, EventArgs e)
         {
             //Check if worker card exists and is activited
-            string NFCSwipe = SwipeEntry.Text;
+            string NFCSwipe = TempSECardEntry.Text;
+            WorkerInOut(NFCSwipe);
+        }
+        //Sign In or Out user based on new swipe
+        async void WorkerInOut(string NFCSwipe)
+        {
+            //Check if location has been properly selected
+            if (currentunit == null | currentvessel == null)
+            {
+                await DisplayAlert("Error Worker Entry", "Location not selected", "Return to Entry");
+                return;
+            }
+            //Check if internet access was lost (not yet warned to sync) since scanning initiated
+            if (!SyncButton.IsVisible & Connectivity.NetworkAccess != NetworkAccess.Internet)
+            {
+                bool answer = await DisplayAlert("Warning", "You have lost internet connection. All actions will not be updated in central database unless sync is completed. Continue?", "Yes", "No");
+                if (answer)
+                {
+                    // Insert code here for showing sync button on GUI
+                    SyncButton.IsVisible = true;
+                    SyncText.IsVisible = true;
+                    Globals.OfflineMode = true;
+                }
+                else
+                { return; }
+            }
+
+            //Verify signin vs signout while waiting for internet sync
+
+            //Check if worker card exists and is activited
             var workerlistall = await App.Database.GetWorkers();
             var properworker = workerlistall.Where(w => w.ReferenceNFC == NFCSwipe & w.Activated == 1);
             int properworker2 = properworker.Count();
 
-            
-
             //If activated worker not found
             if (properworker2 == 0)
             {
-                //Force update from database and recheck
-                workerlistall = await App.Database.GetWorkersAPI();
-                properworker = workerlistall.Where(w => w.ReferenceNFC == NFCSwipe & w.Activated == 1);
-                properworker2 = properworker.Count();
-
+                if (!SyncButton.IsVisible)
+                {
+                    //Force update from database and recheck
+                    workerlistall = await App.Database.GetWorkersAPI();
+                    properworker = workerlistall.Where(w => w.ReferenceNFC == NFCSwipe & w.Activated == 1);
+                    properworker2 = properworker.Count();
+                }
                 //If database user is not active/exist return error
                 if (properworker2 == 0)
                 {
@@ -310,43 +471,68 @@ namespace Xapp2.Pages
                 Worker worker = new Worker();
                 worker = properworker.FirstOrDefault();
 
-/*                newlog.WorkerID = worker.WorkerID; //Removed due to NFC tie to worker. Redundant
-                newlog.Company = worker.Company;
-                newlog.FirstName = worker.FirstName;
-                newlog.LastName = worker.LastName;*/
-                newlog.ReferenceNFC = worker.ReferenceNFC;
-                newlog.TimeLog = DateTime.Now;
-                newlog.VesselName = currentvessel;
-                newlog.UnitName = currentunit;
-
-                AnalyticsLog Alog = new AnalyticsLog();
-                Alog.ReferenceNFC = worker.ReferenceNFC;
-                Alog.InOut = 1;
-                Alog.TimeLog = DateTime.Now;
-                Alog.VesselName = currentvessel;
-                Alog.UnitName = currentunit;
-                      
-                await App.Database.AddLog(newlog);
-                await App.Database.AddAnalyticsLog(Alog);
+                await CreateLog(worker.ReferenceNFC, 1, 0);
 
                 SetCSEList();
-
             }
             else //If signed in, delete log
             {
                 EntryLog templog = new EntryLog();
                 templog = Loglist[0];
 
-                await App.Database.DeleteLog(templog.EntryID);
+                await CreateLog(templog.ReferenceNFC, -1, templog.EntryID);
 
-                    SetCSEList();
+                SetCSEList();
             }
         }
         async void WorkerExitSelected(object sender, EventArgs e)
         {
-           // int selectedIndex = workersview.ItemSelected;
-           // var selectedworker = workersview.ItemsSource.;
+            var LineSelectedvar = workersview.SelectedItem;
+            TimeDisplay LineSelected = (TimeDisplay)LineSelectedvar;
+
+            if (LineSelected != null) //Don't display options if deselecting was trigger
+            {
+                string answer = await DisplayActionSheet("User Selection Options", "Cancel", null, "Manual Sign-Out");
+
+                if (answer == "Manual Sign-Out") //Sign out Logged User
+                {
+                    await CreateLog(LineSelected.ReferenceNFC, -1, LineSelected.EntryID);
+                    SetCSEList();
+                }
+                workersview.SelectedItem = null;
+            }
         }
+
+        async Task CreateLog(string NFCtag, int Inout, int Lognum) //Set Lognum to 0 if entry
+        {
+            EntryLog Elog = new EntryLog();
+            newlog.ReferenceNFC = NFCtag;
+            newlog.TimeLog = DateTime.Now;
+            newlog.VesselName = currentvessel;
+            newlog.UnitName = currentunit;
+
+            AnalyticsLog Alog = new AnalyticsLog();
+            Alog.ReferenceNFC = NFCtag;
+            Alog.InOut = Inout;
+            Alog.TimeLog = DateTime.Now;
+            Alog.VesselName = currentvessel;
+            Alog.UnitName = currentunit;
+
+            if (Inout == -1)
+            {
+                await App.Database.DeleteLog(Lognum); 
+                await App.Database.AddAnalyticsLog(Alog);
+            }
+            
+
+            if (Inout == 1)
+            {
+                await App.Database.AddLog(newlog);
+                await App.Database.AddAnalyticsLog(Alog);
+            }
+            
+        }
+
             private async void OnMainNavClicked(object sender, EventArgs e)
         {
             await Navigation.PushModalAsync(new MainPage(), false).ConfigureAwait(false);
@@ -362,28 +548,211 @@ namespace Xapp2.Pages
         //Nav Bar Navigations
         private async void OnCSEManagerClicked(object sender, EventArgs e)
         {
+            await Task.WhenAll(
+                CSEButton.FadeTo(1.0, 500), StatusButton.FadeTo(0.5, 500), HeirarchyButton.FadeTo(0.5, 500), WorkerButton.FadeTo(0.5, 500), AnalyticsButton.FadeTo(0.5, 500),
+                CSEButton.ScaleTo(1.15,500));
             await Navigation.PushModalAsync(new CSEntryPage(), false);
-
         }
         private async void OnSiteStatusButtonClicked(object sender, EventArgs e)
         {
+            await Task.WhenAll(
+                CSEButton.FadeTo(0.5, 500), StatusButton.FadeTo(1.0, 500), HeirarchyButton.FadeTo(0.5, 500), WorkerButton.FadeTo(0.5, 500), AnalyticsButton.FadeTo(0.5, 500),
+                StatusButton.ScaleTo(1.15, 500));
             await Navigation.PushModalAsync(new SiteStatusPage(), false);
-
         }
         private async void OnVesselButtonClicked(object sender, EventArgs e)
         {
+            await Task.WhenAll(
+                CSEButton.FadeTo(0.5, 500), StatusButton.FadeTo(0.5, 500), HeirarchyButton.FadeTo(1.0, 500), WorkerButton.FadeTo(0.5, 500), AnalyticsButton.FadeTo(0.5, 500),
+                HeirarchyButton.ScaleTo(1.15, 500));
             await Navigation.PushModalAsync(new VesselEntryPage(), false).ConfigureAwait(false);
-
         }
         private async void OnWorkerButtonClicked(object sender, EventArgs e)
         {
+            await Task.WhenAll(
+                CSEButton.FadeTo(0.5, 500), StatusButton.FadeTo(0.5, 500), HeirarchyButton.FadeTo(0.5, 500), WorkerButton.FadeTo(1.0, 500), AnalyticsButton.FadeTo(0.5, 500),
+                WorkerButton.ScaleTo(1.15, 500));
             await Navigation.PushModalAsync(new WorkerEntryPage(), false).ConfigureAwait(false);
-
         }
         private async void OnAnalyticsButtonClicked(object sender, EventArgs e)
         {
+            await Task.WhenAll(
+                CSEButton.FadeTo(0.5, 500), StatusButton.FadeTo(0.5, 500), HeirarchyButton.FadeTo(0.5, 500), WorkerButton.FadeTo(0.5, 500), AnalyticsButton.FadeTo(1.0, 500),
+                AnalyticsButton.ScaleTo(1.15, 500));
             await Navigation.PushModalAsync(new AnalyticsPage(), false).ConfigureAwait(false);
+        }
 
+
+        ////////////////////////// NFC CODE //////////////////////////////////
+
+        //NFC Variables
+        public const string ALERT_TITLE = "NFC";
+        public const string MIME_TYPE = "application/com.companyname.Jurisoft";
+
+        NFCNdefTypeFormat _type;
+        bool _makeReadOnly = false;
+        bool _eventsAlreadySubscribed = false;
+        bool ChkReadOnly = false;
+
+        private bool _nfcIsEnabled;
+        public bool NfcIsEnabled
+        {
+            get => _nfcIsEnabled;
+            set
+            {
+                _nfcIsEnabled = value;
+                OnPropertyChanged(nameof(NfcIsEnabled));
+                OnPropertyChanged(nameof(NfcIsDisabled));
+            }
+        }
+        public bool NfcIsDisabled => !NfcIsEnabled;
+
+        protected override bool OnBackButtonPressed()
+        {
+            UnsubscribeEvents();
+            CrossNFC.Current.StopListening();
+            return base.OnBackButtonPressed();
+        }
+
+        protected override void OnDisappearing()
+        {
+            base.OnDisappearing();
+            UnsubscribeEvents(); //Ensure NFC queries are reset on leaving page
+
+        }
+
+        /// <summary>
+        /// Subscribe to the NFC events
+        /// </summary>
+        void SubscribeEvents()
+        {
+            if (_eventsAlreadySubscribed)
+                return;
+
+            _eventsAlreadySubscribed = true;
+
+            CrossNFC.Current.OnMessageReceived += Current_OnMessageReceived;
+           // CrossNFC.Current.OnMessagePublished += Current_OnMessagePublished;
+           // CrossNFC.Current.OnTagDiscovered += Current_OnTagDiscovered;
+            CrossNFC.Current.OnNfcStatusChanged += Current_OnNfcStatusChanged;
+
+            if (Device.RuntimePlatform == Device.iOS)
+                CrossNFC.Current.OniOSReadingSessionCancelled += Current_OniOSReadingSessionCancelled;
+        }
+
+        /// <summary>
+        /// Unsubscribe from the NFC events
+        /// </summary>
+        void UnsubscribeEvents()
+        {
+            CrossNFC.Current.OnMessageReceived -= Current_OnMessageReceived;
+           // CrossNFC.Current.OnMessagePublished -= Current_OnMessagePublished;
+           // CrossNFC.Current.OnTagDiscovered -= Current_OnTagDiscovered;
+            CrossNFC.Current.OnNfcStatusChanged -= Current_OnNfcStatusChanged;
+
+            if (Device.RuntimePlatform == Device.iOS)
+                CrossNFC.Current.OniOSReadingSessionCancelled -= Current_OniOSReadingSessionCancelled;
+        }
+
+        /// <summary>
+        /// Event raised when NFC Status has changed
+        /// </summary>
+        /// <param name="isEnabled">NFC status</param>
+        async void Current_OnNfcStatusChanged(bool isEnabled)
+        {
+            NfcIsEnabled = isEnabled;
+            await ShowAlert($"NFC has been {(isEnabled ? "enabled" : "disabled")}");
+        }
+
+        /// <summary>
+        /// Event raised when a NDEF message is received
+        /// </summary>
+        /// <param name="tagInfo">Received <see cref="ITagInfo"/></param>
+        async void Current_OnMessageReceived(ITagInfo tagInfo)
+        {
+            if (tagInfo == null)
+            {
+                await ShowAlert("No tag found");
+                return;
+            }
+
+            // Customized serial number
+            var identifier = tagInfo.Identifier;
+            var serialNumber = NFCUtils.ByteArrayToHexString(identifier, ":");
+            var title = !string.IsNullOrWhiteSpace(serialNumber) ? $"Tag [{serialNumber}]" : "Tag Info";
+
+            if (!tagInfo.IsSupported)
+            {
+                await ShowAlert("Unsupported tag (app)", title);
+            }
+            else if (tagInfo.IsEmpty)
+            {
+                await ShowAlert("Empty tag", title);
+            }
+            else
+            {
+                var first = tagInfo.Records[0];
+                
+                try
+                {
+                    WorkerInOut(first.Message);
+                    TempSECardEntry.Text = first.Message;
+                }
+                catch
+                {
+                    TempSECardEntry.Text = "Error";
+                }
+                
+                
+            }
+        }
+
+        /// <summary>
+        /// Event raised when user cancelled NFC session on iOS 
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        void Current_OniOSReadingSessionCancelled(object sender, EventArgs e) => Debug("User has cancelled NFC Session");
+
+        /// Write a debug message in the debug console
+        /// </summary>
+        /// <param name="message">The message to be displayed</param>
+        void Debug(string message) => System.Diagnostics.Debug.WriteLine(message);
+
+        /// <summary>
+        /// Display an alert
+        /// </summary>
+        /// <param name="message">Message to be displayed</param>
+        /// <param name="title">Alert title</param>
+        /// <returns>The task to be performed</returns>
+        Task ShowAlert(string message, string title = null) => DisplayAlert(string.IsNullOrWhiteSpace(title) ? ALERT_TITLE : title, message, "Cancel");
+
+        /// <summary>
+        /// Task to start listening for NFC tags if the user's device platform is not iOS
+        /// </summary>
+        /// <returns>The task to be performed</returns>
+        async Task StartListeningIfNotiOS()
+        {
+            if (Device.RuntimePlatform == Device.iOS)
+                return;
+            await BeginListening();
+        }
+
+        /// <summary>
+        /// Task to safely start listening for NFC Tags
+        /// </summary>
+        /// <returns>The task to be performed</returns>
+        async Task BeginListening()
+        {
+            try
+            {
+                CrossNFC.Current.StartListening();
+                AIndicator.IsRunning = true;
+            }
+            catch (Exception ex)
+            {
+                await ShowAlert(ex.Message);
+            }
         }
     }
 }

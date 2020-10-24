@@ -5,10 +5,11 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:gradient="clr-namespace:Syncfusion.XForms.Graphics;assembly=Syncfusion.Core.XForms"
              mc:Ignorable="d"
-             x:Class="Xapp2.Pages.SiteStatusPage">
+             x:Class="Xapp2.Pages.SiteStatusPage" 
+             >
     <ContentPage.Content>
-        <StackLayout VerticalOptions="Start"
-            Style="{StaticResource pageStyle}">
+        <StackLayout VerticalOptions="Start"  Style="{StaticResource pageStyle}"
+            >
 
             <!-- Top Header Details -->
             <Grid
@@ -22,14 +23,14 @@
                     <ColumnDefinition Width="*"/>
                     <ColumnDefinition Width="40"/>
                 </Grid.ColumnDefinitions>
-                <Image Grid.Column="0"   Source="SEWhite.jpg"   HorizontalOptions="Center"   VerticalOptions="Center"  Margin="3" />
-                <Label Grid.Column="1"   Style="{StaticResource labletitlestyle}"  Text="Site Status"  TextColor="White"  />
+                <Image Grid.Column="0"   Source="SEWhite.jpg"   HorizontalOptions="Center"   VerticalOptions="Center"  Margin="5" />
+                <Label Grid.Column="1"   Style="{StaticResource lableheaderstyle}"  Text="Site Status"  TextColor="White"  />
                 <ImageButton Grid.Column="2" Source="HomeButton.png" Margin="5"  BackgroundColor="Transparent"  Clicked = "OnMainNavClicked" />
             </Grid>
             <!-- Top Header Ends -->
 
-            <Frame Grid.Column="0" CornerRadius="10" HorizontalOptions="StartAndExpand"  VerticalOptions="Start" Margin="16,16,8,16" BackgroundColor="#ffffff"
-           HasShadow="True"   IsClippedToBounds="True"  Padding="0">
+            <Frame Grid.Column="0" CornerRadius="10" HorizontalOptions="StartAndExpand"  VerticalOptions="Start" Margin="10,5,10,10" BackgroundColor="#ffffff"
+           HasShadow="True"   IsClippedToBounds="True"  Padding="0" BorderColor="LightGray">
                 <StackLayout>
                     <!--Display options -->
                     <Grid Margin="0,20">
@@ -61,9 +62,9 @@
                             <ColumnDefinition Width="60"/>
                         </Grid.ColumnDefinitions>
 
-                        <Label Grid.Row="0" Grid.Column="1" FontAttributes="Bold" Text="Location" HorizontalOptions="Start" Style="{StaticResource lablebodystyle}"/>
-                        <Label Grid.Row="0" Grid.Column="2" FontAttributes="Bold" Text="'Active'" HorizontalOptions="Center" Style="{StaticResource lablebodystyle}"/>
-                        <Label Grid.Row="0" Grid.Column="3" FontAttributes="Bold" Text="#" HorizontalOptions="Center" Style="{StaticResource lablebodystyle}"/>
+                        <Label Grid.Row="0" Grid.Column="1" FontAttributes="Bold" Text="Location" HorizontalOptions="Start" Style="{StaticResource labletitlestyle}"/>
+                        <Label Grid.Row="0" Grid.Column="2" FontAttributes="Bold" Text="'Active'" HorizontalOptions="Center" Style="{StaticResource labletitlestyle}"/>
+                        <Label Grid.Row="0" Grid.Column="3" FontAttributes="Bold" Text="#" HorizontalOptions="Center" Style="{StaticResource labletitlestyle}"/>
 
                         <ListView x:Name="statusview" Grid.Row="1" Grid.ColumnSpan="4"  VerticalOptions="FillAndExpand" ItemSelected="DropDownSelected"   >
                             <ListView.ItemTemplate>
@@ -80,10 +81,10 @@
                                                 <ColumnDefinition Width="60"/>
                                             </Grid.ColumnDefinitions>
 
-                                            <Label Grid.Column="0" Text="{Binding droplist}" Style="{StaticResource lablebodystyle}"/>
-                                            <Label Grid.Column="1" Text="{Binding namelist}" Style="{StaticResource lablebodystyle}" HorizontalOptions="Start"/>
+                                            <Label Grid.Column="0" Text="{Binding droplist}" Style="{StaticResource labletitlestyle}"/>
+                                            <Label Grid.Column="1" Text="{Binding namelist}" Style="{StaticResource labletitlestyle}" HorizontalOptions="Start"/>
                                             <Image Grid.Column="2" Source="{Binding path}" WidthRequest="5" HeightRequest="5" />
-                                            <Label Grid.Column="3"  Text="{Binding numberlist}" Style="{StaticResource lablebodystyle}" />
+                                            <Label Grid.Column="3"  Text="{Binding numberlist}" Style="{StaticResource labletitlestyle}" />
                                         </Grid>
                                     </ViewCell>
                                 </DataTemplate>
@@ -121,15 +122,15 @@
                     </Grid.ColumnDefinitions>
 
                     <!-- Nav Bar Selections-->
-                    <ImageButton x:Name="CSEButton" Grid.Row="0"  Grid.Column="0"   Style="{StaticResource NavImageCSE}"
+                    <ImageButton x:Name="CSEButton" Grid.Row="0"  Grid.Column="0"   Style="{StaticResource NavImageCSE}" Margin="3"
                         Clicked = "OnCSEManagerClicked"/>
-                    <ImageButton x:Name="StatusButton" Grid.Row="0"  Grid.Column="1"   Style="{StaticResource NavImageStatus}"
+                    <ImageButton x:Name="StatusButton" Grid.Row="0"  Grid.Column="1"   Style="{StaticResource NavImageStatus}" Margin="3"
                         Clicked = "OnSiteStatusButtonClicked" />
-                    <ImageButton x:Name="HeirarchyButton" Grid.Row="0"  Grid.Column="2"   Style="{StaticResource NavImageHeirarchy}"
+                    <ImageButton x:Name="HeirarchyButton" Grid.Row="0"  Grid.Column="2"   Style="{StaticResource NavImageHeirarchy}" Margin="3"
                         Clicked = "OnVesselButtonClicked" />
-                    <ImageButton x:Name="WorkerButton" Grid.Row="0"  Grid.Column="3"   Style="{StaticResource NavImageWorker}"
+                    <ImageButton x:Name="WorkerButton" Grid.Row="0"  Grid.Column="3"   Style="{StaticResource NavImageWorker}" Margin="3"
                         Clicked = "OnWorkerButtonClicked" />
-                    <ImageButton x:Name="AnalyticsButton" Grid.Row="0"  Grid.Column="4"   Style="{StaticResource NavImageAnalytics}"
+                    <ImageButton x:Name="AnalyticsButton" Grid.Row="0"  Grid.Column="4"   Style="{StaticResource NavImageAnalytics}" Margin="3"
                         Clicked = "OnAnalyticsButtonClicked" />
                 </Grid>
             </Grid>

@@ -19,14 +19,14 @@
     <x:String x:Key="AvatarIcon">&#xe723;</x:String>
 
     <!--  Common style for content pages  -->
-    <Style x:Key="ContentPageStyle" TargetType="ContentPage">
+    <!--Style x:Key="ContentPageStyle" TargetType="ContentPage">
         <Setter Property="BackgroundImageSource">
             <OnPlatform
                 x:TypeArguments="ImageSource"
                 Android="LoginBackground.png"
                 WinPhone="LoginBackground.png" />
         </Setter>
-    </Style>
+    </-->
 
     <!--  Common style for labels  -->
     <Style x:Key="LabelStyle" TargetType="Label">

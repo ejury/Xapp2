@@ -5,7 +5,7 @@ using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-
+using Xamarin.Essentials;
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
 using Xapp2.Models;
@@ -29,17 +29,19 @@ namespace Xapp2.Pages
             base.OnAppearing();
 
             //Create Initial Unit List Selection
-            var unitslist = await App.Database.GetUnits();
-            var vessellist = await App.Database.GetVessels();
+            List<Vessel> vessellist = await App.Database.GetVessels();
+            List<string> unitslist = await orderunits(vessellist);
+
             if (unitslist.Count>0 & vessellist.Count > 0)
             {
+
                 picker.ItemsSource = unitslist;
 
                 //Set Initial Unit Selection
                 currentselect = 0;
                 pieview.pieselect = currentselect;
                 picker.SelectedIndex = currentselect;
-                currentunit = unitslist[currentselect].Name;
+                currentunit = unitslist[currentselect];
 
                 // Populating display if data is present
                 if (vessellist.Count() > 0)
@@ -49,22 +51,55 @@ namespace Xapp2.Pages
                 }
             }
         }
+
+        public async Task<List<string>> orderunits (List<Vessel> vessellist)
+        {
+            
+            List<string> unitslist = vessellist.Select(c => c.Unitname).ToList() //Order from largest to smallest
+                .GroupBy(x => x)
+                .OrderByDescending(x => x.Count())
+                .Select(x => x.Key)
+                .ToList();
+
+            if (unitslist.Count > 0)
+            {
+                // Add any units with zero locations before populating list
+                var unitslist2 = await App.Database.GetUnits();
+                for (int t = 0; t < unitslist2.Count(); t++)
+                {
+                    if (!unitslist.Contains(unitslist2[t].Name))
+                    {
+                        unitslist.Add(unitslist2[t].Name);
+                    }
+                }
+            }
+            return unitslist;
+        }
         private async void SetUnitList()
         {
-            var unitslist = await App.Database.GetUnits();
+            List<Vessel> vessellist = await App.Database.GetVessels();
+            List<string> unitslist = await orderunits(vessellist);
             picker.ItemsSource = unitslist;
             picker.SelectedIndex = pieview.pielabels.Count - 1;
         }
             private async Task SetVesselList()
         {
             //Pulling current Database Heirarchy
-            var vessellist = await App.Database.GetVessels();
-            var unitslist = await App.Database.GetUnits();
-            
-            //Setting vessellist per current unit selection
-            var vessellistFilter = vessellist.Where(w => w.Unitname == currentunit); //Filter for vessels in selected unit
-            List<Vessel> v22 = (List < Vessel>)vessellistFilter.ToList();
-            vesselview1.ItemsSource = v22;
+            List<Vessel> vessellist = await App.Database.GetVessels();
+            List<string> unitslist = await orderunits(vessellist);
+
+            if (vessellist == null)
+            {
+                vesselview1.ItemsSource = null;
+
+            }
+            else
+            {
+                //Setting vessellist per current unit selection
+                var vessellistFilter = vessellist.Where(w => w.Unitname == currentunit); //Filter for vessels in selected unit
+                List<Vessel> v22 = (List<Vessel>)vessellistFilter.ToList();
+                vesselview1.ItemsSource = v22;
+            }
 
             var temp = currentunit;
             unitlabelname.Text = currentunit;
@@ -72,21 +107,18 @@ namespace Xapp2.Pages
             //Generating Pie Chart
             int t = unitslist.Count;
             UnitPieModel temppie = new UnitPieModel();
-            Unit tempunit = new Unit();
 
             pieview.piemodel.Clear();   //Clear old entries
             pieview.pielabels.Clear();  //Clear old entries
             for (int i=0;i<t;i++)
             { 
-                int matchunitname = vessellist.Where(w => w.Unitname == unitslist[i].Name).Count();
-                tempunit = unitslist[i];
-                temppie.Unitname = tempunit.Name;
+                int matchunitname = vessellist.Where(w => w.Unitname == unitslist[i]).Count();
+                temppie.Unitname = unitslist[i];
                 temppie.Vesselcount = matchunitname;
-
 
                 //Updating Pie Chart
                 pieview.piemodel.Add(temppie);
-                pieview.pielabels.Add(unitslist[i].Name);
+                pieview.pielabels.Add(unitslist[i]);
             }
             pie.ExplodeIndex = pieview.pieselect;
     }
@@ -163,6 +195,7 @@ namespace Xapp2.Pages
                 RView1.TextColor = Color.Aqua;
                 RView2.TextColor = Color.Aqua;
 
+                PieFrameLegend.IsVisible = false;
                 LDisplay.Width= GridLength.Star;
                 RDisplay.Width = GridLength.Star;
             }
@@ -172,6 +205,7 @@ namespace Xapp2.Pages
                 RView1.TextColor = Color.White;
                 RView2.TextColor = Color.White;
 
+                PieFrameLegend.IsVisible = true;
                 LDisplay.Width = GridLength.Star;
                 RDisplay.Width = 0;
             }
@@ -189,6 +223,28 @@ namespace Xapp2.Pages
         }
         async void OnUnitEntryCompleted(object sender, EventArgs e)
         {
+            if (Globals.SELevel > 1)
+            {
+                await DisplayAlert("Unauthorized", "User does not have authorization for scanning functionality. Contact your administrator", "Return to Portal");
+                return;
+            }
+
+#if DEBUG //Verify internet connection for any new Db items for release code
+
+#else
+                     {
+                          if (Connectivity.NetworkAccess != NetworkAccess.Internet )
+                            {
+                                await DisplayAlert("Error Area Creation", "Cannot add new Area without internet connection", "Obtain connection and retry");
+                                return;
+                            }
+                        if ( Globals.OfflineMode == true)
+                            {
+                                await DisplayAlert("Error Area Creation", "Currently signed in under Offline Mode. Logout and sign in with internet connection", "Return to Heirarchy Page");
+                                return;
+                            }
+                        }
+#endif
             units.Name = UnitEntryText.Text;
 
             await App.Database.AddUnit(units);
@@ -200,6 +256,27 @@ namespace Xapp2.Pages
         }
         async void OnVesselEntryCompleted(object sender, EventArgs e)
         {
+            if (Globals.SELevel > 1)
+            {
+                await DisplayAlert("Unauthorized", "User does not have authorization for scanning functionality. Contact your administrator", "Return to Portal");
+                return;
+            }
+#if DEBUG //Verify internet connection for any new Db items for release code
+
+#else
+                     {
+                        if (Connectivity.NetworkAccess != NetworkAccess.Internet )
+                            {
+                                await DisplayAlert("Error Area Creation", "Cannot add new Area without internet connection", "Obtain connection and retry");
+                                return;
+                            }
+                        if ( Globals.OfflineMode == true)
+                            {
+                                await DisplayAlert("Error Area Creation", "Currently signed in under Offline Mode. Logout and sign in with internet connection", "Return to Heirarchy Page");
+                                return;
+                            }
+                        }
+#endif
             if (currentunit.Length > 0)
             {
                 var unitslist = await App.Database.GetUnits();
@@ -331,66 +408,41 @@ namespace Xapp2.Pages
 
         }
 
-        //Nav Bar Show/Hide
-        private async void ShowNavClicked(object sender, EventArgs e)
-        {
-            if (Nav)
-            {
-                Nav = false;
-                NavBarGrid.RowDefinitions[1].Height = 0;
-                NavBarGrid.RowDefinitions[1].Height = 0;
-            }
-            else
-            {
-                Nav = true;
-                NavBarGrid.RowDefinitions[1].Height = 15;
-                NavBarGrid.RowDefinitions[1].Height = 60;
-            }
-        }
-        private async void NavSwipedUp(object sender, EventArgs e)
-        {
-            if (!Nav)
-            {
-                Nav = true;
-                NavBarGrid.RowDefinitions[1].Height = 15;
-                NavBarGrid.RowDefinitions[1].Height = 60;
-            }
-        }
-        private async void NavSwipedDown(object sender, EventArgs e)
-        {
-            if (!Nav)
-            {
-                Nav = false;
-                NavBarGrid.RowDefinitions[1].Height = 0;
-                NavBarGrid.RowDefinitions[1].Height = 0;
-            }
-        }
-
         //Nav Bar Navigations
         private async void OnCSEManagerClicked(object sender, EventArgs e)
         {
+            await Task.WhenAll(
+                CSEButton.FadeTo(1.0, 500), StatusButton.FadeTo(0.5, 500), HeirarchyButton.FadeTo(0.5, 500), WorkerButton.FadeTo(0.5, 500), AnalyticsButton.FadeTo(0.5, 500),
+                CSEButton.ScaleTo(1.15, 500));
             await Navigation.PushModalAsync(new CSEntryPage(), false);
-
         }
         private async void OnSiteStatusButtonClicked(object sender, EventArgs e)
         {
+            await Task.WhenAll(
+                CSEButton.FadeTo(0.5, 500), StatusButton.FadeTo(1.0, 500), HeirarchyButton.FadeTo(0.5, 500), WorkerButton.FadeTo(0.5, 500), AnalyticsButton.FadeTo(0.5, 500),
+                StatusButton.ScaleTo(1.15, 500));
             await Navigation.PushModalAsync(new SiteStatusPage(), false);
-
         }
         private async void OnVesselButtonClicked(object sender, EventArgs e)
         {
+            await Task.WhenAll(
+                CSEButton.FadeTo(0.5, 500), StatusButton.FadeTo(0.5, 500), HeirarchyButton.FadeTo(1.0, 500), WorkerButton.FadeTo(0.5, 500), AnalyticsButton.FadeTo(0.5, 500),
+                HeirarchyButton.ScaleTo(1.15, 500));
             await Navigation.PushModalAsync(new VesselEntryPage(), false).ConfigureAwait(false);
-
         }
         private async void OnWorkerButtonClicked(object sender, EventArgs e)
         {
+            await Task.WhenAll(
+                CSEButton.FadeTo(0.5, 500), StatusButton.FadeTo(0.5, 500), HeirarchyButton.FadeTo(0.5, 500), WorkerButton.FadeTo(1.0, 500), AnalyticsButton.FadeTo(0.5, 500),
+                WorkerButton.ScaleTo(1.15, 500));
             await Navigation.PushModalAsync(new WorkerEntryPage(), false).ConfigureAwait(false);
-
         }
         private async void OnAnalyticsButtonClicked(object sender, EventArgs e)
         {
+            await Task.WhenAll(
+                CSEButton.FadeTo(0.5, 500), StatusButton.FadeTo(0.5, 500), HeirarchyButton.FadeTo(0.5, 500), WorkerButton.FadeTo(0.5, 500), AnalyticsButton.FadeTo(1.0, 500),
+                AnalyticsButton.ScaleTo(1.15, 500));
             await Navigation.PushModalAsync(new AnalyticsPage(), false).ConfigureAwait(false);
-
         }
     }
 }

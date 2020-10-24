@@ -6,6 +6,8 @@ using Android.Runtime;
 using Android.Views;
 using Android.Widget;
 using Android.OS;
+using Plugin.NFC;
+using Android.Content;
 
 namespace Xapp2.Droid
 {
@@ -20,14 +22,25 @@ namespace Xapp2.Droid
             base.OnCreate(savedInstanceState);
             Rg.Plugins.Popup.Popup.Init(this, savedInstanceState);
             Xamarin.Essentials.Platform.Init(this, savedInstanceState);
+            // Plugin NFC: Initialization
+            CrossNFC.Init(this);
+
             global::Xamarin.Forms.Forms.Init(this, savedInstanceState);
             LoadApplication(new App());
         }
-    //    public override void OnRequestPermissionsResult(int requestCode, string[] permissions, [GeneratedEnum] Android.Content.PM.Permission[] grantResults)
-    //    {
-    //        Xamarin.Essentials.Platform.OnRequestPermissionsResult(requestCode, permissions, grantResults);
 
-   //         base.OnRequestPermissionsResult(requestCode, permissions, grantResults);
-   //     }
+        protected override void OnNewIntent(Intent intent)
+        {
+            base.OnNewIntent(intent);
+
+            // Plugin NFC: Tag Discovery Interception
+            CrossNFC.OnNewIntent(intent);
+        }
+        //    public override void OnRequestPermissionsResult(int requestCode, string[] permissions, [GeneratedEnum] Android.Content.PM.Permission[] grantResults)
+        //    {
+        //        Xamarin.Essentials.Platform.OnRequestPermissionsResult(requestCode, permissions, grantResults);
+
+        //         base.OnRequestPermissionsResult(requestCode, permissions, grantResults);
+        //     }
     }
 }
